@@ -5,7 +5,6 @@ from .base import *
 DEBUG = True
 ALLOWED_HOSTS = ['wfgs.herokuapp.com','wfg.herokuapp.com/']
 INSTALLED_APPS += (
-	'django.contrib.admin',
 	'storages',#App needed for Amazon AWS S3
 	'whitenoise.runserver_nostatic',
 )
