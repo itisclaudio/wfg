@@ -1,0 +1,217 @@
+{% extends '_base.html' %}
+{% block title %}Search Results{% endblock %}
+
+{% block super-extra-head %}
+	{% load static %}
+	<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+{## CUISINES - Start ##}
+{% if cuisines|length > 0 %}
+	<table width="100%" class="nolinetable nopadding">
+	<tr>
+	<td>
+	<h1 style="display:inline;">Cuisine(s)</h1>
+	<span class="label label-default" style="display:inline;">{{cuisines|length}}</span>
+	{% if search %}<p style="display:inline;"> for "{{search}}" </p>{% endif %}
+	</td>
+	<td class="pull-right">
+		<a class="btn btn-custom" href="{% url 'view_searchadvance' %}" title="Advance Search">
+			<li class="glyphicon glyphicon-search icon-white"></li>
+		</a>
+		<a class="btn btn-custom" title="Add New Cuisine" href="{% url 'view_cuisinenew' %}">Add Cuisine</a>
+	</td>
+	</tr>
+	</table>
+
+	<div class="list-group" style="margin-bottom:0px;">
+	{## CUISINES ##}
+	  {% for p in cuisines|slice:":10" %}
+		  <div class="list-group-item row" style="margin-left:0px; margin-right:0px; padding:4px;">
+			<div class="col-sm-3 col-xs-12" style="padding-left:2px;">
+			{% if p.favphoto %}
+				<a href="/dish/{{p.favphoto.urlname}}">
+					<img src="/media/{{p.favphoto.filename}}-med{{p.favphoto.extension}}" class="img-rounded" width="100%">
+				</a>
+			{% else %}
+				<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+			{% endif %}
+			</div>
+			<div class="col-sm-9 col-xs-12" style="padding-left:2px;">
+				<a href="/cuisine/{{p.urlname}}">
+					<h3 class="list-group-item-heading" style="color:#845505;margin-bottom:2px;display:inline;"><b>{{p.name|truncatechars:66}} Cuisine</b></h3>
+				</a>
+				{% if p.othernames %}
+					<p style="display:inline;" title="{{p.othernames }}"><b>({{p.othernames|truncatechars:30 }})</b></p>
+				{% endif %}
+				<p class="text-small" style="margin-bottom:2px;"><i>
+				{% if p.territory %}
+					<b title="{{p.territory }}">{{p.territory|truncatechars:40 }}</b> |
+				{% endif %}
+				<b>{{p.dishes_count}} dishes, 
+				{{p.pictures_count}} photos</b>
+				</i></p>
+				{% if p.description %}
+					<p class="text-small">{{p.description|truncatewords:40}}</p>
+				{% endif %}
+			</div>
+		  </div>
+	  {% endfor %}
+		{% if cuisines|length > 10 %}
+			<div class="list-group-item row" style="margin-left:0px; margin-right:0px; padding:4px;">
+				<a href="/cuisines_result/{{search}}/1/" class="btn btn-default">More cuisine results ></a>
+			</div>
+		{% endif %}
+	</div>
+{% endif %}
+{## CUISINES - End ##}
+
+{## DISHES - Start ##}
+{% if dishes|length > 0 %}
+	<table width="100%" class="nolinetable nopadding" style="margin-top: 8px;">
+	<tr>
+	<td>
+	<h1 style="display:inline;">Dish(es)</h1>
+	<span class="label label-default" style="display:inline;">{{dishes|length}}</span>
+	{% if search %}<p style="display:inline;"> for "{{search}}" </p>{% endif %}
+	</td>
+	<td class="pull-right">
+		<a class="btn btn-custom" href="{% url 'view_searchadvance' %}" title="Advance Search">
+			<li class="glyphicon glyphicon-search icon-white"></li>
+		</a>
+		<a class="btn btn-custom hidden-xs" title="New dish / photo" href="{% url 'view_dishphotonew' %}">New dish</a>
+	</td>
+	</tr>
+	</table>
+
+	<div class="list-group" style="margin-bottom:0px;">
+	{% if dishes|length > 0 %}
+	{## DISHES ##}
+	  {% for p in dishes|slice:":10"  %}
+		  <div class="list-group-item row" style="margin-left:0px; margin-right:0px; padding:4px;">
+			<div class="col-sm-3 col-xs-12" style="padding-left:2px;">
+			{% if p.photo_main %}
+				<a href="/dish/{{p.urlname}}">
+					<img src="/media/{{p.filename}}-med{{p.extension}}" class="img-rounded" width="100%">
+				</a>
+			{% else %}
+				<a href="/photonew/{{p.id}}/">
+					<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+				</a>
+			{% endif %}
+			</div>
+			<div class="col-sm-9 col-xs-12" style="padding-left:2px;">
+				<a href="/dish/{{p.urlname}}" title="{{p.name}}">
+					<h3 class="list-group-item-heading" style="color:#845505;margin-bottom:2px;display:inline;"><b>{{p.name|truncatechars:66}}</b></h3></a>
+				{% if p.othernames %}
+					<p style="display:inline;" title="{{p.othernames }}">{{p.othernames|truncatechars:40 }}</p>
+				{% endif %}
+				<p style="margin-bottom: 0px;">
+					({{p.likestot}} <i id="likeicon"  title="Number of likes" class="glyphicon glyphicon-thumbs-up"></i>)
+					({{p.picture__count}} <i class="fa fa-camera"  title="Number of photos"></i>)
+				</p>
+				{% if p.cuisines.all %}
+					{% for cuisine in p.cuisines.all|slice:":5" %}
+						(<a style="font-size:14px;" href="/cuisine/{{cuisine.urlname}}" title="Go to {{cuisine|truncatechars:24}} cuisine page">{{cuisine}}</a>)
+					{% endfor %}
+				{% endif %}
+				{% if p.description %}
+					<p style="margin-bottom:0px;">{{ p.description|urlizetrunc:32|escape|truncatewords:45 }}</p>
+				{% endif %}
+				<p class="smallfont" style="margin-top:6px; margin-bottom:2px;"><i>{{p.datetime|date:"h:iA F d, Y" }} - by: <a href="/profile/{{p.userprofile}}">{{p.userprofile}}</a></i></p>
+			</div>
+		  </div>
+	  {% endfor %}
+		{% if dishes|length > 10 %}
+			<div class="list-group-item row" style="margin-left:0px; margin-right:0px; padding:4px;">
+				<a href="/searchresultadv/{{search}}/*/*/1/" class="btn btn-default">More dishes results ></a>
+			</div>
+		{% endif %}
+	 {% endif %}
+	</div>
+{% endif %}
+{## END DISHES ##}
+
+{## LISTS - Start ##}
+{% if lists|length > 0 %}
+	<table width="100%" class="nolinetable nopadding" style="margin-top: 8px;">
+	<tr>
+	<td>
+	<h1 style="display:inline;">Lists(s)</h1>
+	<span class="label label-default" style="display:inline;">{{list_count}}</span>
+	{% if search %}<p style="display:inline;"> for "{{search}}" </p>{% endif %}
+	</td>
+	<td class="pull-right">
+		<a class="btn btn-custom" href="{% url 'view_list_search' %}" title="List Search">
+			<li class="glyphicon glyphicon-search icon-white"></li>
+		</a>
+		<a class="btn btn-custom" title="Add New Cuisine" href="{% url 'view_listnew' %}">Add List</a>
+	</td>
+	</tr>
+	</table>
+
+	<div class="list-group" style="margin-bottom:0px;">
+	{## LISTS for - Start ##}
+		{% for p in lists|slice:":10" %}
+			{% if user.is_authenticated and p.type == '3' and p.owner.user == user or p.type != '3' %}
+			<div class="list-group-item">
+				<h2 style="color:#845505;margin-bottom:2px; margin-top:0px;text-align: left;"><a href="/list/{{p.urlname}}"><b>{{p.name|truncatechars:100}}</b></a></h2>
+				<p class="smallfont" style="margin-bottom:4px;">by <b>{{p.owner.user.username|truncatechars:20}}</b> ({{p.likestot}} <i class="glyphicon glyphicon-thumbs-up"></i>)
+					{% if p.type = '3' %}
+						<i style="color:red;">{{ p.get_type_display }}</i>
+					{% else %}
+						<i>{{ p.get_type_display }}</i>
+					{% endif %}
+				</p>
+				<p style="margin-top:5px;">{{ p.description|urlizetrunc:44|truncatewords:58}}</p>
+				{% if p.dishes.all %}
+
+					<div class="row" style="margin:0px;">
+					{% for p in p.dishes.all|slice:":6"  %}
+						  <div class="col-md-2 col-xs-3 {% if forloop.counter > 4 %} hidden-sm hidden-xs {% endif %}" style="padding:2px;">
+							<a class="thumbnail" href="/dish/{{p.urlname}}/" title="Go to dish page: {{p.name}}" style="font-size:14px; margin-bottom:0px;line-height:14px;">
+								{% if p.favphoto %}
+									<img src="/media/{{p.favphoto.filename}}-med{{p.favphoto.extension}}" class="img-rounded" width="100%">
+								{% else %}
+									<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+								{% endif %}
+								<b style="display:inline;" >{{p.name|truncatechars:22}}</b>
+								<b class="smallfont" style="margin-bottom:4px; display:inline;">
+								{% if p.othernames %}
+									<i title="Othernames">{{p.othernames|truncatechars:26}}</i>
+								{% endif %}</b></b>
+								{% if p.cuisines.all %}
+								<p class="smallfont" style="margin-bottom:4px;">
+									{% for cuisine in p.cuisines.all|slice:":3" %}
+										({{cuisine|truncatechars:26}})
+									{% endfor %}
+								{% endif %}
+								</p>
+							</a>
+						  </div>
+					{% endfor %}
+					</div>
+				{% else %}
+					<div class="row" style="margin:0px;">
+						<div class="thumbnail col-md-2 col-xs-3" title="Go to dish page: {{p.name}}" style="margin-bottom:0px;line-height:16px;">
+						<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+						<b style="display:inline;font-size:14px;" >There are no dishes</b>
+						</div>
+					</div>
+				{% endif %}
+			  </div>
+			  {% endif %}
+		{% endfor %}
+	{## LISTS for - End ##}  
+		{% if list_count > 10 %}
+			<div class="list-group-item row" style="margin-left:0px; margin-right:0px; padding:4px;">
+				<a href="/list_search_results/{{search}}/1/" class="btn btn-default">More lists results ></a>
+			</div>
+		{% endif %}
+	</div>
+{% endif %}
+{## LISTS - End ##}
+
+{% endblock %}

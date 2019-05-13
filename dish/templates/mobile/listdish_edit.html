@@ -1,0 +1,213 @@
+{% extends '_base.html' %}
+{% block title %}Edit List{% endblock %}
+
+{% block super-extra-head %}
+	{% load static %}
+	<link href="{% static 'dist/jquery/autocomplete/jquery-ui.min.css' %}" rel="stylesheet" >
+{% endblock %}
+
+{% block content %}
+<h1>{{list.name|truncatechars:54 }}</h1>
+<div class="well-mobile">
+{% if list.description %}
+	{% if list.description|wordcount > 80 %}
+		<div id='desc_small' style="display:block;">{{ list.description|urlizetrunc:32|escape|linebreaks|truncatewords:80 }}
+		</div>
+		<div id="desc" style="display:none;">{{ list.description|urlizetrunc:65|escape|linebreaks }}
+		</div>
+	{% else %}
+		{{ list.description|urlizetrunc:32|escape|linebreaks }}
+	{% endif %}
+{% else %}
+	<p>There is no description</p>
+{% endif %}
+
+<!--
+{% if user.id = list.owner.user.id %}
+	<a class="btn btn-custom btn-lg btn-block" href="{% url 'view_listedit' urlname=list.urlname%}">Edit info <i class="glyphicon glyphicon-arrow-up"></i></a>
+	<a class="btn btn-custom btn-lg btn-block" href="{% url 'view_listindexedit' urlname=list.urlname%}">Change dishe's order <i class="glyphicon glyphicon-arrow-down"></i></a>
+{% endif %}
+-->
+<h2>Dishes in list:</h2>
+
+<div id="insert" class="insert">
+{% for p in dishlist %}
+	<div id="{{forloop.counter}}div">
+		<div class="col-xs-1" style="padding:2px 2px 2px 0px;">
+			<input class="form-control" id="{{forloop.counter}}ind" readonly="true" style="padding:1px; text-align:right;" value="{{p.index}}">
+		</div>
+		<div class="col-xs-9" style="padding:2px 0px;">
+			<input class="form-control" readonly="true" value="{{p.dish.name}}{% for cuisine in p.dish.cuisines.all|slice:':3' %} ({{cuisine|truncatechars:26}}){% endfor %}
+			">
+		</div>
+		<div style="display:none;">
+			<input class="form-control" readonly="true" id="dish_pk{{p.dish.id}}" style="padding:1px; text-align:right;" value="{{p.dish.id}}">
+		</div>
+		<div class="col-xs-2" id="button_host" style="padding:2px 0px 2px 2px;">
+			<a class="btn btn-custom btn-lg form-control" id="{{forloop.counter}}" style="padding-top:6px;padding-left:4px;" name="{{p.dish.id}}" href="#">
+				<i class="fa fa-times fa-lg" aria-hidden="true"></i>
+			</a>
+		</div> 
+	</div>
+{% endfor %}
+</div>
+
+	<form enctype='multipart/form-data' role="form" action="." method="POST">
+		{% csrf_token %}
+		{{ form.non_field_errors }}
+		<div id="insert" class="insert"></div>
+		<div class="col-xs-12" id="div_input" name="div_input" style="padding:2px 0px;">
+			<label for="id_auto">Add dishes: <i class="glyphicon glyphicon-arrow-up"></i></label>
+			<input class="form-control ui-autocomplete-input" id="id_auto" name="auto" type="text"  placeholder="type dish here.." autocomplete="off"/>
+		</div>
+		<br clear="all"/>
+		<div class="alert alert-danger fade in" id="alert-dupli" style="display:none;">
+			<strong id="name_dupli"></strong> Already in your list!
+		</div>
+		<select multiple="multiple" id="id_di" name="di" style="display:none;">
+		{% with c=1 %}  
+			{% for d in dishes %}
+				<option 
+				{% if d.id in dishids_list %} 
+					value='##-{{d.id}}' selected
+				{% else %}
+					value='##-{{d.id}}'
+				{% endif %}>
+				{{d.name}}
+				</option>
+			
+			{% endfor %}
+		{% endwith %}
+		</select>
+		<button class="btn btn-custom btn-lg btn-block" type="submit"/>Save</button>
+		<a class="btn btn-custom btn-lg btn-block" href="/list/{{list.urlname}}/">Cancel</a>
+	</form>
+
+</div>
+
+{% block focus %}
+	<script type="text/javascript">
+		document.getElementById('id_auto').focus();
+	</script>
+{% endblock %}
+
+{% endblock %}
+
+{% block extra-bottom %}
+
+	<script src="{% static 'dist/jquery/autocomplete/jquery-ui.min.js' %}"></script>
+		<script>
+		$( function() {
+			var limit = {{limit}};
+			var dishes_array = [];
+			//Converts the quetyset to an array of ints:
+			var dishes_array = {{ dishids_list|safe }};
+			//Initiates count with the number of dishes:
+			var count = dishes_array.length;
+			//If the number of dishes reached the limit already
+			if (count >= limit){
+				//show alert
+				$('#alert-dupli').show().text(limit+" is the limit! Delete dishes to add more");
+				//Hide add new dish input
+				$("#div_input").hide();
+			};
+			//Changes value in id_di (hidden multiselect) for select options from ##-id to index-id 
+			for (i=1; i < count+1; i++) {
+				$("#id_di option[value='##-"+dishes_array[i-1]+"']").val(i+"-"+dishes_array[i-1]);
+				};
+			//When a new dish is entered:
+			$( "#id_auto" ).autocomplete({
+				minLength: 2,
+				source: '/dish_list/',
+				focus: function( event, ui ) {
+					return false;
+				},
+				//Additional intructions when new dish entered:
+				select: function( event, ui ) {
+					//If the selected dish is NOT in the array (the system)
+					if( $.inArray(parseInt(ui.item.value), dishes_array) == -1){
+						count = count + 1;
+						$("#id_auto").val("");
+						$('#alert-dupli').hide();
+						$("#insert").show();
+						$("#id_di option[value='##-"+ui.item.value+"']").val(count+"-"+ui.item.value).prop('selected', true);
+						var elem_index = $('<input class="form-control" id="'+count+'ind" readonly="true" style="padding:1px; text-align:right;">').val(count);
+						var elem_dish_name = $('<input class="form-control" readonly="true">').val(ui.item.label);
+						var elem_dish_id = $('<input class="form-control" readonly="true" id="dish_pk'+ui.item.value+'" style="padding:1px; text-align:right;">').val(ui.item.value);
+						var elem_delete = $('<a class="btn btn-custom btn-lg form-control" id="'+count+'" style="padding-top:6px;padding-left:4px;" name="'+ui.item.value+'" href="#">').append('<i class="fa fa-times fa-lg" aria-hidden="true">');
+						var div_index = $('<div class="col-xs-1" style="padding:2px 2px 2px 0px;">').append(elem_index);
+						var div_dish_name = $('<div class="col-xs-9" style="padding:2px 0px;">').append(elem_dish_name);
+						var div_dish_id = $('<div style="display:none;">').append(elem_dish_id);
+						var div_del =  $('<div class="col-xs-2" id="button_host" style="padding:2px 0px 2px 2px;">').append(elem_delete);;
+						var br = document.createElement("br");
+						var div = $('<div id="'+count+'div"></div>').append(div_index,div_dish_name,div_dish_id,div_del);
+						$("#insert").append(div);
+						dishes_array.push(parseInt(ui.item.value));
+						if (count >= limit)
+						{
+							//Show alert
+							$('#alert-dupli').show().text(limit+" is the limit! Delete dishes to add more");
+							//Hide add new dish input
+							$("#div_input").hide();
+						}
+						return false;
+					}
+					//The dish is already in the list, delete and alert:
+					else{
+						//show alert
+						$('#alert-dupli').show();
+						$('#name_dupli').text(ui.item.label);
+						//Clear value in input
+						$("#id_auto").val("");
+						return false;
+					}
+				}
+			});
+			//Delete selected:
+			$("#insert").on("click", "#1,#2,#3,#4,#5,#6,#7,#8,#9,#10,#11,#12,#13,#14,#15,#16,#17,#18,#19,#20,#21,#22,#23,#24,#25,#26,#27,#28,#29,#30,#31,#32,#33,#34,#35,#36,#37,#38,#39,#40,#41,#42,#43,#44,#45,#46,#47,#48,#49,#50,#51,#52,#53,#54,#55,#56,#57,#58,#59,#60,#61,#62,#63,#64,#65,#66,#67,#68,#69,#70,#71,#72,#73,#74,#75,#76,#77,#78,#79,#80", function(){
+				var selected = $(this).attr('id');
+				//-Capture Dish PK to delete
+				var dish_pk = $(this).attr('name');
+				//-Capture the index number of the object to delete:
+				inde = $("#"+selected+"ind").val();
+				//-Modify the index select (unselect option, fill up with DISH text):
+				var find = inde+"-"+dish_pk;
+				//-Modify the id select (Return ##-id to value and unselect option):
+				$("#id_di option[value='"+find+"']").val("##-"+dish_pk).prop('selected', false);
+				//-Remove element:
+				$("#"+selected+"div").remove();
+				//-Remove id from array:
+				dishes_array.splice((selected-1), 1);
+				//dishes_array.splice(dishes_array.indexOf(parseInt(dish_pk)), 1);
+				//-re accomodate lists:
+				var selected = parseInt(selected);
+				for (selected; selected < count; selected++) {
+					var n = selected+1;
+					var next = n.toString();
+					//alert("Working on: "+next);
+					//Get id so I can change value on the option
+					var cur_id = $("#"+next).attr("name");
+					var cur_val = selected+"-"+cur_id
+					var nex_val = next+"-"+cur_id
+					$("#id_di option[value='"+nex_val+"']").val(cur_val);
+					//It is not the lastone, reorganize lists from selected to end:
+					$("#"+next+"ind").val(selected);
+					$("#"+next).attr("id",selected);
+					$("#"+next+"div").attr("id",selected+"div");
+					$("#"+next+"ind").attr("id",selected+"ind");
+				}
+				if (count < limit+1)
+				{
+				$("#div_input").show();
+				$('#alert-dupli').hide()
+				}
+								//If we are deleting the last dish then hide white div
+				if (count == 1)
+				{
+				$("#insert").hide();
+				}
+				count = count - 1
+			});
+		});
+		</script>
+{% endblock %}

@@ -1,0 +1,169 @@
+{% extends '_base.html' %}
+{% block title %}Search Results{% endblock %}
+{% block content %}
+
+<a class="btn btn-custom btn-block"  style="margin:0px 2px 2px 2px;" href="/searchadvance/" title="Advance Search"><li class="glyphicon glyphicon-search icon-white"></li>Search Again</a>
+
+{## CUISINES - Start ##}
+{% if cui_count > 0 %}
+<div class="list-group">
+  <div class="list-group-item" style="background-color:#dddddd; padding-bottom:6px; padding-top:6px; text-align:center;">
+  <span class="label label-default">{{cui_count}}</span>
+	<p style="margin-top:5px;margin-bottom:2px;display:inline;"><b>Cuisines </b> for: {{search}}
+	</p>
+  </div>
+  <div class="list-group-item" style="padding:4px;">
+	<a class="btn btn-custom btn-block" href="{% url 'view_cuisinenew' %}"><b>Add Cuisine</b></a>
+  </div>
+  {% for p in cuisines|slice:":10"  %}
+	  <a href="/cuisine/{{p.urlname}}/" class="list-group-item">
+		<h3 class="list-group-item-heading" style="color:#845505;margin-bottom:0px;"><b>{{p.name|truncatewords:42}} Cuisine</b></h3>
+		<p class="text-small"><i><b>{{p.othernames|truncatechars:18}} ({{p.dishes_count}} dishes)</b></i></p>
+		<p class="list-group-item-text text-small" style="margin-top:4px;">{{p.description|truncatewords:28 }}</p>
+	  </a>
+ {% endfor %}
+{% if cui_count > 10 %}
+	<div class="list-group-item" style="padding:4px;">
+		<a class="btn btn-custom btn-block" href="/cuisines_result/{{search}}/1/" style="text-align:center;"><b>More cuisine results ></b></a>
+	</div>
+{% endif %}
+</div>
+{% endif %}
+{## CUISINES - End ##}
+
+{## DISH - Start ##}
+{% if dishes|length > 0 %}
+<div class="list-group">
+  <div class="list-group-item" style="background-color:#dddddd; padding-bottom:6px; padding-top:6px; text-align:center;">
+  <span class="label label-default">{{dishes|length}}</span>
+	<p style="margin-top:5px;margin-bottom:2px;display:inline;"><b>Dishes </b> for: {{search}}
+	</p>
+  </div>
+
+  <div class="list-group-item" style="padding:4px;">
+	<a class="btn btn-custom btn-block" href="/dishnew/0/"><b>Add Dish</b></a>
+  </div>
+  {% for p in dishes|slice:":10"  %}
+	  <a class="list-group-item row" href="/dish/{{p.urlname}}/" style="margin-left:0px; margin-right:0px; padding:4px;">
+	  {% if p.name|length > 20 %}
+		<div class="col-xs-12" style="padding-left:2px;">
+			<h3 class="list-group-item-heading" style="color:#845505;margin-bottom:2px;"><b>{{p.name|truncatechars:56}}</b></h3>
+		</div>
+		<div class="col-xs-7" style="padding-left:2px;">
+			<p class="text-small" style="margin-bottom:2px;"><b><i>
+			{% if p.othernames %}
+				{{p.othernames|truncatechars:20 }}
+			{% endif %}
+			{% if p.cuisines.all %}
+				{% for cuisine in p.cuisines.all|slice:":3"  %}
+					({{cuisine|truncatechars:20}})
+				{% endfor %}
+			{% endif %}
+			</i></b></p>
+			{% if p.description %}
+				<p class="text-small">{{p.description|truncatewords:26}}</p>
+			{% endif %}
+		</div>
+	  {% else %}
+		<div class="col-xs-7" style="padding-left:2px;">
+			<h3 class="list-group-item-heading" style="color:#845505;margin-bottom:2px;"><b>{{p.name}}</b></h3>
+			<p class="text-small" style="margin-bottom: 2px;"><b><i>
+			{% if p.othernames %}
+				{{p.othernames|truncatechars:20 }}
+			{% endif %}
+			{% if p.cuisines.all %}
+				{% for cuisine in p.cuisines.all|slice:":3"  %}
+					({{cuisine|truncatechars:20}})
+				{% endfor %}
+			{% endif %}
+			</i></b></p>
+			{% if p.description %}
+				<p class="text-small">{{p.description|truncatewords:26}}</p>
+			{% endif %}
+		</div>
+	   {% endif %}
+		<div class="col-xs-5" style="padding-left:0px; padding-right:0px;">
+			{% if p.photo_main %}
+				<img src="/media/{{p.filename}}-med{{p.extension}}" class="img-rounded" width="100%">
+			{% else %}
+				<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+			{% endif %}
+		</div>
+	  </a>
+  {% endfor %}
+	{% if dishes|length > 10 %}
+		 <div class="list-group-item" style="padding:4px;">
+			<a class="btn btn-custom btn-block" href="/searchresultadv/{{search}}/*/*/1/"><b>More dishes results ></b></a>
+			
+		</div>
+	{% endif %}
+</div>
+{% endif %}
+
+{## LIST - Start ##}
+{% if lists|length > 0 %}
+<div class="list-group">
+  <div class="list-group-item" style="background-color:#dddddd; padding-bottom:6px; padding-top:6px; text-align:center;">
+  <span class="label label-default">{{list_count}}</span>
+	<p style="margin-top:5px;margin-bottom:2px;display:inline;"><b>Lists </b> for: {{search}}
+	</p>
+  </div>
+  <div class="list-group-item" style="padding:4px;">
+	<a class="btn btn-custom btn-block" href="{% url 'view_listnew' %}"><b>Add List</b></a>
+  </div>
+  {% for p in lists|slice:":10" %}
+  {% if user.is_authenticated and p.type == '3' and p.owner.user == user or p.type != '3' %}
+		<a class="list-group-item" href="/list/{{p.urlname}}" style="padding:4px;">
+			<h3 class="list-group-item-heading" style="color:#845505;margin-bottom:2px;"><b>{{p.name|truncatechars:100}}</b></h3>
+			<p class="text-small" style="margin-bottom:4px;">{{p.modified|date:"M yy"}} by <b>{{p.owner.user.username|truncatechars:20}}</b> ({{p.likestot}} <i class="glyphicon glyphicon-thumbs-up"></i>)
+				{% if p.type = '3' %}<i style="color:red;">Private List</i>{% endif %}
+				{% if p.type = '1' %} Personal List {% endif %}
+				{% if p.type = '2' %} Public List{% endif %}
+			</p>
+			<p class="text-small" style="margin-top:5px; margin-bottom:5px;">{{ p.description|truncatewords:48}}</p>
+			<div class="row" style="margin-left:0px; margin-right:0px; padding:0px;">
+			{% if p.dishes.all %}
+				{% for p in p.dishes.all|slice:":3"  %}
+					  <div class="col-md-4 col-xs-4" style="padding:2px;">
+						<div class="thumbnail" title="Go to dish page: {{p.name}}" style="font-size:14px; margin-bottom:0px;line-height:16px;">
+							{% if p.photo_main %}
+								<img src="/media/{{p.filename}}-med{{p.extension}}" class="img-rounded" width="100%">
+							{% else %}
+								<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+							{% endif %}
+							<b style="display:inline;" >{{p.name|truncatechars:22}}</b>
+							<b class="text-small" style="margin-bottom:4px; display:inline;">
+							{% if p.othernames %}
+								<i title="Othernames">{{p.othernames|truncatechars:26}}</i>
+							{% endif %}</b></b>
+							{% if p.cuisines.all %}
+							<p class="text-small" style="margin-bottom:4px;">
+								{% for cuisine in p.cuisines.all|slice:":2" %}
+									({{cuisine|truncatechars:20}})
+								{% endfor %}
+							{% endif %}
+							</p>
+						</div>
+					  </div>
+				{% endfor %}
+			{% else %}
+				<div class="thumbnail col-md-4 col-xs-4" title="Go to dish page: {{p.name}}" style="margin-bottom:0px;line-height:16px;">
+				<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+				<b style="display:inline;font-size:14px;" >There are no dishes</b>
+				</div>
+			{% endif %}
+			</div>
+		  </a>
+  {% endif %}
+ {% endfor %}
+
+{% if list_count > 10 %}
+	<div class="list-group-item" style="padding:4px;">
+		<a class="btn btn-custom btn-block" href="/list_search_results/{{search}}/1/" style="text-align:center;"><b>More list results ></b></a>
+	</div>
+{% endif %}
+</div>
+{% endif %}
+{## LIST - End ##}
+
+{% endblock %}

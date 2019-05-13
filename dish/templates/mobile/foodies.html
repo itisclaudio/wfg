@@ -1,0 +1,166 @@
+{% extends '_base.html' %}
+
+{% block title %} Foodies 
+	{% if paginatorlist.paginator.count > 15 %}
+		| Page {{paginatorlist.number}}
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+
+{% if paginatorlist.paginator.count > 0 %}
+
+<div class="row" style="margin:2px;">
+	<div class="col-xs-3" style="padding:1px;">
+		{% if paginatorlist.has_previous %}
+			<a class="btn btn-custom btn-block" href="/foodies/1">
+		{% else %}
+			<a class="btn btn-custom btn-block disabled">
+		{% endif %}
+		<span class="glyphicon glyphicon-fast-backward"></span></a>
+	</div>
+	<div class="col-xs-3" style="padding:1px;">
+		{% if paginatorlist.has_previous %}
+			<a class="btn btn-custom btn-block" href="/foodies/{{paginatorlist.previous_page_number}}">
+		{% else %}
+			<a class="btn btn-custom btn-block disabled">
+		{% endif %}
+		<span class="glyphicon glyphicon-step-backward"></span></a>
+	</div>
+	<div class="col-xs-3" style="padding:1px;">
+		{% if paginatorlist.has_next %}
+			<a class="btn btn-custom btn-block" href="/foodies/{{paginatorlist.next_page_number}}">
+		{% else %}
+			<a class="btn btn-custom btn-block disabled">
+		{% endif %}
+		<span class="glyphicon glyphicon-step-forward"></span></a>
+	</div>
+	<div class="col-xs-3" style="padding:1px;">
+		{% if paginatorlist.has_next %}
+			<a class="btn btn-custom btn-block" href="/foodies/{{paginatorlist.paginator.num_pages}}">
+		{% else %}
+			<a class="btn btn-custom btn-block disabled">
+		{% endif %}
+		<span class="glyphicon glyphicon-fast-forward"></span></a>
+	</div>
+</div>
+
+
+{## FOODIES ##}
+<div class="list-group" style="margin-bottom:0px;">
+  <div class="list-group-item" style="background-color:#dddddd; padding-bottom:6px; padding-top:6px;">
+	<p style="margin-top:5px;margin-bottom:2px; text-align:center;">
+		<span class="label label-default" style="vertical-align:top;display:inline;">
+			{{paginatorlist.paginator.count}}</span>
+			Foodies
+		<span class="label label-default" style="vertical-align:top;display:inline;">{{paginatorlist.number}}</span>
+		of
+		<span class="label label-default" style="vertical-align:top;display:inline;">{{paginatorlist.paginator.num_pages}}</span>
+	</p>
+  </div>
+  {% for p in paginatorlist.object_list %}
+	  <a class="list-group-item row" href="/foodie/{{p.user.username}}/" style="margin-left:0px; margin-right:0px; padding:4px;">
+	  {% if p.user.username|length > 20 %}
+		<div class="col-xs-12" style="padding-left:2px;">
+			<h2 class="list-group-item-heading" style="color:#845505;margin-bottom:2px; text-align:left; padding-left: 0px;"><b>{{p.user.username|truncatechars:56}}</b></h2>
+		</div>
+		<div class="col-xs-9" style="padding-left:2px;">
+			<p class="text-small" style="margin-bottom:2px;">
+			<b>Name :</b>
+			{% if p.names_show = 1 %}
+				{{ p.user.first_name }} {{ p.user.last_name }}
+			{% else %}
+				<i>"Not Public"</i>
+			{% endif %}<br/>
+			<b>Email :</b>
+			{% if profile.email_show = True %}
+				{{ profile.user.email }}
+			{% else %}
+				<i>"Not Public"</i>
+			{% endif %}
+			<br/>
+			<b>Photos:</b> {{ p.picture_set.count }}<br/>
+			<b>Dishes:</b> {{ p.dish_set.count }}<br/>
+			<b>Lists:</b> {{ p.list_set.count }}
+			</p>
+		</div>
+	  {% else %}
+		<div class="col-xs-9" style="padding-left:2px;">
+			<h2 class="list-group-item-heading" style="color:#845505;margin-bottom:2px; text-align:left; padding-left: 0px;"><b>{{p.user.username}}</b></h2>
+			<p  class="text-small" style="margin-bottom:2px;">
+			<b>Name :</b>
+			{% if p.names_show = 1 %}
+				{{ p.user.first_name }} {{ p.user.last_name }}
+			{% else %}
+				<i>"Not Public"</i>
+			{% endif %}<br/>
+			<b>Email :</b>
+			{% if profile.email_show = True %}
+				{{ profile.user.email }}
+			{% else %}
+				<i>"Not Public"</i>
+			{% endif %}
+			<br/>
+			<b>Photos:</b> {{ p.picture_set.count }}<br/>
+			<b>Dishes:</b> {{ p.dish_set.count }}<br/>
+			<b>Lists:</b> {{ p.list_set.count }}
+			</p>
+		</div>
+	   {% endif %}
+		<div class="col-xs-3" style="padding-left:0px; padding-right:0px;">
+			{% if p.photo %}
+				<img id="foodie_photo" name="/media/{{p.photofilename}}{{p.extension}}" src="/media/{{p.photofilename}}-med{{p.extension}}" class="img-rounded" width="100%"/>
+			{% else %}
+				<img src="/media/images/user.png"  class="img-rounded"  width="100%"/>
+			{% endif %}
+		</div>
+	  </a>
+  {% endfor %}
+</div>
+{## END NEW ##}
+
+	{% if paginatorlist.paginator.count > 15 %}
+	
+		<div class="row" style="margin:2px;">
+			<div class="col-xs-3" style="padding:1px;">
+				{% if paginatorlist.has_previous %}
+					<a class="btn btn-custom btn-block" href="/foodies/1">
+				{% else %}
+					<a class="btn btn-custom btn-block disabled">
+				{% endif %}
+				<span class="glyphicon glyphicon-fast-backward"></span></a>
+			</div>
+			<div class="col-xs-3" style="padding:1px;">
+				{% if paginatorlist.has_previous %}
+					<a class="btn btn-custom btn-block" href="/foodies/{{paginatorlist.previous_page_number}}">
+				{% else %}
+					<a class="btn btn-custom btn-block disabled">
+				{% endif %}
+				<span class="glyphicon glyphicon-step-backward"></span></a>
+			</div>
+			<div class="col-xs-3" style="padding:1px;">
+				{% if paginatorlist.has_next %}
+					<a class="btn btn-custom btn-block" href="/foodies/{{paginatorlist.next_page_number}}">
+				{% else %}
+					<a class="btn btn-custom btn-block disabled">
+				{% endif %}
+				<span class="glyphicon glyphicon-step-forward"></span></a>
+			</div>
+			<div class="col-xs-3" style="padding:1px;">
+				{% if paginatorlist.has_next %}
+					<a class="btn btn-custom btn-block" href="/foodies/{{paginatorlist.paginator.num_pages}}">
+				{% else %}
+					<a class="btn btn-custom btn-block disabled">
+				{% endif %}
+				<span class="glyphicon glyphicon-fast-forward"></span></a>
+			</div>
+		</div>
+	
+	{% endif %}
+	
+{% else %}
+	<h3>There are no Foodies</h3>
+{% endif %}
+
+
+{% endblock %}

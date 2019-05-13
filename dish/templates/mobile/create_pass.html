@@ -1,0 +1,91 @@
+{% extends '_base.html' %}
+{% block title %}WorldFood.Guide | Sign Up{% endblock %}
+{% block content %}
+<h1>Sign Up</h1>
+<div class="well-mobile">
+
+	<form enctype='multipart/form-data' role="form" action="." method="POST">
+		{% csrf_token %}
+		<div class="fieldWrapper">
+			{{ form.first_name.errors }}
+			<label for="id_first_name">First Name*</label>
+			{{ form.first_name }}
+		</div>
+		<div class="fieldWrapper">
+		    {{ form.last_name.errors }}
+			<label for="id_last_name">Last Name*</label>
+			{{ form.last_name }}
+    	</div>
+	    <div class="fieldWrapper">
+    	    {{ form.username.errors }}
+    	    <label for="id_username">Username*</label>
+    	    {{ form.username }}
+    	</div>
+	    <div class="fieldWrapper">
+    	    {{ form.password.errors }}
+    	    <label for="id_password">Password*</label>
+    	    {{ form.password }}
+    	</div>
+	    <div class="fieldWrapper">
+    	    {{ form.password2.errors }}
+    	    <label for="id_password2">Repeat Password*</label>
+    	    {{ form.password2 }}
+    	</div>
+	    <div class="fieldWrapper">
+    	    {{ form.email.errors }}
+    	    <label for="id_email">Email*</label>
+    	    {{ form.email }}
+    	</div>
+	    <div class="fieldWrapper">
+    	    {{ form.email2.errors }}
+    	    <label for="id_email2">Repeat Email*</label>
+    	    {{ form.email2 }}
+    	</div>
+		<div class="fieldWrapper">
+    	    {{ form.about.errors }}
+    	    <label for="id_about">About you</label>
+    	    {{ form.about }}
+    	</div>
+		<div class="fieldWrapper">
+    	    {{ form.photo.errors }}
+    	    <label for="id_photo">Photo*</label>
+    	    {{ form.photo }}
+    	</div>
+		<br>
+		<div class="well well-white" style="padding-bottom:40px;">
+			<div class="col-xs-8">
+				<p><b>Names public:</b></p>
+			</div>
+			<div class="col-xs-4">
+				{{ form.names_show }}
+			</div>
+		</div>
+		{{ form.names_show.errors }}		
+		<div class="well well-white" style="padding-bottom:40px;">
+			<div class="col-xs-8">
+				<p><b>Email public:</b></p>
+			</div>
+			<div class="col-xs-4">
+				{{ form.email_show }}
+			</div>
+		</div>
+		{{ form.email_show.errors }}		
+		<button id="signup_button" class="btn btn-custom btn-lg btn-block">Sign Up!</button>
+		<a class="btn btn-custom btn-lg btn-block" href="{% url 'view_main' %}">Cancel</a>
+		<p class="text-small" style="margin-top: 5px;">By signing up, you agree to WFG's <a href="{% url 'view_terms' %}" target="_blank">Terms of Service</a></p>
+	</form>
+	{% if information = 1 %}
+		<p>The email <b>"{{ user.email }}" </b>already exist.<br>
+		User another email or <a href="{% url 'view_login' %}">log in</a></p>
+	{% endif %}
+
+</div>
+
+{% block extra-bottom %}
+	<script type="text/javascript">
+	$( function() {
+		document.getElementById('id_first_name').focus();
+	</script>
+{% endblock %}
+
+{% endblock %}

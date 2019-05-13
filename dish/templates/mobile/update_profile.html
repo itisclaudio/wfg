@@ -1,0 +1,35 @@
+{% extends '_base.html' %}
+{% block title %}Update Profile{% endblock %}
+{% block content %}
+<h1>Edit Profile</h1>
+<div class="well-mobile">
+	<form enctype='multipart/form-data' action="." method="POST">
+		{% csrf_token %}
+		{{ formUser.non_field_errors }}
+		<div class="fieldWrapper">
+			<label for="id_username">Username*:</label>
+			<sup class="footer-rest"><i class="text-small" style="color: #999;">30 max. Letters, numbers and _@-.+ can be used</i></sup>
+			{{ formUser.username }} {{ formUser.username.errors }}
+		</div>
+		<div class="fieldWrapper">
+			<label for="id_first_name">First Name:</label>
+			{{ formUser.first_name }} {{ formUser.first_name.errors }}
+		</div>
+		<div class="fieldWrapper">
+			<label for="id_last_name">Last Name:</label>
+			{{ formUser.last_name }} {{ formUser.last_name.errors }}
+		</div>
+		<br>
+		<button class="btn btn-custom btn-block btn-lg" type="submit"/>Save</button> 
+		<a class="btn btn-custom btn-block btn-lg" href="{% url 'view_myprofile' %}">Cancel</a>
+	</form>	
+
+</div>
+
+{% block focus %}
+	<script type="text/javascript">
+			document.getElementById('id_username').focus();
+	</script>
+{% endblock %}
+	
+{% endblock %}

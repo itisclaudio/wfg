@@ -1,0 +1,66 @@
+{% extends '_base.html' %}
+{% block title %}Delete Dish{% endblock %}
+{% block content %}
+
+<!--Modal 0 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="myModalLabel">Processing...</h1>
+      </div>
+      <div class="modal-body">
+		<div class="progress">
+			  <div class="progress-bar progress-bar-striped progress-bar-warning active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+			  </div>
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Modal 1 -->
+
+	{% if information = 1 %}
+		<h1>Delete "{{dish.name}}"</h1>
+		<div class="well-1">
+			<p><a href="/dish/{{dish.urlname}}">{{dish.name}} </a> can not be deleted because the following photos are associated to it:</p>
+			<div class="well well-white">
+				<table class="table table-title" width="100%" border="0">
+				{% for p in pictures %}
+				<tr>
+				<td>
+					<a href="/photo/{{p.urlname}}/">
+					<img src="/media/{{p.filename}}-thum{{p.extension}}" class="img-rounded" width="100%">
+					</a>
+				</td>
+				<td>
+					Picture by: <a href="/foodie/{{p.owner.user.username}}">{{p.owner}}</a><br>
+					Uploaded:  {{ p.datetime|date:"N j, Y"}} 
+				</td>
+				</tr>
+				{% endfor %}
+				</table>
+			</div>
+			<p>To delete "{{dish.name}}". The above photos have to be deleted first</p>
+			<a class="btn btn-custom btn-lg" href="javascript:window.history.go(-1);">Cancel</a>
+	{% else %}
+		<h1>Delete <a href="/dish/{{dish.urlname}}">{{dish.name}}</a> for ever?</h1>
+		<div class="well-mobile" style="margin-top:0px; padding-top:0px;"">
+			<form action="." method="POST">
+			{% csrf_token %}
+			<p>{{dish.description|truncatechars:200|linebreaks}}</p>
+				<button class="btn btn-custom btn-lg btn-block" onclick="loading();" type="submit"/>Yes delete</button>
+				<a class="btn btn-custom btn-lg btn-block" href="javascript:window.history.go(-1);">Cancel</a>
+			</form>
+		</div>
+		</div>
+	{% endif %}
+
+<script>
+//function to show the modal "Processing" when loading results page
+function loading(){
+	$("#myModal").modal('show');
+};
+</script>
+
+{% endblock %}

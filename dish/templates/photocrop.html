@@ -1,0 +1,88 @@
+{% extends '_base.html' %}
+{% block title %}Crop Photo{% endblock %}
+
+{% block super-extra-head %}
+	{% load static %}
+	<link href="{% static 'dist/jcrop/css/jquery.Jcrop.css' %}" rel="stylesheet"/>
+{% endblock %}
+
+{% block content %}
+<h1 align="center">Crop Photo</h1>
+<div class="well">
+	<div class="row">
+		<div class="col-md-8" align="center">
+			<img id="photo" src="/media/{{ photo.filename }}-med{{photo.extension}}?cachebuster={%now 'H:i:s'%}" title="{{ photo.dish.name }}"/>
+		</div>
+		<div class="col-md-4" align="left">
+			<form action="." method="POST">
+			{% csrf_token %}
+			<button class="btn btn-lg btn-custom btn-block" type="submit"/>Crop and Save</button>
+			<a class="btn btn-custom btn-lg btn-block" href="/photo/{{photo.urlname}}">Cancel</a>
+			<p> Click on the photo, resize and press "crop and save"</p>
+				<div style="display:none">
+					{{ form.x }}
+					{{ form.y }}
+					{{ form.w }}
+					{{ form.h }}
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block extra-bottom %}
+<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
+<script src="{% static 'dist/jcrop/js/jquery.Jcrop.js' %}"></script>
+<script type="text/javascript">
+
+function updateCoords(c)
+	{
+		$("#id_x").val(c.x);
+		$("#id_y").val(c.y);
+		$("#id_w").val(c.w);
+		$("#id_h").val(c.h);
+	}
+
+$(document).ready(function(){
+
+	//Jcrop -Start-
+	$("#photo").Jcrop({
+		onSelect: updateCoords,
+		onchange: updateCoords,
+		minSize: [160,160]
+	});
+	
+	//Jcrop -End-
+
+	$("#rotate-right").click(function(){
+		data = parseInt($("#id_rotation").val());
+		if (data == 0){
+			$("#id_rotation").val(270);
+		}
+		else{
+			$("#id_rotation").val(data - 90);
+		}
+		$("#photo").rotate(90);
+		$("#photo").css("width","300px");
+		$("#photo").css("height","300px");
+		$("#photo").attr('class', 'img-rounded');
+	});
+
+	$("#rotate-left").click(function(){
+		data = parseInt($("#id_rotation").val());
+		if (data == 270){
+			$("#id_rotation").val(0);
+		}
+		else{
+			$("#id_rotation").val(data + 90);
+		}
+		$("#photo").rotate(-90);
+		$("#photo").css("width","300px");
+		$("#photo").css("height","300px");
+		$("#photo").attr('class', 'img-rounded');
+	});
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,77 @@
+{## DISHES ##}
+<div class="list-group" style="margin-bottom:0px;">
+  <div class="list-group-item" style="background-color:#f5f5f5; padding-bottom:6px; padding-top:6px;">
+	<h2 style="margin-top:5px;margin-bottom:2px; text-align:center;">Most liked Photos</h2>
+  </div>
+  {% if user_liked_photos.count > 0 %}
+	  {% for photo in user_liked_photos %}
+		  <div class="list-group-item row" style="margin-left:0px; margin-right:0px; padding:4px;">
+		  {% if photo.dish.name|length > 20 %}
+			<div class="col-xs-12" style="padding-left:2px;">
+				<a href="/dish/{{photo.dish.urlname}}/">
+					<h3 class="list-group-item-heading" style="color:#845505;margin-bottom:2px;"><b>{{photo.dish.name|truncatechars:56}}</b></h3>
+				</a>
+			</div>
+			<div class="col-xs-7" style="padding-left:2px;">
+				<p style="margin-bottom:2px;"><i>
+				({{photo.dish.likestot}} <i class="glyphicon glyphicon-thumbs-up"></i>) 
+				{% if photo.dish.othernames %}
+					{{photo.dish.othernames|truncatechars:20 }}
+				{% endif %}
+				{% if photo.dish.cuisines.all %}
+					{% for cuisine in photo.dish.cuisines.all|slice:":3"  %}
+						<a href="/cuisine/{{cuisine.urlname}}/">
+							({{cuisine|truncatechars:20}})
+						</a>
+					{% endfor %}
+				{% endif %}
+				</i></p>
+				{% if photo.dish.description %}
+					<p class="smallfont">{{photo.dish.description|truncatewords:20}}</p>
+				{% endif %}
+			</div>
+		  {% else %}
+			<div class="col-xs-7" style="padding-left:2px;">
+				<a href="/dish/{{photo.dish.urlname}}/">
+					<h3 class="list-group-item-heading" style="color:#845505;margin-bottom:2px;"><b>{{photo.dish.name}}</b></h3>
+				</a>
+				<p style="margin-bottom: 2px;"><i>
+				({{photo.dish.likestot}} <i class="glyphicon glyphicon-thumbs-up"></i>) 
+				{% if photo.dish.othernames %}
+					{{photo.dish.othernames|truncatechars:20 }}
+				{% endif %}
+				{% if photo.dish.cuisines.all %}
+					{% for cuisine in photo.dish.cuisines.all|slice:":3"  %}
+						<a href="/cuisine/{{cuisine.urlname}}/">
+							({{cuisine|truncatechars:20}})
+						</a>
+					{% endfor %}
+				{% endif %}
+				</i></p>
+				{% if photo.dish.description %}
+					<p class="smallfont">{{photo.dish.description|truncatewords:20}}</p>
+				{% endif %}
+			</div>
+		   {% endif %}
+			<div class="col-xs-5" style="padding-left:0px; padding-right:0px;">
+				{% if photo.filename %}
+					<a href="/photo/{{photo.urlname}}" title="Click to see the photo" >
+						<img src="/media/{{photo.filename}}-med{{photo.extension}}" class="img-rounded" width="100%">
+					</a>
+				{% else %}
+					<a href="/photonew/{{photo.dish.id}}/">
+						<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%" title="Upload new {{p.name|truncatechars:20}} photo" >
+					</a>
+				{% endif %}
+			</div>
+		  </div>
+	  {% endfor %}
+	 {% else %}
+		<div class="list-group-item" style="text-align:center;">
+			<p style="margin-top:10px;">No photos yet.</p>
+			<p>Upload you first dish and/or photo:</p>
+			<img src="/media/images/upload-med.jpg" width="60%" class="img-rounded">
+		</div>
+	 {% endif %}
+</div>
+{## END DISH ##}

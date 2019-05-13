@@ -1,0 +1,227 @@
+{% extends '_site_base.html' %}
+{% load static %}
+{% block extra-head %}
+	<!-- stylesheets -->
+	
+	<!--<link href="{% static 'dist/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" >-->
+	<link href="{% static 'css/desktop.css' %}" rel="stylesheet">
+	
+	<!-- <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.js"></script>-->
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style type="text/css">
+      body {
+        background-color:#FFFFE8;
+		/*padding-top:60px;*/
+		margin-bottom: 60px;
+		/*padding-bottom:60px;*/
+		/*background-color:#993300;*/
+      }
+	  
+.navbar.navbar-default {
+  border: none;
+}
+.navbar.navbar-default .navbar-split ul > li > a {
+  color: #333;
+}
+
+@media (min-width: 768px) {
+  .navbar.navbar-default .navbar-split {
+    position: relative;
+    padding-left: 50px;
+    /*float: right;*/
+    margin-right: -15px;
+  }
+  .navbar.navbar-default .navbar-split .navbar-upper {
+    /*float: right;*/
+    /*margin-top: 8px;*/
+  }
+  .navbar.navbar-default .navbar-split .navbar-lower {
+    /*background-color: #069CCF;*/
+	padding-left: 120px;
+	margin-top: -5px;
+    width: 100%;
+    clear: both;
+  }
+  .navbar-nav > li > a {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+}
+@media (max-width: 767px) {
+  .navbar.navbar-default {
+    padding: 0;
+  }
+  .navbar.navbar-default .navbar-brand {
+    padding-top: 0;
+    /*margin-top: -10px;*/
+  }
+  .navbar.navbar-default .navbar-collapse {
+    margin-top: 15px;
+    margin-bottom: -15px;
+  }
+  .icon-brand {
+    height: 40px;
+  }
+}
+	  </style>
+{% endblock %}
+{% block extra-content-top %}
+
+<!--Navbar (start)-->
+<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom:10px;">
+  <div class="container">
+
+    <div class="navbar-header" style="height:38px;">
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar"> <span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+		<a class="navbar-brand" style="padding-top:4px;padding-right:4px;" href="{% url 'view_main' %}">
+			<img class="icon-brand" alt="WorldFood.Guide" src="/media/images/worldfoodguide.png" height="60px">
+			<!--<img class="icon-brand" alt="WorldFood.Guide" src="/media/images/worldfoodguide-worldcup.png" height="60px">-->
+		</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="navbar">
+      <div class="navbar-split">
+		<form class="navbar-form navbar-left form-inline" role="search" action="/searchquick/" method="POST" style="padding-left:0px; padding-right:0px; margin-top:4px; margin-bottom:4px;">
+			{% csrf_token %}
+			<div class="form-group">
+				<input type="text" class="form-control" style="height:30px;font-size:16px;" name="search" id="id_search_inbar" placeholder="Quick search"/>
+				<input id="source" name="source" type="text"  style="display:none;" value="desktop{{request.path}}"/>
+			</div>
+			<button class="btn btn-default btn-menu" type="submit" style="margin-left:-4px ;height:30px; margin-top:0px; background-color:#C1C100;">
+				<i class="fa fa-search fa-lg" aria-hidden="true"></i>
+			</button>
+		</form>
+        <ul class="nav navbar-nav navbar-upper hidden-phone hidden-sm hidden-xs">
+			<li class="menu" style="margin-left: 5px;">
+			<a class="btn btn-default btn-menu" href="https://www.facebook.com/worldfoodguide/" target="_blank"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a>
+			</li>
+        </ul>
+        <ul class="nav navbar-nav navbar-lower">
+			<li class="dropdown menu">
+				<a href="#" class="dropdown-toggle btn btn-default btn-menu" data-toggle="dropdown">Dish / Cuisine <b class="caret"></b></a>
+				<ul class = "dropdown-menu">
+					<!--<li><a href="/photonewnodish/">Photo Upload</a></li>-->
+					<li><a href="{% url 'view_dishphotonew' %}">New Dish / Photo</a></li>
+					<li><a href="{% url 'view_dishes' %}">All Dishes</a></li>
+					<li><a href="{% url 'view_searchadvance' %}">Search Dish(es)</a></li>
+					<li role="separator" class="divider"></li>
+					<li><a href="{% url 'view_cuisinenew' %}">New Cuisine</a></li>
+					<li><a href="{% url 'view_cuisines' %}">All Cuisines</a></li>
+					<li role="separator" class="divider"></li>
+					<li><a href="{% url 'view_userphotos' username=user.username %}">My Photos</a></li>
+					<li><a href="{% url 'view_disheslatest' %}">Latest Dishes</a></li>
+					<li><a href="{% url 'view_latestphotos' %}">Latest Photos</a></li>
+					<li><a href="{% url 'view_photos' %}">Top 100 Photos</a></li>
+					<li><a href="{% url 'view_photosfull' %}">Photos - Fullscreen</a></li>
+				</ul>
+			</li>
+			<li class="dropdown menu">
+				<a href="#" class="dropdown-toggle btn btn-default btn-menu" data-toggle="dropdown">Lists <b class="caret"></b></a>
+				<ul class="dropdown-menu">
+				<li><a href="{% url 'view_listnew' %}">New List</a></li>
+				<li><a href="{% url 'view_lists_mine' %}">My Lists</a></li>
+				<li><a href="{% url 'view_lists' %}">All Lists</a></li>
+				<li><a href="{% url 'view_list_search' %}">Search List(s)</a></li>
+				</ul>
+			</li>
+			{% if user.is_authenticated %}
+				<li class="dropdown menu">
+					<a href="#" class="dropdown-toggle btn btn-default btn-menu" data-toggle="dropdown">{{user|truncatechars:20}} <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+					<li><a href="{% url 'view_myprofile' %}">My Profile</a></li>
+					<li><a href="{% url 'view_privacy' %}">Privacy Settings</a></li>
+					<li><a href="{% url 'view_logout' %}">Log Out</a></li>
+					<li role="separator" class="divider"></li>
+					<li><a href="{% url 'view_userphotos' username=user.username %}">My Photos</a></li>
+					<li><a href="{% url 'view_lists_mine' %}">My Lists</a></li>
+					<li role="separator" class="divider"></li>
+					<li><a href="{% url 'view_foodies' %}">All Foodies</a></li>
+					</ul>
+				</li>
+			{% else %}
+				<li class="dropdown menu">
+					<a href="#" class="dropdown-toggle btn btn-default btn-menu" data-toggle="dropdown">Account <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li><a href="{% url 'view_signin' %}">Sign In</a></li>
+						<li><a href="{% url 'view_signup' %}">Sign Up</a></li>
+						<li><a href="{% url 'view_passrecovery' %}">Forgot my password</a></li>
+						<li role="separator" class="divider"></li>
+						<li><a href="{% url 'view_foodies' %}">All Foodies</a></li>
+					</ul>
+				</li>
+			{% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+<!--Navbar (end)-->
+
+<!--Body (start)-->
+<div class="container">
+<div class="row">
+
+	<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12" style="padding-right:5px; padding-left:5px;">
+	{## Main Content (start) ##}
+		{% endblock %}
+		{% block extra-content-botton %}
+	</div>
+	{## Main Content (end) ##}
+	{## Side right bar (start) ##}
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<div class="col-lg-3 col-md-3 hidden-sm hidden-xs hidden-phone" style="padding-right:5px; padding-left:5px;">
+		{## Latest dishes side bar ##}
+		{% load side_latest_dishes %}
+		{% show_dishes %}
+		
+		<ins class="adsbygoogle"
+			 style="display:block"
+			 data-ad-format="fluid"
+			 data-ad-layout-key="-i9+a-13-3t+b0"
+			 data-ad-client="ca-pub-3566007766704147"
+			 data-ad-slot="5836491982"></ins>
+		<script>
+			 (adsbygoogle = window.adsbygoogle || []).push({});
+		</script>
+		{## Latest lists side bar ##}
+		{% if user.is_authenticated %}
+			{% load side_latest_lists_logged %}
+			{% show_lists user %}
+		{% else %}
+			{% load side_latest_lists %}
+			{% show_lists %}
+		{% endif %}
+	</div>
+	{## Side right bar (end) ##}
+
+</div><!--Row (End)-->
+</div><!--Body (End)-->
+<!--Stiky Footnote (start)-->
+<footer class="footer navbar navbar-default" style="padding-top:0px;margin-bottom:0px;margin-top:0px;">
+	<div class="container">
+		<p style="margin-top:8px;margin-bottom:0px;" class="navbar-text pull-left"> &copy; WorldFood.Guide 2013 - Claudio Roman
+		<br>
+			<a href="{% url 'view_guidelines' %}">General Guidelines</a> |
+			<a href="{% url 'view_terms' %}">Terms of Service</a> |
+			<a href="{% url 'view_about' %}">About WorldFood.Guide</a> |
+			<a href="{% url 'view_contact' %}">Contact Us</a> |
+			<a href="{% url 'view_help' %}">Help</a> |
+			<a href="{% url 'view_siteindex' %}">Site Index</a></p>
+	</div>
+</footer>
+<!--Stiky Footnote (end)-->
+<script>
+$(document).ready(function(){
+    $('ul.nav li.dropdown').hover(function() {
+      $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(200);
+    }, function() {
+      $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(200);
+    });  
+});
+</script>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends '_base.html' %}
+{% block title %}Delete Dish{% endblock %}
+{% block content %}
+<h1>Delete Cuisine</h1>
+<div class="well-mobile">
+	{% if information = 1 %}
+	<!--There are dishes it can not be deleted -->
+		<p><b><a href="/cuisine/{{cuisine.urlname}}">{{cuisine.name|truncatechars:20}}</a></b> cuisine can not be deleted because the following dish(es) are associated to it.</p>
+		<p>To delete <b><a href="/cuisine/{{cuisine.urlname}}/">{{cuisine.name|truncatechars:20}}</a></b> cuisine. The dish(es) bellow have to be deleted or dissociated first</p>
+		<div class="well well-white well-tight">
+			<h2>Dishes in Cuisine:</h2>
+			<table class="table table-title" width="100%" border="0">
+				<tbody>
+				{% for p in dishes|slice:":10" %}
+				<tr>
+					<td width="45%">
+						{% if p.favphoto %}
+							<a href="/photo/{{p.favphoto.urlname}}">
+							<img src="/media/{{ p.favphoto.filename }}-thum{{p.favphoto.extension}}" class="img-rounded" width="100%"></a>
+						{% else %}
+							<a href="/photonew/{{p.id}}/"><img src="/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
+						{% endif %}
+					</td>
+					<td width="55%">
+						<a class="btn btn-default" href="/dish/{{p.urlname}}">
+							<b>{{p.name|truncatechars:20}} </b>
+						</a><br/>
+						{% for c in p.cuisines.all %}
+						  (<a href="/cuisine/{{c.urlname}}/">{{c.name|truncatechars:20}}</a>)
+						{% endfor %}
+						<br/>
+						By: <a href="/foodie/{{p.userprofile.user.username}}">{{p.userprofile|truncatechars:20}}</a><br/>
+						{{ p.datetime|date:"N j, Y"}}
+					</td>
+				</tr>
+				{% endfor %}
+				</tbody>
+			</table>			
+		</div>
+		<a class="btn btn-custom btn-lg btn-block" href="/cuisine/{{cuisine.urlname}}/">Cancel</a>
+	{% else %}
+	<!--There aren't dishes. Cuisine can be deleted -->
+		<p>Are you sure you want to delete <a href="/cuisine/{{cuisine.urlname}}/">{{cuisine.name}}</a> for ever?</p>
+		<div class="well well-white">
+			<h2>{{cuisine.name}} cuisine</h2>
+			<p>{{cuisine.description|truncatechars:200|linebreaks}}</p>
+		</div>
+		<form action="." method="POST">
+		{% csrf_token %}
+			<button class="btn btn-custom btn-lg btn-block" type="submit"/>Yes delete</button>
+			<a class="btn btn-custom btn-lg btn-block" href="/cuisine/{{cuisine.urlname}}/">Cancel</a>
+		</form>
+	{% endif %}
+</div>
+{% endblock %}

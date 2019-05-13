@@ -1,0 +1,133 @@
+{% extends '_base.html' %}
+{% block title %}WorldFood.Guide | Sign Up{% endblock %}
+{% block content %}
+{% load socialaccount %}
+{% providers_media_js %}
+<h1>Sign Up</h1>
+<div class="well row">
+<div class="col-md-9">
+{% if is_robot %}
+	<h3>Robot Alert!</h3>
+	<br>
+	<p>Profile not created</p>
+{% else %}
+	<form enctype='multipart/form-data' action="." method="POST">
+		{% csrf_token %}
+		{{ form.non_field_errors }}
+		<div class="fieldWrapper">
+			<label for="id_first_name">First Name*</label>
+			{{ form.first_name }}
+			{{ form.first_name.errors }}
+		</div>
+		<div class="fieldWrapper">
+			<label for="id_last_name">Last Name*</label>
+			{{ form.last_name }}
+			{{ form.last_name.errors }}
+    	</div>
+	    <div class="fieldWrapper">
+    	    <label for="id_username">Username*</label>
+    	    {{ form.username }}
+			{{ form.username.errors }}
+    	</div>
+	    <div class="fieldWrapper">
+    	    <label for="id_password">Password* <small><em> (case sensitive)</em></small></label>
+    	    {{ form.password }}
+			{{ form.password.errors }}
+    	</div>
+	    <div class="fieldWrapper">
+    	    <label for="id_password2">Repeat Password*</label>
+    	    {{ form.password2 }}
+			{{ form.password2.errors }}
+    	</div>
+	    <div class="fieldWrapper">
+    	    <label for="id_email">Email*</label>
+    	    {{ form.email }}
+			{{ form.email.errors }}
+    	</div>
+	    <div class="fieldWrapper">
+    	    <label for="id_email2">Repeat Email*</label>
+    	    {{ form.email2 }}
+			{{ form.email2.errors }}
+    	</div>
+		<div class="fieldWrapper">
+    	    <label for="id_about">About you</label>
+    	    {{ form.about }}
+			{{ form.about.errors }}
+    	</div>
+		<div class="fieldWrapper">
+    	    <label for="id_photo">Photo</label>
+    	    {{ form.photo }}
+			{{ form.photo.errors }}
+    	</div>
+		{% for choice in form.names_show %}
+		  {{ choice.choice_label }}
+		  <span class="radio">{{ choice.tag }}</span>
+		{% endfor %}	
+		<label for="id_names_show">Show Names to the public:</label>
+		<div class="well well-white" style="padding-top:5px;padding-bottom:10px;">
+			<div class="row">
+			<div class="col-xs-6">
+				<div class="radio">
+				  <label for="id_names_show_0">
+					<input checked="checked"  id="id_names_show_0" name="names_show" type="radio" value="True">
+					<!--{{ form.names_show.0.choice_label }}-->
+					Yes
+				  </label>
+				</div>
+			</div>
+			<div class="col-xs-6">
+				<div class="radio">
+				  <label for="id_names_show_1">
+					<input id="id_names_show_1" name="names_show" type="radio" value="False">
+					<!--{{ form.names_show.1.choice_label }}-->
+					No
+				  </label>
+				</div>
+			</div>
+			</div>
+		</div>
+		<label for="id_email_show">Show e-mail to the public:</label>
+		<div class="well well-white" style="padding-top:5px;padding-bottom:10px;">
+			<div class="row">
+			<div class="col-xs-6">
+				<div class="radio">
+				  <label for="id_email_show_0">
+					<input checked="checked" id="id_email_show_0" name="email_show" type="radio" value="True">
+					<!--<input checked="checked" id="id_email_show_0" name="email_show" type="radio" value="1">-->
+					<!--{{ form.email_show.0.choice_label }}-->
+					Yes
+				  </label>
+				</div>
+			</div>
+			<div class="col-xs-6">
+				<div class="radio">
+				  <label for="id_email_show_1">
+					<input id="id_email_show_1" name="email_show" type="radio" value="False">
+					<!--{{ form.email_show.1.choice_label }}-->
+					No
+				  </label>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="fieldWrapper">
+			<label for="id_test">Select the list of food items:</label>
+			{{ form.test }}
+			{{ form.test.errors }}
+		</div>
+		<br>
+		<p>* Required</p>
+		<button id="signup_button" class="btn btn-custom btn-lg">Sign Up!</button>
+		<a class="btn btn-custom btn-lg" href="{% url 'view_main' %}">Cancel</a>
+		<p class="smallfont">By signing up you agree with the <a href="{% url 'view_terms' %}" target="_blank">Terms of Service</a></p>
+	</form>
+{% endif %}
+	{% if information = 1 %}
+		<p>The email <b>"{{ user.email }}" </b>already exist.<br>
+		User another email or <a href="{% url 'vista_login' %}">log in</a></p>
+	{% endif %}
+
+</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,433 @@
+{% extends '_site_base.html' %}
+{% load static %}
+{% block title %}WorldFood.Guide{% endblock %}
+{% block extra-head %}
+<meta name="description" content="Foods from all cuisines around the world, including photos, descriptions and ingredients. Users can create, upload and edit information about new dishes, cuisines and photos">
+<meta name="keywords" content="International food, food photos, foodies, foody, food porn, food guide, what to eat, restaurant guide, cuisines, eating guide" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+	{% load static %}
+	<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
+	
+	<!--<link href="{% static 'dist/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" >-->
+	<link href="{% static 'css/desktop.css' %}" rel="stylesheet" >
+	
+	<!-- <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.js"></script>-->
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style type="text/css">
+      body {
+        background-color:#FFFFE8;
+		/*padding-top:60px;*/
+		margin-bottom: 60px;
+		/*padding-bottom:60px;*/
+		/*background-color:#993300;*/
+      }
+
+.navbar.navbar-default {
+  border: none;
+}
+.navbar.navbar-default .navbar-split ul > li > a {
+  color: #333;
+}
+
+@media (min-width: 768px) {
+  .navbar.navbar-default .navbar-split {
+    position: relative;
+    padding-left: 50px;
+    /*float: right;*/
+    margin-right: -15px;
+  }
+  .navbar.navbar-default .navbar-split .navbar-upper {
+    /*float: right;*/
+    /*margin-top: 8px;*/
+  }
+  .navbar.navbar-default .navbar-split .navbar-lower {
+    /*background-color: #069CCF;*/
+	padding-left: 120px;
+	margin-top: -5px;
+    width: 100%;
+    clear: both;
+  }
+  .navbar-nav > li > a {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+}
+@media (max-width: 767px) {
+  .navbar.navbar-default {
+    padding: 0;
+  }
+  .navbar.navbar-default .navbar-brand {
+    padding-top: 0;
+    /*margin-top: -10px;*/
+  }
+  .navbar.navbar-default .navbar-collapse {
+    margin-top: 15px;
+    margin-bottom: -15px;
+  }
+  .icon-brand {
+    height: 40px;
+  }
+}
+	  </style>
+{% endblock %}
+
+{% block content %}
+<!--Navbar (start)-->
+<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom:10px;">
+  <div class="container">
+
+    <div class="navbar-header" style="height:38px;">
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar"> <span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+		<a class="navbar-brand" style="padding-top:4px;padding-right:4px;" href="{% url 'view_main' %}">
+			<img class="icon-brand" alt="WorldFood.Guide" src="/media/images/worldfoodguide.png" height="60px">
+			<!--<img class="icon-brand" alt="WorldFood.Guide" src="/media/images/worldfoodguide-worldcup.png" height="60px">-->
+		</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="navbar">
+      <div class="navbar-split">
+		<form class="navbar-form navbar-left form-inline" role="search" action="/searchquick/" method="POST" style="padding-left:0px; padding-right:0px; margin-top:4px; margin-bottom:4px;">
+			{% csrf_token %}
+			<div class="form-group">
+				<input type="text" class="form-control" style="height:30px;font-size:16px;" name="search" id="id_search_inbar" placeholder="Quick search"/>
+			</div>
+			<button class="btn btn-default btn-menu" type="submit" style="margin-left:-4px ;height:30px; margin-top:0px; background-color:#C1C100;">
+				<i class="fa fa-search fa-lg" aria-hidden="true"></i>
+			</button>
+		</form>
+        <ul class="nav navbar-nav navbar-upper hidden-phone hidden-sm hidden-xs">
+			<li class="menu" style="margin-left: 5px;">
+			<a class="btn btn-default btn-menu" href="https://www.facebook.com/worldfoodguide/" target="_blank"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a>
+			</li>
+        </ul>
+        <ul class="nav navbar-nav navbar-lower">
+			<li class="dropdown menu">
+				<a href="#" class="dropdown-toggle btn btn-default btn-menu" data-toggle="dropdown">Dish / Cuisine <b class="caret"></b></a>
+				<ul class = "dropdown-menu">
+					<!--<li><a href="/photonewnodish/">Photo Upload</a></li>-->
+					<li><a href="{% url 'view_dishphotonew' %}">New Dish / Photo</a></li>
+					<li><a href="{% url 'view_dishes' %}">All Dishes</a></li>
+					<li><a href="{% url 'view_searchadvance' %}">Search Dish(es)</a></li>
+					<li role="separator" class="divider"></li>
+					<li><a href="{% url 'view_cuisinenew' %}">New Cuisine</a></li>
+					<li><a href="{% url 'view_cuisines' %}">All Cuisines</a></li>
+					<li role="separator" class="divider"></li>
+					<li><a href="{% url 'view_userphotos' username=user.username %}">My Photos</a></li>
+					<li><a href="{% url 'view_disheslatest' %}">Latest Dishes</a></li>
+					<li><a href="{% url 'view_latestphotos' %}">Latest Photos</a></li>
+					<li><a href="{% url 'view_photos' %}">Top 100 Photos</a></li>
+					<li><a href="{% url 'view_photosfull' %}">Photos - Fullscreen</a></li>
+				</ul>
+			</li>
+			<li class="dropdown menu">
+				<a href="#" class="dropdown-toggle btn btn-default btn-menu" data-toggle="dropdown">Lists <b class="caret"></b></a>
+				<ul class="dropdown-menu">
+				<li><a href="{% url 'view_listnew' %}">New List</a></li>
+				<li><a href="{% url 'view_lists_mine' %}">My Lists</a></li>
+				<li><a href="{% url 'view_lists' %}">All Lists</a></li>
+				<li><a href="{% url 'view_list_search' %}">Search List(s)</a></li>
+				</ul>
+			</li>
+			{% if user.is_authenticated %}
+				<li class="dropdown menu">
+					<a href="#" class="dropdown-toggle btn btn-default btn-menu" data-toggle="dropdown">{{user|truncatechars:20}} <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+					<li><a href="{% url 'view_myprofile' %}">My Profile</a></li>
+					<li><a href="{% url 'view_privacy' %}">Privacy Settings</a></li>
+					<li><a href="{% url 'view_logout' %}">Log Out</a></li>
+					<li role="separator" class="divider"></li>
+					<li><a href="{% url 'view_userphotos' username=user.username %}">My Photos</a></li>
+					<li><a href="{% url 'view_lists_mine' %}">My Lists</a></li>
+					<li role="separator" class="divider"></li>
+					<li><a href="{% url 'view_foodies' %}">All Foodies</a></li>
+					</ul>
+				</li>
+			{% else %}
+				<li class="dropdown menu">
+					<a href="#" class="dropdown-toggle btn btn-default btn-menu" data-toggle="dropdown">Account <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li><a href="{% url 'view_signin' %}">Sign In</a></li>
+						<li><a href="{% url 'view_signup' %}">Sign Up</a></li>
+						<li><a href="{% url 'view_passrecovery' %}">Forgot my password</a></li>
+						<li role="separator" class="divider"></li>
+						<li><a href="{% url 'view_foodies' %}">All Foodies</a></li>
+					</ul>
+				</li>
+			{% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+<!--Navbar (end)-->
+
+<!--Body (start)-->
+<div class="container">
+
+<!-- Carousel Start-->
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-interval="7000">
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+  </ol>
+ 
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+    <div class="item active">
+      <img src="/media/images/carousel/carousel1.jpg" alt="Welcome to WorldFood.Guide">
+    </div>
+    <div class="item">
+      <img src="/media/images/carousel/banner2.png" alt="Featured Foodie">
+    </div>
+    <div class="item">
+		<a href="{% url 'view_listnew' %}">
+			<img src="/media/images/carousel/list.jpg" alt="Create list">
+		</a>
+    </div>
+  </div>
+ 
+  <!-- Controls -->
+  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+  </a>
+  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+  </a>
+</div> <!-- Carousel END -->
+
+<div class="row"><!-- MAIN ROW -->
+
+{# LATEST DISHES - START #}
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+<h2 style="padding:0px; margin-top:10px; margin-bottom:0px;">Latest Dishes:</h2>
+<div class="row" style="margin:0px;">
+{% for p in dishes_latest %}
+	  <div class="col-md-2 col-xs-3 {% if forloop.counter > 4 %} hidden-sm hidden-xs {% endif %}" style="padding:2px;">
+		<div class="thumbnail" style="margin-bottom:0px; line-height: 20px;">
+			{% if p.photo_main %}
+				<a href="/dish/{{p.urlname}}" title="Go to photo page">
+					<img src="/media/{{p.filename}}-med{{p.extension}}" class="img-rounded img-responsive" style="max-height:140px;">
+				</a>
+			{% else %}
+				<a href="/photonew/{{p.id}}/" title="Upload photo for {{p.name|truncatechars:24}}">
+				<img src="/media/images/upload-med.jpg" class="img-rounded" style="max-height:140px;"></a>
+			{% endif %}
+			<a href="/dish/{{p.urlname}}/">
+				<h4 style="margin-bottom:2px; margin-top:2px; line-height: 16px; color: #754b04;" title="Go to dish page: {{p.name}}">
+					{{p.name|truncatechars:32}}
+				</h4>
+			</a>
+			<p style="font-size:12px; line-height: 14px; color:#636363; margin-bottom:4px;">
+			{% if p.othernames %}
+				<i title="Othernames">{{p.othernames|truncatechars:26}}</i>
+			{% endif %}
+			{% if p.cuisines.all %}
+				<i>
+				{% for cuisine in p.cuisines.all|slice:":3" %}
+					(<a href="/cuisine/{{cuisine.urlname}}/" title="Go to Cuisine page">{{cuisine|truncatechars:26}}</a>)
+				{% endfor %}
+				</i>
+			{% endif %}
+			</p>
+		</div>
+	  </div>
+{% endfor %}
+</div>
+</div>
+{# LATEST DISHES - END #}
+
+{# LIST - START #}
+<div class="col-lg-5 col-md-5 col-sm-5 col-xs-12"><!--List-->
+<h2 style="padding:0px; margin-top:10px; margin-bottom:0px;">Top Lists:</h2>
+<div class="list-group" style="margin-top:0px;">
+	{% if top_lists|length > 0 %}
+		{% for p in top_lists %}
+		  <a href="/list/{{p.urlname}}/" class="list-group-item" style="padding:8px;" title="Go to list page: {{p.name}}">
+			<p style="color:#845505;margin-bottom:2px; margin-top:0px;"><b>{{p.name|truncatechars:92}}</b></p>
+			<p class="smallfont" style="margin-bottom:4px;">by <b>{{p.owner.user.username|truncatechars:20}}</b> ({{p.likestot}} <i class="glyphicon glyphicon-thumbs-up"></i>)
+				{% if p.type = '3' %}<i style="color:red;">Private List</i>{% endif %}
+				{% if p.type = '1' %} Personal List {% endif %}
+				{% if p.type = '2' %} Public List{% endif %}
+			</p>
+			{% if p.dishes.all %}
+			<div class="row" style="margin:0px;">
+				{% for dish in p.dishes.all|slice:":6"  %}
+					<div class="col-xs-2" style="padding:1px;">
+						{% if dish.photo_main %}
+							<img src="/media/{{dish.filename}}-thum{{dish.extension}}" class="img-rounded" width="100%">
+						{% else %}
+							<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%" title="Upload new {{dish.name|truncatechars:20}} photo">
+						{% endif %}
+					</div>
+				{% endfor %}
+			</div>
+			{% endif %}
+		  </a>
+		{% endfor %}
+		<div class="list-group-item" style="padding:4px;text-align:center;">
+			<div class="row" style="margin:0px;">
+				<div class="col-xs-6" style="padding:1px;">
+					<a class="btn btn-custom" href="{% url 'view_lists' %}" style="margin-bottom:4px;">See all lists</a>
+				</div>
+				<div class="col-xs-6" style="padding:1px;">
+					<a class="btn btn-custom" href="{% url 'view_listnew' %}" style="margin-bottom:4px;">Create new list</a>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+	{% if top_lists|length  == 0 %}
+		<div class="well well-tight well-white">
+			<p style="margin:10px;text-align:center;">There are no lists</p>
+			<a class="btn btn-custom btn-lg" href="{% url 'view_listnew' %}" style="margin-bottom:4px;">Create new list</a>
+		</div>
+	{% endif %}
+</div>
+</div>
+{# LIST - END #}
+
+{# FOODIES - START #}
+<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12"><!--List-->
+<h2 style="padding:0px; margin-top:10px; margin-bottom:0px;">Foodies:</h2>
+	{% for foodie in foofies_top %}
+	  <a class="list-group-item" href="/profile/{{foodie.user.username}}/" title="Go to foodie page: {{foodie.user.username}}" style="padding:8px;">
+	  <div class="row">
+		{% if foodie.user.username|length > 15 %}
+			<div class="col-xs-12" style="padding-right:2px;">
+				<h4 style="color:#845505;margin-bottom:2px; margin-top:0px;">{{foodie.user.username|truncatechars:20}}</h4>
+			</div>
+			<div class="col-xs-7" style="padding-right:2px;">
+				<p>
+				Dishes: <b>{{ foodie.dish_set.count }}</b><br/>
+				Pictures: <b>{{ foodie.picture_set.count }}</b><br/>
+				Lists: <b>{{ foodie.list_set.count }}</b>
+				</p>
+			</div>
+		{% else %}
+		<div class="col-xs-7" style="padding-right:2px;">
+			<h4 style="color:#845505;margin-bottom:2px; margin-top:0px;"><b>{{foodie.user.username}}</b></h4>
+			<p>
+			Dishes: <b>{{ foodie.dish_set.count }}</b><br/>
+			Pictures: <b>{{ foodie.picture_set.count }}</b><br/>
+			Lists: <b>{{ foodie.list_set.count }}</b>
+			</p>
+		</div>
+		{% endif %}
+		<div class="col-xs-5" style="padding-left:0px; text-align:right;">
+		{% if foodie.photo %}
+			<img src="/media/{{foodie.photofilename}}-med{{foodie.extension}}" class="img-rounded" width="100%">
+		{% else %}
+			<img src="/media/images/user.png"  class="img-rounded" width="100%"/>
+		{% endif %}
+		</div>
+	  </div>
+	  </a>
+	{% endfor %}
+	<div class="list-group-item" style="padding:2px;text-align:center;">
+		<a class="btn btn-custom" href="{% url 'view_foodies' %}" style="margin-bottom:4px;">See all Foodies</a>
+	</div>
+</div>
+{# FOODIES - END #}
+
+{# CUISINES - START #}
+<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12"><!--List-->
+<h2 style="padding:0px; margin-top:10px; margin-bottom:0px;">Cuisines:</h2>
+	{% if cuisine_top|length > 0 %}
+		{% for p in cuisine_top %}
+		  <a class="list-group-item" href="/cuisine/{{p.urlname}}/" title="Go to cuisine page: {{p.name}}" style="padding:8px;">
+		  <div class="row">
+			{% if p.name|length > 15 %}
+				<div class="col-xs-12" style="padding-right:2px;">
+					<h4 style="color:#845505;margin-bottom:2px; margin-top:0px;"><b>{{p.name|truncatechars:52}}</b></h4>
+				</div>
+			<div class="col-xs-7" style="padding-right:2px;">
+				{% if p.othernames %}
+					<p style="margin-bottom:0px"><b>{{p.othernames|truncatechars:34}}</b></p>
+				{% endif %}
+				{% if p.territory %}
+					<p style="margin-bottom:0px"><i>{{p.territory|truncatechars:34}}</i></p>
+				{% endif %}
+				<p style="margin-bottom:0px">Pictures: <b>{{ p.dish__picture__count }}</b></p>
+				<p style="margin-bottom:0px">Dishes: <b>{{ p.dish__count }}</b></p>
+			</div>
+			{% else %}
+			<div class="col-xs-7" style="padding-right:2px;">
+				<h4 style="color:#845505;margin-bottom:2px; margin-top:0px;"><b>{{p.name}}</b></h4>
+				{% if p.othernames %}
+					<p style="margin-bottom:0px"><b>{{p.othernames|truncatechars:34}}</b></p>
+				{% endif %}
+				{% if p.territory %}
+					<p style="margin-bottom:0px"><i>{{p.territory|truncatechars:34}}</i></p>
+				{% endif %}
+				<p style="margin-bottom:0px">Pictures: <b>{{ p.dish__picture__count }}</b></p>
+				<p style="margin-bottom:0px">Dishes: <b>{{ p.dish__count }}</b></p>
+			</div>
+			{% endif %}
+			<div class="col-xs-5" style="padding-left:0px; text-align:right;">
+				{% if p.favphoto %}
+					{% if p.favphoto.location.width > p.favphoto.location.height %}
+						<img src="/media/{{p.favphoto.filename}}-med{{p.favphoto.extension}}" class="img-rounded" width="100%">
+					{% else %}
+						<img src="/media/{{p.favphoto.filename}}-med{{p.favphoto.extension}}" class="img-rounded" height="80px">
+					{% endif %}
+				{% else %}
+					<img src="/media/images/upload-med.jpg" class="img-rounded" height="70px">
+				{% endif %}
+			</div>
+		  </div>
+		  </a>
+		{% endfor %}
+		<div class="list-group-item" style="padding:4px;text-align:center;">
+			<div class="row" style="margin:0px;">
+				<div class="col-xs-5" style="padding:1px;">
+					<a class="btn btn-custom" href="{% url 'view_cuisines' %}" style="margin-bottom:4px;">See all</a>
+				</div>
+				<div class="col-xs-7" style="padding:1px;">
+					<a class="btn btn-custom" href="{% url 'view_cuisinenew' %}" style="margin-bottom:4px;">New Cuisine</a>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+	{% if cuisine_top|length  == 0 %}
+		<div class="well well-tight well-white">
+			<p style="margin:10px;text-align:center;">There are no lists</p>
+			<a class="btn btn-custom btn-lg" href="/listnew/" style="margin-bottom:4px;">Create new list</a>
+		</div>
+	{% endif %}
+</div>
+{# CUISINES - END #}
+
+</div><!--Row (End)-->
+</div><!--Body (End)-->
+<!--Stiky Footnote (start)-->
+<footer class="footer navbar navbar-default" style="padding-top:0px;margin-bottom:0px;margin-top:0px;">
+	<div class="container">
+		<p style="margin-top:8px;margin-bottom:0px;" class="navbar-text pull-left"> &copy; WorldFood.Guide 2013 - Claudio Roman
+		<br>
+			<a href="{% url 'view_guidelines' %}">General Guidelines</a> |
+			<a href="{% url 'view_terms' %}">Terms of Service</a> |
+			<a href="{% url 'view_about' %}">About WorldFood.Guide</a> |
+			<a href="{% url 'view_contact' %}">Contact Us</a> |
+			<a href="{% url 'view_help' %}">Help</a> |
+			<a href="{% url 'view_siteindex' %}">Site Index</a></p>
+	</div>
+</footer>
+
+<!--Stiky Footnote (end)-->
+<script type="text/javascript">
+$(document).ready(function(){
+    $('ul.nav li.dropdown').hover(function() {
+      $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(200);
+    }, function() {
+      $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(200);
+    });  
+});
+document.getElementById('id_search_inbar').focus();
+</script>
+{% endblock %}

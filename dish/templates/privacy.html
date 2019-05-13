@@ -1,0 +1,36 @@
+{% extends '_base.html' %}
+{% block title %} My Profile {% endblock %}
+{% block content %}
+<h1>Privacy Settings</h1>
+<div class="well">
+	<p style="font-size:16px;"><b>Username: </b> {{user.username}}</p>
+	<form action="." method="POST">
+		{% csrf_token %}
+		{{ form.non_field_errors }}
+
+		<div class="well well-white" style="padding-bottom:60px;margin-bottom:30px;">
+			<div class="col-lg-3 col-md-3 col-sm-3 col-xs-7">
+				<p style="font-size:16px;margin-top:16px;margin-bottom:0px;"><b>Names public:</b></p>
+			</div>
+			<div class="col-lg-2 col-md-2 col-sm-2 col-xs-3">
+				{{ form.names_show }}
+			</div>
+		</div>
+
+		<div class="well well-white" style="padding-bottom:60px;margin-bottom:30px;">
+			<div class="col-lg-3 col-md-3 col-sm-3 col-xs-7">
+				<p style="font-size:16px;margin-top:12px;margin-bottom:0px;"><b>E-mail public:</b></p>
+			</div>
+			<div class="col-lg-2 col-md-2 col-sm-2 col-xs-3">
+				{{ form.email_show }}
+			</div>
+		</div>
+
+		<button class="btn btn-lg btn-custom" type="submit"/>Save</button> 
+		<a class="btn btn-custom btn-lg" href="{% url 'view_myprofile' %}">Cancel</a>
+	</form>
+
+
+</div>
+
+{% endblock %}

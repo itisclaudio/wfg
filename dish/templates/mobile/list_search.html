@@ -1,0 +1,48 @@
+{% extends '_base.html' %}
+{% block title %} Food List Search {% endblock %}
+{% block content %}
+
+<div class="well-1">
+
+	{% if alert == '1' %}
+		<div class="alert alert-danger alert-dismissible" role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<p>No results for: <b>{{search}}</b></p>
+			<p>Search again</p>
+		</div>
+	{% endif %}
+
+	<form enctype='multipart/form-data' action="." method="POST">
+		{% csrf_token %}
+		{{ form.non_field_errors }}
+		<label for="id_search">List name:</label>
+		<div class="fieldWrapper">
+			{{ form.search.errors }}
+			{{ form.search }}
+		</div>
+		<div class="row" style="margin-top:10px;">
+			<div class="col-xs-6">
+				<button class="btn btn-lg btn-custom btn-block" type="submit"/>Search
+					 <li class="glyphicon glyphicon-search icon-white"></li>
+				</button>
+			</div>
+			<div class="col-xs-6">
+				<a class="btn btn-lg btn-custom btn-block" title="Create List" href="{% url 'view_listnew' %}">
+					Create List
+				</a>
+
+			</div>
+		</div>
+
+	</form>
+</div>
+	
+{% block focus %}
+	<script type="text/javascript">
+		document.getElementById('id_search').focus();
+	</script>
+{% endblock %}
+
+{% endblock %}

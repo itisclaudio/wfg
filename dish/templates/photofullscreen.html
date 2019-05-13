@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head>
+<title>WorldFood.Guide</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="icon" href="http://worldfood.guide/media/images/icons/favicon-32x32.png" sizes="32x32">
+<link rel="shortcut icon" href="http://worldfood.guide/media/images/favicon.ico" >
+<link rel="icon" href="/media/images/main_icon_32.png" sizes="32x32">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link href="{% static 'css/desktop.css' %}" rel="stylesheet" type="text/css" media="screen" />
+<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
+<link href="{% static 'dist/bootstrap/css/bootstrap-responsive-mine.css' %}" rel="stylesheet">
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+$(document).keyup(function(e) {
+  if (e.keyCode == 27) { $('#esc').click(); }   // Scape
+});
+
+$("#esc").click(function(){
+	window.history.go(-1);
+});
+
+});
+</script>
+</head>
+<body style="background-color:black;">
+
+{% if object %}
+
+<!--<a class="btn btn-large btn-warning" style="position:absolute;right:0.5%;top:0.5%;" href="javascript:window.history.go(-1);" id="esc" />Exit Fullscreen (Esc)</a>-->
+
+<div style="position:absolute;top:0px; background-color:black; opacity: 0.4; filter:alpha(opacity=40); height: 50px; width: 100%;"></div>
+
+<a class="btn btn-lg btn-warning" style="position:absolute;right:0.5%;top:0.5%;"
+ href="/photo/{{object.id}}" id="esc" />Exit Fullscreen (Esc)</a>
+ 
+
+<h1 id="title" name="name" style="position:absolute;top:5;left:10; color:#FFF">
+<a id="location" href="/dish/{{object.dish.urlname}}" style="color:#FFF">
+{{ object.dish.name }}
+</a>
+</h1>
+<p style="position:absolute;top:30;left:10; color:#FFF">Picture by: <b id="owner">{{object.owner }}</b></p>
+<!--
+<p style="position:absolute;top:7%;left:10; color:#FFF">Likes: <b id="likes">{{ likes }}</b></p>
+<p style="position:absolute;top:9%;left:10; color:#FFF">Date Uploaded: <b id="uploaded">{{ object.datetime|date:"N j, Y"}} </b></p>
+-->
+<img id="image_element" name="0" alt="{{ object.dish.name }}" src="/media/{{object.location}}" width="100%">
+
+{% else %}
+<h3>No Picture</h3>
+
+{% endif %}
+

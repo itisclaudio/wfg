@@ -1,0 +1,32 @@
+{% extends '_base.html' %}
+{% block title %}Update About me{% endblock %}
+{% block content %}
+<h1>Update About me</h1>
+<div class="well">
+	<form enctype='multipart/form-data' action="." method="POST">
+		{% csrf_token %}
+		{{ form.non_field_errors }}
+		<div class="fieldWrapper">
+			{{ form.about.errors }}
+			<label for="id_about">About me:</label>
+			{{ form.about }}
+		</div>
+		
+		<button class="btn btn-custom btn-lg" type="submit">Save</button>
+		<a class="btn btn-custom btn-lg" href="{% url 'view_myprofile' %}">Cancel</a>
+	</form>
+{% if updates %}
+	<p>
+	{% for item in updates %}
+		{{forloop.counter}}- {{item}}</br>
+	{% endfor %}
+	</p>
+{% endif %}
+</div>
+{% block focus %}
+	<script type="text/javascript">
+			document.getElementById('id_about').focus();
+	</script>
+{% endblock %}
+
+{% endblock %}

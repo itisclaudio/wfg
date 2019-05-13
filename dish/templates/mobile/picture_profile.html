@@ -1,0 +1,28 @@
+{% extends '_base.html' %}
+{% block title %}Upload/Edit Profile Picture{% endblock %}
+{% block content %}
+<h1>Upload/Edit Profile Picture</h1>
+<div class="well-mobile">
+<hr/>
+	<h3><b>{{ user.first_name }} {{user.last_name}}</b><a href="{% url 'view_myprofile' %}"> ({{user.username}})</a></h3>
+	<form enctype='multipart/form-data' action="." method="POST">
+		{% csrf_token %}
+		{{ form.non_field_errors }}
+		<div class="fieldWrapper">
+    	    <label for="id_photo">Photo:</label>
+    	    {{ form.photo }}
+			{{ form.photo.errors }}
+    	</div>
+		<br/>
+		<button class="btn btn-custom btn-block btn-lg" type="submit"/>Save</button> 
+		<a class="btn btn-custom btn-block btn-lg" href="{% url 'view_myprofile' %}">Cancel</a>
+	</form>
+</div>
+
+	{% block focus %}
+		<script type="text/javascript">
+			document.getElementById('id_photo').focus();
+		</script>
+	{% endblock %}
+
+{% endblock %}

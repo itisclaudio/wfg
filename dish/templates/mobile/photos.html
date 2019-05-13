@@ -1,0 +1,205 @@
+{% extends '_base.html' %}
+{% block title %} Top 100 photos {% endblock %}
+{% block super-extra-head %}
+{% load static %}
+<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+	$(document).keyup(function(e) {
+	  if (e.keyCode == 39) { $('#next').click(); }     // right or next
+	  if (e.keyCode == 37) { $('#prev').click(); }   // left or prev
+	  if (e.keyCode == 27) { $('#close').click(); }   // Scape
+	});
+
+	$("#next").click(function(){
+		var current = $("#image_element").attr('name');
+		if (current == {{ list|length }}-1){
+			var nextp = 1;
+		}
+		else{
+			var nextp = parseInt(current) + 1;
+		}
+		var new_url = $('#photo' + nextp).attr('name');
+	  $("#counter").html(nextp+1);
+	  $("#image_element").attr("src", '/media/' + new_url);
+	  $("#image_element").attr("name", nextp);
+	  $("#image_link").attr("href", '/fullscreen_photo/'+$('#data_pic_id' + nextp).html());
+	  $("#title").html($('#data_name' + nextp).html());
+	  $("#location").attr("href", '/dish/'+$('#data_id' + nextp).html());
+	  //$("#location").html($('#data_name' + nextp).html());
+	  $("#owner").html($('#data_owner' + nextp).html());
+	  $("#likes").html($('#data_likes' + nextp).html());
+	  $("#uploaded").html($('#data_uploaded' + nextp).html());
+	  $("#comments").html($('#data_comments' + nextp).html());
+	  for (i = 0; i < 11; i++) {
+			$("#cuisine_"+i).html("");
+		}
+	  var cui = parseInt($('#data_cuisines' + nextp).html());
+	  for (i = 0; i < cui; i++) {
+			$("#cuisine_"+i).html($('#data_pic_cuisine' +nextp + i).html());
+		}
+	});
+
+	$("#prev").click(function(){
+		var current = $("#image_element").attr('name');
+		//alert(current)
+		if (current == 0){
+			var nextp = {{ list|length }}-1;
+		}
+		else{
+			var nextp = parseInt(current) - 1;
+		}
+		var new_url = $('#photo' + nextp).attr('name');
+	  $("#counter").html(nextp+1);
+	  $("#image_element").attr("src", '/media/' + new_url);
+	  $("#image_element").attr("name", nextp);
+	  $("#image_link").attr("href", '/fullscreen_photo/'+$('#data_pic_id' + nextp).html());
+	  $("#title").html($('#data_name' + nextp).html());
+	  $("#location").attr("href", '/dish/'+$('#data_id' + nextp).html());
+	  //$("#location").html($('#data_name' + nextp).html());
+	  $("#owner").html($('#data_owner' + nextp).html());
+	  $("#likes").html($('#data_likes' + nextp).html());
+	  $("#uploaded").html($('#data_uploaded' + nextp).html());
+	  $("#comments").html($('#data_comments' + nextp).html());
+	  for (i = 0; i < 11; i++) {
+			$("#cuisine_"+i).html("");
+		}
+	  var cui = parseInt($('#data_cuisines' + nextp).html());
+	  for (i = 0; i < cui; i++) {
+			$("#cuisine_"+i).html($('#data_pic_cuisine' +nextp + i).html());
+		}
+	});
+	//--Fullscreem--
+	$("#image_element").click(function(){
+		url = $("#image_element").attr("src");
+		name = $("#title").html();
+		$("#pop-img").attr('src',url);
+		$("#titlefullscreen").html(name);
+		$("#pop-img").fadeIn(1000);
+		$("#titlefullscreen").fadeIn(1000);
+		$("#close").fadeIn(1000);
+		$("#shadow").css({visibility:'visible'});
+		positionPopup();
+	});
+	//close popup
+	$("#close").click(function(){
+		$("#pop-img").fadeOut(500);
+		$("#titlefullscreen").fadeOut(500);
+		$("#close").fadeOut(500);
+		$("#shadow").css({visibility:'hidden'});
+	});
+});
+
+//position the popup at the center of the page
+function positionPopup(){
+  if(!$("#popup_img").is(':visible')){
+    return;
+  }
+  $("#popup_img").css({
+      left: 0,
+      top: 0,
+      position:'absolute',
+	  width: '100%'
+  });
+}
+
+//maintain the popup at center of the page when browser resized
+$(window).bind('resize',positionPopup);
+
+</script>
+
+<style>
+#pop-img{
+	position: absolute;left:0px;top:0px;
+	padding: 0px;
+	width:100%;
+}
+</style>
+
+{% endblock %}
+{% block content %}
+<!--<div class="well" id="popup_element" style="display:none" width="100%">-->
+	
+	<!--<h1> {{ list.0.dish.name }} <a class="pull-right" href="#" id="close" >X</a> </h1>-->
+	<!--<img src="/media/{{ dish.filename }}.jpg" width="100%">-->
+	<img id="pop-img" src="" width="100%" style="display:none" width="100%">
+	<div id="shadow" style="visibility:hidden; position:absolute; top:0px; left:0px; background-color:black; opacity: 0.4; filter:alpha(opacity=40); height: 38px; width: 100%;"></div>
+	<h2 id="titlefullscreen" name="name" style="position:absolute;top:0.2%;left:10; color:#FFF"></h2>
+	<a id="close" class="btn btn-warning" style="display:none;position:absolute;right:0.5%;top:0.5%;" href="#" />Exit Fullscreen (Esc)</a>
+	<!--<img id="pop-img" src="" width="100%"  style="margin:0px;padding: 0px;">-->
+<!--</div>-->
+<table border="0" width="100%" style="padding:0px; margin-top:5px;">
+<tr>
+<td style="padding:0px; vertical-align: middle;border-top:none;">
+	<div align="center"><a href="#" id="prev">
+	  <img src="/media/images/arrow-left.png" width="50px" alt="previous" />
+	  </a></div>
+</td>
+<td style="padding:0px; border-top:none;">
+<h1 style="text-align:center; margin:5px;">Top 100 {% if list %}
+(<b id="counter">1</b>)
+{% endif %}
+</h1>
+</td>
+<td valign="middle" style="padding:0px; vertical-align: middle; border-top:none;">
+<div align="center">
+<a href="#" id="next"/>
+	<img src="/media/images/arrow-right.png" width="50px" alt="next" />
+		</a></div>
+</td>
+</tr>
+</table>
+
+
+{% if list %}
+<!--
+<a id="image_link" href="/fullscreen_photo/{{ list.0.id }}"/>
+<img id="image_element" name="0" src="/media/{{ list.0.location }}" width="100%">
+</a>
+-->
+<a href="#" id="pop"><img id="image_element" name="0" src="/media/{{ list.0.location }}" class="img-rounded" width="100%"></a>
+
+<a id="location" href="/dish/{{list.0.dish.urlname}}"><h2 id="title" name="name">{{ list.0.dish.name }}</h2></a>
+<div class="well-1" id="lables" name="dd">
+<p>Cuisine(s): 
+		<b id="cuisine_0">{% if list.0.dish.cuisines.all.0 %}({{list.0.dish.cuisines.all.0}}){% endif %}</b>
+		<b id="cuisine_1">{% if list.0.dish.cuisines.all.1 %}({{list.0.dish.cuisines.all.1}}){% endif %}</b>
+		<b id="cuisine_2">{% if list.0.dish.cuisines.all.2 %}({{list.0.dish.cuisines.all.2}}){% endif %}</b>
+		<b id="cuisine_3">{% if list.0.dish.cuisines.all.3 %}({{list.0.dish.cuisines.all.3}}){% endif %}</b>
+		<b id="cuisine_4">{% if list.0.dish.cuisines.all.4 %}({{list.0.dish.cuisines.all.4}}){% endif %}</b>
+		<b id="cuisine_5">{% if list.0.dish.cuisines.all.5 %}({{list.0.dish.cuisines.all.5}}){% endif %}</b>
+		<b id="cuisine_6">{% if list.0.dish.cuisines.all.6 %}({{list.0.dish.cuisines.all.6}}){% endif %}</b>
+		<b id="cuisine_7">{% if list.0.dish.cuisines.all.7 %}({{list.0.dish.cuisines.all.7}}){% endif %}</b>
+		<b id="cuisine_8">{% if list.0.dish.cuisines.all.8 %}({{list.0.dish.cuisines.all.8}}){% endif %}</b>
+		<b id="cuisine_9">{% if list.0.dish.cuisines.all.9 %}({{list.0.dish.cuisines.all.9}}){% endif %}</b>
+</p>
+<p>Picture by: <b id="owner">{{ list.0.owner }}</b></p>
+<p>Likes: <b id="likes">{{ list.0.likestot }}</b></p>
+<p>Date Uploaded: <b id="uploaded">{{ list.0.datetime }}</b></p>
+<p id="comments">{{ list.0.comments }}</p>
+</div>
+<div id="list_photos" name="{{ list|length }}" style="display:none">
+	{% for t in list %}
+		<div id="photo{{forloop.counter0}}" name="{{t.location}}">photo{{forloop.counter0}} - {{t.location}}</div>
+		<div id="data_id{{forloop.counter0}}">{{t.dish.urlname}}</div>
+		<div id="data_pic_id{{forloop.counter0}}">{{t.id}}</div>
+		<div id="data_name{{forloop.counter0}}">{{t.dish.name}}</div>
+		<div id="data_owner{{forloop.counter0}}">{{t.owner}}</div>
+		<div id="data_likes{{forloop.counter0}}">{{t.likestot}}</div>
+		<div id="data_uploaded{{forloop.counter0}}">{{t.datetime}}</div>
+		<div id="data_comments{{forloop.counter0}}">{{t.comments|urlizetrunc:80}}</div>
+		<div id="data_cuisines{{forloop.counter0}}">{{t.dish.cuisines.all.count}}</div>
+		{% for c in t.dish.cuisines.all %}
+			<div id="data_pic_cuisine{{forloop.parentloop.counter0}}{{forloop.counter0}}">({{c}})</div>
+		{% endfor %}
+	{% endfor %}
+</div>
+
+{% else %}
+<h3>No Pictures</h3>
+
+{% endif %}
+
+{% endblock %}

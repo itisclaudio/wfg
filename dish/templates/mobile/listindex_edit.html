@@ -1,0 +1,169 @@
+{% extends '_base.html' %}
+{% block title %} {{ list.name }} {% endblock %}
+
+{% block super-extra-head %}
+	{% load static %}
+{% endblock %}
+
+{% block content %}
+<!--Modal-0 Processing -->
+<div class="modal fade" id="modal_processing" tabindex="-1" role="dialog" aria-labelledby="modal_processingLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="myModalLabel">Processing...</h1>
+      </div>
+      <div class="modal-body">
+		<div class="progress">
+		  <div class="progress-bar progress-bar-striped progress-bar-warning active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+		  </div>
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Modal 0 -->
+
+<!-- Modal-1 Alert, No number in index -->
+<div class="modal fade" id="modal_nonumber" tabindex="-1" role="dialog" aria-labelledby="modal_nonumber">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h1 style="margin-top:0px;">Alert</h1>
+	</div>
+	<div class="modal-body">
+		<b>Only numbers allowed in index</b>
+		</br></br>
+		<button type="button" class="btn btn-custom btn-lg btn-block" id="modal1_cancel" data-dismiss="modal">Ok</button>
+	</div>
+</div>
+</div>
+</div>
+<!-- Modal-1 END-->
+
+<div class="well-mobile">
+	<h1>{{list.name|truncatechars:54 }}</h1>
+	{% if list.description %}
+		{{ list.description|urlizetrunc:32|escape|linebreaks|truncatewords:80 }}
+	{% else %}
+		There is no description
+	{% endif %}
+	<form  id="myform" enctype='multipart/form-data' action="." method="POST">
+	{% csrf_token %}
+	{{ form.non_field_errors }}
+	<input id="indexs" name="indexs" type="text"  style="display:none;"/>
+	<div class="row" style="margin-bottom:6px; padding:10px;">
+		<div class="col-xs-6" style="padding:3px;">
+			<!--<button class="btn btn-custom btn-lg btn-block" onclick="processing();" type="submit"/>Save</button>-->
+			<button class="btn btn-custom btn-lg btn-block" type="submit"/>Save</button>
+		</div>
+		<div class="col-xs-6" style="padding:3px;">
+			<a class="btn btn-custom btn-lg btn-block" onclick="processing();" href="/listedit/{{list.urlname}}/">Cancel</a>
+		</div>
+	</div>
+	</form>
+	<div class="well well-tight well-white">
+	
+	<h2>Dishes in list:</h2>
+	{% if dishlist|length > 0 %}
+	<table class="table table-title" width="100%" border="0">
+		<tbody>
+		{% for p in dishlist %}
+		<tr>
+			<td width="60%"  style="padding:2px;">
+			<div>
+			<div class="col-xs-2" style="padding:4px 1px 2px 0px;">
+				<input id="index_{{p.index}}" class="form-control" type="text" name="index_dish" value="{{p.index}}" style="padding:1px;text-align:right;" maxlength="2" size="2" onkeypress='return event.charCode >= 48 && event.charCode <= 57'/>
+			</div>
+			<div class="col-xs-10" style="padding:2px 0px 2px 0px;">
+				<a class="btn btn-lg btn-warning btn-block" style="text-align:left;padding-left:4px;" href="/dish/{{p.dish.urlname}}">
+					<b>{{p.dish.name|truncatechars:20}} </b>
+				</a>
+			</div>
+			</div>
+				<p class="text-reg" style="padding-top:5px;">
+				   {% for cuisine in p.dish.cuisines.all|slice:":3" %}
+					 (<a href="/cuisine/{{cuisine.urlname}}/">{{cuisine.name}}</a>)
+				   {% endfor %}
+				   {% if p.dish.cuisines.all|length > 3 %}
+						(<a href="/dish/{{p.dish.urlname}}">...</a>)
+				   {% endif %}
+				  {{p.dish.description|urlizetrunc:32|escape|truncatewords:32}}
+				</p>
+			</td>
+            <td width="40%"  style="padding:2px;">
+				{% if p.dish.favphoto %}
+					<a href="/photo/{{p.dish.favphoto.urlname}}">
+					<img src="/media/{{ p.dish.favphoto.filename }}-thum{{p.dish.favphoto.extension}}" class="img-rounded" width="100%"></a>
+				{% else %}
+					<a href="/photonew/{{p.dish.id}}/"><img src="/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
+				{% endif %}
+			</td>
+		</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+	{% else %}
+			<i>No dishes in this list.</i>
+	{% endif %}
+	</div>
+</div>
+{% endblock %}
+
+{% block extra-bottom %}
+
+<script src="{% static 'dist/jquery/autocomplete/jquery-ui.min.js' %}"></script>
+<script>
+function processing(){
+	$("#modal_processing").modal('show');
+};
+$( function() {
+	$('#myform').submit(function() {
+		// DO STUFF...
+		var numbers = /^[0-9]+$/;
+		//get the firstone then loop for the rest
+		var index_chain = $("#index_1").val();
+		result = numbers.test(index_chain);
+		if (result == false){
+			//Testing if first index is a number:
+			//If false, it isn't number, show alert
+			$('#modal_nonumber').modal('show');
+			return false;
+		}
+		var count = {{dishlist.all.count}}
+		//Countinuing testing after index 1
+		for (i=2; i < count+1; i++) {
+			var ii = $("#index_"+i).val();
+			console.log('Testing: '+ii);
+			var result = numbers.test(ii);
+			console.log(result);
+			if (result == false){
+				//False means it didn't passed test, it is not a number
+				console.log('En el if');
+				$('#modal_nonumber').modal('show');
+				return false;
+			}
+			else{
+				index_chain += "+"+ii;
+			}
+		}
+		$("#indexs").val(index_chain);
+		$("#modal_processing").modal('show');
+		return true; // return true will sumbit form
+	});
+});
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+

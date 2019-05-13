@@ -1,0 +1,153 @@
+{% extends '_base.html' %}
+{% block title %} Advance Dish Search {% endblock %}
+{% block content %}
+
+<div class="well-1">
+
+	{% if alert == '1' %}
+		<div class="alert alert-danger alert-dismissible" role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<p><b>No results on your search for:</b></p>
+			</br>
+			<ul>
+			<li>Dish Name(s):
+			<b>
+			{% if names %}
+				{{names}}
+			{% else %}
+				any.
+			{% endif %}
+			</b>
+			</li>
+			<li>With Ingresient(s):
+			<b>
+			{% if ingredients %}
+				{{ingredients}}
+			{% else %}
+				any.
+			{% endif %}
+			</b>
+			</li>
+			<li>In Cuisine(s):
+			<b>
+			{% if cuisines %}
+				{{cuisines}}
+			{% else %}
+				any.
+			{% endif %}
+			</b>
+			</li>
+			</ul>
+			{% if names != "*" %}
+				</br>
+				<a class="btn btn-lg  btn-custom" title="Create a new dish with the name: '{{names}}'" href="{% url 'view_dishphotonew' id_cui='0' name=names %}">
+					Create dish: '{{names|truncatechars:30}}'
+				</a>
+			{% endif %}
+		</div>
+	{% endif %}
+
+	<form enctype='multipart/form-data' action="." method="POST">
+	<button id="search_button" class="btn btn-lg btn-custom" style="padding-left:20px;padding-right:20px" type="submit"/>Search
+	 <li class="glyphicon glyphicon-search icon-white"></li>
+	</button>
+	<a class="btn btn-lg btn-custom" style="margin:0px 2px 2px 2px;padding-left:15;padding-right:15px" title="Create new dish" href="{% url 'view_dishphotonew' %}">
+Create Dish <img src="/media/images/icons/food-16-white.png"/><li class="glyphicon glyphicon-star icon-white"></li>
+</a>
+		{% csrf_token %}
+		{{ form.non_field_errors }}
+		<div class="fieldWrapper">
+			{{ form.names.errors }}
+			<label for="id_names">Name(s):</label>
+			{{ form.names }}
+			<div id="alert_chars" class="alert alert-danger fade in" role="alert" style="display:none;">
+			  The following characters are not allowed in search:</br>
+			  !;.@{}|#$%^&*()+=\/[]":<>?
+			</div>
+		</div>
+	<div class="fieldWrapper">
+		{{ form.ingredients.errors }}
+		<label for="id_ingredients">With ingredient(s):</label>
+		{{ form.ingredients }}
+		<div id="alert_ingre" class="alert alert-danger fade in" role="alert" style="display:none;">
+		  The following characters are not allowed in search:</br>
+		  !;.@{}|#$%^&*()+=\/[]":<>?
+		</div>
+	</div>
+	<div class="fieldWrapper">
+		{{ form.cuisines.errors }}
+		<label for="id_cuisines">Only in Cuisines(s):</label>
+		{{ form.cuisines }}
+	</div>
+	</form>
+</div>
+{% endblock %}
+
+{% block extra-bottom %}
+<script>
+$( function() {
+	$('#id_names').focus();
+	var iChars = "!@#$%^&*()+_=[]\\;./{}|\":<>?";
+	var names_block = 0;
+	var ingredients_block = 0;
+	//console.log('name.length: '+name.length);
+	$("#id_names").on("paste keyup", function() {
+		var name = $('#id_names').val().trim();
+		if (name.length < 1){
+			if (ingredients_block == 0){
+				$("#search_button").prop('disabled', false);
+				};
+			$('#alert_chars').hide();
+			names_block = 0;
+			}
+		else{
+			for (var i = 0; i < name.length; i++) {
+				if (iChars.indexOf(name.charAt(i)) != -1) {
+					//invalid charecter added
+					$('#alert_chars').show();
+					$("#search_button").prop('disabled', true);
+					names_block = 1;
+				}
+				else{
+					//valid charecter added
+					$('#alert_chars').hide();
+					//Verify search button wasn't disabled by ingredients
+					if (ingredients_block == 0){
+						$("#search_button").prop('disabled', false);
+						};
+					names_block = 0;
+				};
+			};
+		};
+	});
+	$("#id_ingredients").on("paste keyup", function() {
+		var name = $('#id_ingredients').val().trim();//trim():clears whitespaces in both ends
+		if (name.length < 1){
+			if (ingredients_block == 0){
+				$("#search_button").prop('disabled', false);
+				};
+			$('#alert_ingre').hide();
+			ingredients_block = 0;
+			}
+		else{
+			for (var i = 0; i < name.length; i++) {
+				if (iChars.indexOf(name.charAt(i)) != -1) {
+					$('#alert_ingre').show();
+					$("#search_button").prop('disabled', true);
+					ingredients_block = 1;
+				}
+				else{
+					$('#alert_ingre').hide();
+					if (names_block == 0){
+						$("#search_button").prop('disabled', false);
+					};
+					ingredients_block = 0;
+				};
+			};
+		}
+	});
+});
+</script>
+{% endblock %}

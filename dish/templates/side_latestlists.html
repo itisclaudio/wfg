@@ -1,0 +1,60 @@
+<div class="list-group" style="margin-top: 5px;">
+  <div class="list-group-item" style="background-color:#f5f5f5; padding:5px;">
+	<h3 style="vertical-align:middle; display:inline;">Latest lists</h3>
+	<a class="btn btn-custom btn" href="{% url 'view_lists' %}" title="See all latest dishes uploaded" style="display:inline; padding-top:3px; padding-bottom:3px;">See all</a>
+  </div>
+	{% if latest_lists|length > 0 %}
+		{% for p in latest_lists %}
+		  <a href="/list/{{p.urlname}}/" class="list-group-item" style="padding:6px;">
+			<p class="list-group-item-heading" style="color:#845505;margin-bottom:0px;"><b>{{p.name|truncatechars:52 }}</b></p>
+			<p class="smallfont" style="margin-bottom:0px;">by {{p.owner.user.username}} ({{p.likestot}} <i class="glyphicon glyphicon-thumbs-up"></i>)
+				{% if p.type = '3' %}<i style="color:red;">Private List</i>{% endif %}
+				{% if p.type = '1' %} Personal List {% endif %}
+				{% if p.type = '2' %} Public List{% endif %}
+			</p>
+			{% if p.dishes.all %}
+				<div class="row" style="margin:0px;">
+					{% for p in p.dishes.all|slice:":3"  %}
+					<div class="col-md-4 col-xs-4" style="padding:1px;">
+						<div class="thumbnail" title="Go to dish page: {{p.name}}" style="padding:1px; font-size:10px; margin-bottom:0px;line-height:10px;">
+							{% if p.photo_main %}
+								<img src="/media/{{p.filename}}-thum{{p.extension}}" class="img-rounded" width="100%">
+							{% else %}
+								<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+							{% endif %}
+							<p style="display:inline;font-size:10px;line-height:10px;">
+							{{p.name|truncatechars:22}}
+							{% if p.othernames %}
+								<i title="Othernames">{{p.othernames|truncatechars:26}}</i>
+							{% endif %}
+							{% if p.cuisines.all %}
+								{% for cuisine in p.cuisines.all|slice:":2" %}
+									({{cuisine|truncatechars:20}})
+								{% endfor %}
+							{% endif %}
+							</p>
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+			{% else %}
+				<div class="row" style="margin:0px;">
+					<div class="thumbnail col-md-4 col-xs-4" title="Go to dish page: {{p.name}}" style="font-size:10px; margin-bottom:0px;line-height:10px;">
+					<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+					<p style="display:inline;font-size:10px;line-height:10px;" >There are no dishes</p>
+					</div>
+				</div>
+			{% endif %}
+		  </a>
+		{% endfor %}
+		<div class="list-group-item" style="padding:8px;text-align:center;">
+			<a class="btn btn-custom" href="/listnew/" style="margin-bottom:4px;">Create new list</a>
+		</div>
+	{% endif %}
+	{% if latest_lists|length  == 0 %}
+		<div class="well well-tight well-white">
+			<p style="margin:10px;text-align:center;">There are no lists</p>
+			<a class="btn btn-custom btn-lg" href="/listnew/" style="margin-bottom:4px;">Create new list</a>
+		</div>
+	{% endif %}
+</div>

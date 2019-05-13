@@ -1,0 +1,79 @@
+{% extends '_base.html' %}
+{% block title %}Site index{% endblock %}
+{% block content %}
+<h1>Site Index</h1>
+
+	<div class="list-group" style="margin:4px;">
+	  <a class="list-group-item list-group-item-warning text-center"><b>General</b></a>
+		<a href="{% url 'view_main' %}" class="list-group-item"><b>Home</b></a>
+		<a href="{% url 'view_about' %}" class="list-group-item"><b>About</b></a>
+		<a href="{% url 'view_contact' %}" class="list-group-item"><b>Contact Us</b></a>
+		<a href="{% url 'view_guidelines' %}" class="list-group-item"><b>General Guidelines</b></a>
+		<a href="{% url 'view_terms' %}" class="list-group-item"><b>Terms of Service</b></a>
+		<a class="list-group-item"><b>Site Index</b>  <span class="footer-rest">This page</span></a>
+		<a href="{% url 'view_help' %}" class="list-group-item"><b>Help</b></a>
+	</div>
+
+	<div class="list-group" style="margin:4px;">
+	  <a class="list-group-item list-group-item-warning text-center"><b>Account Management</b></a>
+	  {% if user.is_authenticated %}
+	    <a class="list-group-item" href="{% url 'view_signin' %}" title="Ways to access WFG"><b>Sign In</b> <span class="footer-rest">(Will log you out)</span></a>
+		<a class="list-group-item" href="{% url 'view_login' %}" title="Using your WFG cretentials"><b>Log In</b> <span class="footer-rest">(Will log you out)</span></a>
+		<a class="list-group-item" href="{% url 'view_signup' %}"><b>Sign Up</b> <span class="footer-rest">(Will log you out)</span></a>
+		<a class="list-group-item" href="{% url 'view_logout' %}"><b>Log Out</b> <span class="footer-rest">(Will log you out)</span></a>
+		<a class="list-group-item" href="/accounts/email/"><b>Manage Emails </b><li class="glyphicon glyphicon-user"></li></a>
+		<a class="list-group-item" href="{% url 'view_privacy' %}" title="Edit your privacy settings"><b>Edit Privacy Settings</b> <li class="glyphicon glyphicon-user"></li></a>
+	  {% else %}
+		<a class="list-group-item" href="{% url 'view_signin' %}" title="Ways to access WFG"><b>Sign In</b></a>
+		<a class="list-group-item" href="{% url 'view_login' %}" title="Using your WFG cretentials"><b>Log In</b></a>
+		<a class="list-group-item" href="{% url 'view_signup' %}" title="Create a new WFG account"><b>Sign Up</b></a>
+		<a class="list-group-item" title="Log out WFG (Login first)"><b>Log Out</b>  <span class="footer-rest">(You are already out)</span></a>
+		<a class="list-group-item" title="Manage Emails (Login first)"><b>Manage Emails </b><li class="glyphicon glyphicon-user"></li></a>
+		<a class="list-group-item" title="I forgot my password (Login first)"><b>Password Recovery</b> <li class="glyphicon glyphicon-user"></li></a>
+		<a class="list-group-item" title="Edit your privacy settings (Login first)"><b>Edit Privacy Settings</b> <li class="glyphicon glyphicon-user"></li></a>
+	  {% endif %}
+	</div>
+
+	<div class="list-group" style="margin:4px;">
+	  <a class="list-group-item list-group-item-warning text-center"><b>My Things</b></a>
+		{% if user.is_authenticated %}
+			<a href="{% url 'view_profile' username=user.username %}" class="list-group-item" title="My Public Profile"><b>My Public Profile</b> <li class="glyphicon glyphicon-user"></li></a>
+			<a href="{% url 'view_userphotos' username=user.username %}" class="list-group-item" title="My Photos"><b>My Photos</b> <li class="glyphicon glyphicon-user"></li></a>
+			<a href="{% url 'view_lists_mine' %}" class="list-group-item" title="My Lists"><b>My Lists</b> <li class="glyphicon glyphicon-user"></li></a>
+		{% else %}
+			<a title="My Private Profile (Login first)" class="list-group-item" ><b>My Privite Profile</b> <li class="glyphicon glyphicon-user"></li></a>
+			<a title="My Public Profile (Login first)" class="list-group-item"><b>My Public Profile </b> <li class="glyphicon glyphicon-user"></li></a>
+			<a title="My Photos (Login first)" class="list-group-item"><b>My Photos</b> <li class="glyphicon glyphicon-user"></li></a>
+			<a title="My Lists (login first)" class="list-group-item"><b>My Lists</b> <li class="glyphicon glyphicon-user"></li></a>
+		{% endif %}
+	</div>
+
+	<div class="list-group" style="margin:4px;">
+		<a class="list-group-item list-group-item-warning text-center"><b>Cuisines</b></a>
+		<a href="{% url 'view_cuisines' %}" class="list-group-item" title="All cuisines listed"><b>All Cuisines</b></a>
+		<a href="{% url 'view_cuisinenew' %}" class="list-group-item"><b>Add New Cuisine</b> <li class="glyphicon glyphicon-user"></li></a>
+	</div>
+
+	<div class="list-group" style="margin:4px;">
+		<a class="list-group-item list-group-item-warning text-center"><b>Dishes</b></a>
+		<a href="{% url 'view_dishes' %}" class="list-group-item" title="All dishes listed"><b>All Dishes</b></a>
+		<a href="{% url 'view_dishphotonew' %}" class="list-group-item"><b>Add New Dish</b> <li class="glyphicon glyphicon-user"></li></a>
+		<a href="{% url 'view_searchadvance' %}" class="list-group-item"><b>Search Dish</b></a>
+	</div>
+
+	<div class="list-group" style="margin:4px;">
+		<a class="list-group-item list-group-item-warning text-center"><b>Photos</b></a>
+		<a href="{% url 'view_photos' %}" class="list-group-item"><b>Top 100 Photos</b></a>
+		<a href="{% url 'view_photosfull' %}" class="list-group-item"><b>Navegate Photos Full Screen</b></a>
+		<a href="{% url 'view_dishphotonew' %}" class="list-group-item"><b>Upload new Photo</b> <li class="glyphicon glyphicon-user"></li></a>
+		<a href="{% url 'view_latestphotos' %}" class="list-group-item" title="Latest photos uploaded"><b>Latest Photos</b></a>
+	</div>
+
+	<div class="list-group" style="margin:4px;">
+		<a class="list-group-item list-group-item-warning text-center"><b>Lists</b></a>
+		<a href="{% url 'view_lists' %}" class="list-group-item"><b>All Public Lists</b></a>
+		<a href="{% url 'view_list_search' %}" class="list-group-item"><b>Search List</b></a>
+		<a href="{% url 'view_listnew' %}" class="list-group-item"><b>Create New List</b> <li class="glyphicon glyphicon-user"></li></a>
+	</div>
+
+{% endblock %}

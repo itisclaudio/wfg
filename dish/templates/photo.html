@@ -1,0 +1,161 @@
+{% extends '_base.html' %}
+	{% block title %} {{ object.dish }} Photo 
+	{% if object.dish.cuisines.all %}
+		{% for cuisine in object.dish.cuisines.all %}
+			| {{cuisine}}
+		{% endfor %}
+	{% endif %}
+ {% endblock %}
+
+{% block super-extra-head %}
+{% load static %}
+<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
+<!--Facebook tags (Start)-->
+<meta property="og:title"  content="{{object.dish}} photo by {{object.owner.user.username}}" />
+<meta property="og:image" content="https://worldfood.guide/media/{{object.location}}" />
+<meta name="description" content="{{ object.dish.description|truncatechars:170 }}"/>
+<!--Facebook tags (End)-->
+<!--Sharethis script (Start)-->
+<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5bf2e117d741e40011ae96ac&product=social-ab' async='async'></script>
+<!--Sharethis script (End)-->
+{% endblock %}
+ 
+{% block content %}
+<div class="well well-white">
+<div class="row">
+	<div class="col-md-9 col-sm-9 col-xs-12">
+		<h2 style="display:inline-block;margin:0px; text-align:left;">
+		Photo {{index}} of {{photos}}</h2>
+
+		{% if prev %}
+			<a class="btn btn-custom" href="/photo/{{prev}}" style="display:inline-block;margin-bottom:5px;">< Prev</a>
+		{% else %}
+		<a class="btn btn-custom disabled" style="display:inline-block;margin-bottom:5px;">< Prev</a>
+		{% endif %}
+		{% if next %}
+			<a class="btn btn-custom" href="/photo/{{next}}" style="display:inline-block;vertical-align:top;">Next ></a>
+		{% else %}
+		<a class="btn btn-custom disabled" style="display:inline-block;vertical-align:top;">Next ></a>
+		{% endif %}
+			{% if user.is_authenticated %}
+				<button id="likeaction" class="btn btn-custom" type="submit"  title="Number of likes. Click to like or dislike picture" style="display:inline-block;margin-top:0px;margin-left:0px;"/>
+			{% else %}
+				<button id="likeaction" class="btn btn-custom btn disabled" type="submit"  title="Number of likes. Login to like or dislike dish" style="display:inline-block;margin-top:0px;margin-left:0px;"/>
+			{% endif %}
+				<span id="likes" style="display:inline-block;">{{object.likestot}}</span>
+					{% if liked = 1 %}
+						<li id="likeicon" style="display:inline-block;" class="glyphicon glyphicon-thumbs-down icon-white"></li>
+					{% else %}
+						<li id="likeicon" style="display:inline-block;" class="glyphicon glyphicon-thumbs-up icon-white"></li>
+					{% endif %}
+				</button>
+		{% if reload = '1' %}
+		<a href="/photofullscreen/{{object.id}}/">
+		<img id="photo" src="/media/{{object.location}}?cachebuster=blah23" alt="{{object.dish}}" class="img-rounded" width="100%"></a>
+		{% else %}
+		<a href="/photofullscreen/{{object.id}}/">
+		<img id="photo" src="/media/{{object.location}}" alt="{{object.dish}}" class="img-rounded" width="100%"></a>
+		{% endif %}
+		<br>
+	<div style="margin-top:5px; margin-bottom: 5px;">
+		{# Sharethis buttons #}
+		<div class="sharethis-inline-share-buttons"></div>
+	</div>
+	{% if object.ownit|lower == 'true' %}
+		<p><b>Photo credit: </b><a href="{% url 'view_profile' username=object.owner.user.username %}">{{ object.owner|truncatechars:60 }}</a></p>
+	{% else %}
+		{% if object.creditsname %}
+			{% if object.creditsurl %}
+				<p><b>Photo credit: </b><a href="{{object.creditsurl}}" target="_blank">{{ object.creditsname }}</a></p>
+			{% else %}
+				<p><b>Photo credit: </b>{{ object.creditsname }}</p>
+			{% endif %}
+		{% else %}
+			{% if object.creditsurl %}
+				<p><b>Photo credit: </b><a href="{{object.creditsurl}}" target="_blank">{{ object.creditsurl|truncatechars:60 }}</a></p>
+			{% endif %}
+		{% endif %}
+	{% endif %}
+	<p><b>Uploaded by: </b><a href="{% url 'view_profile' username=object.owner.user.username %}">{{ object.owner|truncatechars:60 }}</a></p>
+	<p><b>Comments : </b>{{ object.comments|urlizetrunc:85 }}</p>
+	<p><b>Date Uploaded: </b>{{ object.datetime|date:"N j, Y"}}</p>
+	<!--<div id="id" style="visibility: hidden;">{{ object.id}}</div>-->
+	</div>
+	<div class="col-md-3 col-sm-3 col-xs-12">
+	<a class="btn btn-custom" id="id_obj" style="margin-left:0px;" name="{{object.id}}" href="/dish/{{object.dish.urlname}}"><b>{{object.dish|truncatechars:20}}</b></a>
+	<a href="/photo/{{object.dish.favphoto.urlname}}" class="hidden-xs">
+		<img src="/media/{{object.dish.favphoto.filename}}-med{{object.dish.favphoto.extension}}" class="img-rounded" width="80%">
+	</a>
+	<p>
+	{% for cuisine in object.dish.cuisines.all %}
+		(<a href="/cuisine/{{cuisine.urlname}}/">{{cuisine}}</a>)
+	{% endfor %}
+	</p>
+	<p>{{ object.dish.description|urlizetrunc:10|truncatewords:28}}</p>
+	{% if reload = '1' %}
+		<script>
+			url = $("#photo").attr('src');
+			$("#photo").attr("src", url);
+		</script>
+	{% endif %}
+
+	{% if user.is_authenticated %}
+		<a class="btn btn-custom btn-block" href="/photonew/{{ object.dish.id }}/">Upload
+			<i class="fa fa-cloud-upload fa-lg"></i> 
+			<i class="fa fa-picture-o fa-lg"></i>
+		</a>
+		<a class="btn btn-custom btn-block" href="/dishnew/0/">Add Dish
+			<i class="fa fa-magic fa-lg"></i> 
+			<i class="fa fa-cutlery fa-lg"></i>
+		</a>
+		{% if user.username = object.owner.user.username %}
+			<a class="btn btn-custom btn-block" href="/photoedit/{{ object.id }}/">Edit 
+				<i class="fa fa-pencil-square-o fa-lg"></i> 
+				<i class="fa fa-file-text-o fa-lg"></i>
+			</a>
+			<a class="btn btn-custom btn-block" href="/photorotate/{{object.id}}/">Rotate 
+				<i class="fa fa-refresh fa-lg"></i> 
+				<i class="fa fa-picture-o fa-lg"></i>
+			</a>
+			<a class="btn btn-custom btn-block" href="/photodelete/{{object.id}}/">Delete
+				<i class="fa fa-trash fa-lg"></i> 
+				<i class="fa fa-picture-o fa-lg"></i>
+			</a>
+			<a class="btn btn-custom btn-block" href="/photocrop/{{object.id}}/">Crop
+				<i class="fa fa-crop fa-lg" aria-hidden="true"></i>
+				<i class="fa fa-picture-o fa-lg"></i>
+			</a>
+		{% endif %}
+	{% endif %}
+	</div>
+</div>
+</div>
+<script>
+
+$('#likeaction').click(function(){
+	var photo = $('#id_obj').attr("name");
+	$.ajax({
+		data: {'photo':photo},
+		url: '/photolikeaction/',
+		type: 'get',
+		success: function(data){
+			//data:(first char={1=liked,0=unliked} rest of char=total numer o likes)
+			if (data.charAt(0) == "0"){
+				$('#likeicon').attr("class","glyphicon glyphicon-thumbs-up icon-white");
+				}
+			if (data.charAt(0) == "1"){
+				$('#likeicon').attr("class","glyphicon glyphicon-thumbs-down icon-white");
+			}
+			//total number of likes starts at the second char of data
+			$('#likes').html(data.substr(1));
+		}
+	});
+});
+
+//Sharethis script (Start)
+var options={ "publisher": "a17a5cbd-f11c-42a3-87a6-b63741c9d52c", "position": "left", "ad": { "visible": false, "openDelay": 5, "closeDelay": 0}, "chicklets": { "items": ["facebook", "twitter", "linkedin", "pinterest", "email", "sharethis"]}};
+var st_hover_widget = new sharethis.widgets.hoverbuttons(options);
+//Sharethis script (End)
+</script>
+
+{% endblock %}

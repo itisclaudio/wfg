@@ -1,0 +1,119 @@
+{% extends '_base.html' %}
+{% block title %} All International Dishes  {% endblock %}
+
+{% block super-extra-head %}
+	{% load static %}
+	<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
+	<script type="text/javascript">
+		$(window).keydown(function(e) {
+			if(e.which === 39) {
+				$('#next')[0].click();
+			}
+			if(e.which === 37) {
+				$('#prev')[0].click();
+			}
+		});
+	</script>
+{% endblock %}
+
+{% block content %}
+<table width="100%" class="nolinetable nopadding">
+<tr>
+<td>
+	<h1 style="display:inline;">All Dishes</h1>
+	<span class="label label-default" style="vertical-align:top;display:inline;" title="Number dishes">{{ paginatorlist.paginator.count }}</span>
+	<a class="btn btn-custom hidden-xs" style="vertical-align:top;margin-top:-5px;" title="New dish / photo" href="/dishnew/0/">New dish</a>
+</td>
+
+{% if paginatorlist.paginator.count > 10 %}
+	<td style="vertical-align:bottom;">
+		<ul class="pagination pull-right" style="margin:0px 7px -1px 0px;">
+			{% if paginatorlist.has_previous %}
+				<li><a href="/dishes/1/"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+				<li><a href="/dishes/{{paginatorlist.previous_page_number}}" id="prev"><span class="glyphicon glyphicon-step-backward"></span></a><li>
+			{% else %}
+				<li class="disabled"><a href="#"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+				<li class="disabled"><a href="#"><span class="glyphicon glyphicon-step-backward"></span></a><li>
+			{% endif %}
+			<li class="disabled hidden-xs"><a href="#">Page {{paginatorlist.number}} of {{paginatorlist.paginator.num_pages}}</a><li>
+			{% if paginatorlist.has_next %}
+				<li><a href="/dishes/{{paginatorlist.next_page_number}}" id="next"><span class="glyphicon glyphicon-step-forward"></span></a><li>
+				<li><a href="/dishes/{{paginatorlist.paginator.num_pages}}"><span class="glyphicon glyphicon-fast-forward"></span></a><li>
+			{% else %}
+				<li class="disabled"><a href="#"><span class="glyphicon glyphicon-step-forward"></span></a><li>
+				<li class="disabled"><a href="#"><span class="glyphicon glyphicon-fast-forward"></span></a><li>
+			{% endif %}
+		</ul>
+</td>
+{% endif %}
+
+</tr>
+</table>
+
+<div class="list-group" style="margin-bottom:0px;">
+{% if paginatorlist.paginator.count > 0 %}
+{## LIST ##}
+  {% for p in paginatorlist.object_list %}
+	  <div class="list-group-item row" style="margin-left:0px; margin-right:0px; padding:4px;">
+		<div class="col-sm-3 col-xs-12" style="padding-left:2px;">
+		{% if not p.photo_main %}
+			<a href="/photonew/{{p.id}}/">
+				<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+			</a>
+        {% else %}
+			<a href="/dish/{{p.urlname}}">
+				<img src="/media/{{p.filename}}-med{{p.extension}}" class="img-rounded" width="100%">
+			</a>
+        {% endif %}
+		</div>
+		<div class="col-sm-9 col-xs-12" style="padding-left:2px;">
+			<a href="/dish/{{p.urlname}}">
+				<h3 class="list-group-item-heading" style="color:#845505;margin-bottom:2px;display:inline;"><b>{{p.name|truncatechars:66}}</b></h3>
+			</a>
+			{% if p.othernames %}
+				<p style="display:inline;" title="{{p.othernames }}">{{p.othernames|truncatechars:30 }}</p>
+			{% endif %}
+			<p style="display:inline;">
+				({{p.likestot}} <i id="likeicon"  title="Number of likes" class="glyphicon glyphicon-thumbs-up"></i>)
+				({{p.picture__count}} <i class="fa fa-camera"  title="Number of photos"></i>)
+			</p>
+			{% if p.cuisines.all %}
+				<br>
+				{% for cuisine in p.cuisines.all|slice:":5" %}
+					(<a style="font-size:14px;" href="/cuisine/{{cuisine.urlname}}" title="Go to {{cuisine|truncatechars:24}} cuisine page">{{cuisine}}</a>)
+				{% endfor %}
+			{% endif %}
+			{% if p.description %}
+				<p style="margin-bottom:0px;">{{ p.description|urlizetrunc:32|escape|truncatewords:45 }}</p>
+			{% endif %}
+			<p class="smallfont" style="margin-top:6px; margin-bottom:2px;"><i>{{p.datetime|date:"h:iA F d, Y" }} - by: <a href="/profile/{{p.userprofile}}">{{p.userprofile}}</a></i></p>
+		</div>
+	  </div>
+  {% endfor %}
+{## END LIST ##}
+
+    {% if paginatorlist.paginator.count > 10 %}
+		<ul class="pagination pull-right" style="margin-top:0px">
+		{% if paginatorlist.has_previous %}
+			<li><a href="/dishes/1/"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+			<li><a href="/dishes/{{paginatorlist.previous_page_number}}" id="prev"><span class="glyphicon glyphicon-step-backward"></span></a><li>
+		{% else %}
+			<li class="disabled"><a href="#"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+			<li class="disabled"><a href="#"><span class="glyphicon glyphicon-step-backward"></span></a><li>
+		{% endif %}
+		<li class="disabled hidden-xs"><a href="#">Page {{paginatorlist.number}} of {{paginatorlist.paginator.num_pages}}</a><li>
+		{% if paginatorlist.has_next %}
+			<li><a href="/dishes/{{paginatorlist.next_page_number}}" id="next"><span class="glyphicon glyphicon-step-forward"></span></a><li>
+			<li><a href="/dishes/{{paginatorlist.paginator.num_pages}}"><span class="glyphicon glyphicon-fast-forward"></span></a><li>
+		{% else %}
+			<li class="disabled"><a href="#"><span class="glyphicon glyphicon-step-forward"></span></a><li>
+			<li class="disabled"><a href="#"><span class="glyphicon glyphicon-fast-forward"></span></a><li>
+		{% endif %}
+        </ul>
+    {% endif %}
+{% else %}
+        <h3>There are no dishes</h3>
+{% endif %}
+</div>
+
+{% endblock %}

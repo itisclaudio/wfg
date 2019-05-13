@@ -1,0 +1,308 @@
+{% extends '_base.html' %}
+{% block title %} My Profile {% endblock %}
+
+{% block super-extra-head %}
+{% load static %}
+{% load socialaccount %}<!--This is for (**)-->
+<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#more").click(function(){
+		document.getElementById('desc').style.display = "block";
+		document.getElementById('desc_small').style.display = "none";
+		$("#more").css({display:'none'});
+		document.getElementById('less').style.display = "block";
+	});
+	$("#less").click(function(){
+		document.getElementById('desc').style.display = "none";
+		document.getElementById('desc_small').style.display = "block";
+		document.getElementById('more').style.display = "block";
+	});
+});
+</script>
+{% endblock %}
+
+{% block content %}
+
+<!--Modal-start Showing loading bar -->
+<div class="modal fade" id="modalLoading" tabindex="-1" role="dialog" aria-labelledby="modalLoadingLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="modalLoadingLabel">Processing...</h1>
+      </div>
+      <div class="modal-body">
+		<div class="progress">
+			  <div class="progress-bar progress-bar-striped progress-bar-warning active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+			  </div>
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Modal end -->
+
+{% if provider = 'facebook' %}
+<!--Modal-start Facebook photo -->
+<div class="modal fade" id="myModal-facebookphoto" tabindex="-1" role="dialog" aria-labelledby="myModal-facebookphotoLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModal-facebookphotoLabel">Use Facebook photo?</h2>
+      </div>
+      <div class="modal-body">
+		<img id="social_image" src="" class="img-rounded" width="200px" style="margin-bottom: 6px;"/>
+      </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+		  <a id="use_photo" class="btn btn-custom btn-lg" href="" onclick="hide();">Use photo</a> 
+        </div>
+    </div>
+  </div>
+</div>
+
+<!--Modal to ask to create WFG password -->
+<div class="modal fade" id="modalUnlinkSocial" tabindex="-1" role="dialog" aria-labelledby="modalUnlinkSocialLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalUnlinkSocialLabel">Remove Social Media Account?</h2>
+      </div>
+      <div class="modal-body">
+		You will only be able to login by using your WFG username and password.
+      </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+		  <a id="use_photo" class="btn btn-custom btn-lg" href="/unlink_account/" onclick="hide();">Yes, remove</a>
+        </div>
+    </div>
+  </div>
+</div>
+
+<!--Modal to delete facebook account -->
+<div class="modal fade" id="modalCreateWFGpass" tabindex="-1" role="dialog" aria-labelledby="modalCreateWFGpassLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalCreateWFGpassLabel">You cannot remove your social media account yet!</h2>
+      </div>
+      <div class="modal-body">
+		A WFG password needs to be created first in order to remove your social media account.
+      </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+		  <a id="use_photo" class="btn btn-custom btn-lg" href="{% url 'view_create_pass' %}">Create a WFG password</a>
+        </div>
+    </div>
+  </div>
+</div>
+
+{% endif %}
+<!--Modal end -->
+
+{% if profile.photo %}
+<div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="modalDeleteLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalDeleteLabel">Delete current profile picture?</h2>
+      </div>
+      <div class="modal-body">
+		<img src="/media/{{profile.photofilename}}-med{{profile.extension}}" class="img-rounded" width="200px" style="margin-bottom: 6px;"/>
+		<p>Your profile will not have a picture. But you can upload another one at any time. </p>
+      </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+		  <a id="photo_delete" class="btn btn-custom btn-lg" href="/profile_photo_delete/" onclick="hide();"/>Yes, delete photo</a> 
+        </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<h1>Private Profile</h1>
+<div class="well">
+<div class="row">
+	<div class="col-md-5 col-sm-5 col-xs-12">
+		{% if profile.photo %}
+			<img src="/media/{{ profile.photofilename}}{{ profile.extension}}" class="img-rounded" width="100%"/>
+		{% else %}
+			<img src="/media/images/user.png"  class="img-polaroid" width="100%"/>
+		{% endif %}
+		<br/><br/>
+		<a class="btn btn-custom btn-block btn-lg" href="{% url 'view_updatePicture' %}">Upload new photo</a>
+		{% if provider = 'facebook' %}
+			<a class="btn btn-custom btn-lg btn-block" id="social_photo" onclick="facebook_photo();">Use current Facebook photo</a>
+		{% endif %}
+		{% if profile.photo %}
+			<a class="btn btn-custom btn-lg btn-block" onclick="photo_delete();">Delete photo</a>
+		{% endif %}
+	</div>
+	<div class="col-md-7 col-sm-7 col-xs-12">
+	{% if not profile.account_verified %} 
+		<div class="alert alert-warning alert-dismissible" role="alert">
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			  <span aria-hidden="true">&times;</span>
+		  </button>
+	  In order to verify your email address please follow the instructions in the email that has been sent to you.<br/>
+	 Or go to <a href="/accounts/email/"><b>Manage</b></a> to complete the verification process.
+		</div>
+	{% endif %}
+		<ul class="list-group">
+			<li class="list-group-item">
+				<a class="btn btn-custom pull-right" href="{% url 'view_updateProfile' %}" style="margin-top:-7px;">Edit</a>
+				<p><b>Username :</b> {{ user.username }}</p>
+				<p><b>Name :</b> {{ user.first_name }} {{ user.last_name }}</p>
+			</li>
+			<li class="list-group-item">
+			<a class="btn btn-custom pull-right" href="/accounts/email/" style="margin-top:-7px;">Manage</a>
+				<p><strong>Email(s) :</strong></p> 
+				<p>
+					{% if user.emailaddress_set.all %}
+					  <ul style="padding-left: 20px;">
+					  {% for emailaddress in user.emailaddress_set.all %}
+					   <li>
+						{{ emailaddress.email }}
+						{% if emailaddress.primary %}
+							<span class="smallfont">
+							(primary)
+							{% if not emailaddress.verified %}
+								<b style="color:red;">(unverified!)</b>
+							{% else %}
+								(verified)
+							{% endif %}
+							</span>
+						{% else %}
+							<span class="smallfont">
+							{% if not emailaddress.verified %}
+								<b style="color:red;">(unverified!)</b>
+							{% else %}
+								(verified)
+							{% endif %}
+							</span>
+						{% endif %}
+						</li>
+					  {% endfor %}
+					  </ul>
+					{% endif %}
+				</p>
+			</li>
+			<li class="list-group-item">
+			<b>Password :</b>
+			{% if not profile.only_social %}
+				<b>*********</b>
+				<a class="btn btn-custom pull-right" href="{% url 'view_updatePassword' %}" style="margin-top:-7px;">Edit</a>
+			{% else %} 
+				{{provider|title}}
+				<a class="btn btn-custom pull-right" href="{% url 'view_create_pass' %}" style="margin-top:-7px;">Add a WFG password</a>
+			{% endif %}
+			</li>
+			{% if provider = 'facebook' %}
+			<li class="list-group-item">
+			<b>Social media account :</b> Facebook
+			{% if profile.only_social %}
+				<a class="btn btn-custom pull-right" onclick="social_unlink_question();" style="margin-top:-7px;">Remove account</a>
+			{% else %}
+				<a class="btn btn-custom pull-right" onclick="social_unlink();" style="margin-top:-7px;">Remove account</a>
+			{% endif %}
+			</li>	
+			{% endif %}
+			{% if social = 'none' %}
+				<li class="list-group-item">
+					<b>Social Account:</b> <i>None</i>
+					<!--(**) Connects Facebook to autenticated account-->
+					<a class="btn btn-custom pull-right" href="{% provider_login_url 'facebook' process='connect' %}" style="margin-top:-7px;" title="Connect your Facebook account to WorldFood.Guide" onclick="loading();">Connect to Facebook</a>
+				</li>
+			{% endif %}
+			<li class="list-group-item">
+			<a class="btn btn-custom pull-right" href="{% url 'view_privacy' %}" style="margin-top:-7px;">Edit</a>
+				<p><strong>Privacy Settings :</strong></p> 
+				<ul style="padding-left: 20px;">
+				  <li>
+				  Name public : 
+				  {% if profile.names_show = 1 %} <b>Yes</b>
+				  {% else %} <b>No</b>
+				  {% endif %}
+				  </li>
+				  <li>
+				  Email public :
+				  {% if profile.email_show = 1 %} <b>Yes</b>
+				  {% else %} <b>No</b>
+				  {% endif %}
+				  </li>
+				</ul>
+			</li>
+			<li class="list-group-item">
+			<a class="btn btn-custom pull-right" href="{% url 'view_updateAboutme' %}" style="margin-top:-7px;">Edit</a>
+				<p><strong>About me :</strong></p> 
+				<p>
+				 {% if profile.about %}
+					{% if profile.about|wordcount > 80 %}
+						<div id='desc_small' style="display:block;">{{ profile.about|urlizetrunc:32|escape|linebreaks|truncatewords:80 }}
+						<p class="pull-right"><a id="more" href="#"><i>...See more</i></a></p><br clear="all" />
+						</div>
+						<div id="desc" style="display:none;">{{ profile.about|urlizetrunc:32|escape|linebreaks }}
+						<p class="pull-right"><a id="less" href="#"><i>...See less</i></a></p><br clear="all" />
+						</div>
+					{% else %}
+						{{ profile.about|urlizetrunc:32|escape|linebreaks }}
+					{% endif %}
+				{% else %}
+					<a href="{% url 'view_updateAboutme' %}">Add description</a>
+				{% endif %}
+				</p>
+			</li>
+		</ul>
+		{% if user.is_authenticated %}
+		<a class="btn btn-custom btn-lg btn-block" href="/foodie/{{user.username}}">My Public Profile</a>
+	</div>
+	{% else %}
+		<p>No profile. You have you "login" or "sign up" first!</p>
+		<br>
+		<a class="btn btn-custom btn-lg" href="{% url 'view_login' %}"><i class="icon-pencil icon-white"></i> Login</a> 
+		<a class="btn btn-custom btn-lg" href="{% url 'view_signup' %}"><i class="icon-user icon-white"></i> Sign Up</a>
+	{% endif %}
+	{% if mensaje %}
+		<p>{{ mensaje }}</p>
+	{% endif %}
+</div>
+</div>
+
+{% block extra-bottom %}
+	<script type="text/javascript">
+		function facebook_photo(){
+			//var fb_user = '{{social.uid}}';
+			var image_url = 'https://graph.facebook.com/'+'{{social.uid}}'+'/picture?width=800';
+			//alert (image);
+			document.getElementById('social_image').src = image_url;
+			
+			var path = window.location.href;
+			var to_delete = "/myprofile/";
+			var main_path = path.replace(to_delete,'');
+			var url_delete = main_path+"/profile_photo_upload/?fb_id="+"{{social.uid}}";
+			$('#use_photo').attr("href",url_delete);
+			$("#myModal-facebookphoto").modal('show');
+			//$("#modalDelete").modal('show');
+		};
+		function photo_delete(){
+			$("#modalDelete").modal('show');
+			//$("#myModal-facebookphoto").modal('show');
+			//alert('What!');
+		};
+		function social_unlink(){
+			$("#modalUnlinkSocial").modal('show');
+		};
+		function social_unlink_question(){
+			$("#modalCreateWFGpass").modal('show');
+		};
+		function loading(){
+			$("#modalLoading").modal('show');
+		};
+		function hide(){
+			$("#modalUnlinkSocial,#modalDelete,#modalCreateWFGpass,#myModal-facebookphoto").modal('hide');
+			$("#modalLoading").modal('show');
+		};
+	</script>
+{% endblock %}
+
+{% endblock %}

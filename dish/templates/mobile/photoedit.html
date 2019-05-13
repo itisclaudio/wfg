@@ -1,0 +1,115 @@
+{% extends '_base.html' %}
+{% block title %}Dish Photo{% endblock %}
+
+{% block super-extra-head %}
+	{% load static %}
+{% endblock %}
+
+{% block content %}
+<!--Modal 0 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="myModalLabel">Processing...</h1>
+      </div>
+      <div class="modal-body">
+		<div class="progress">
+			  <div class="progress-bar progress-bar-striped progress-bar-warning active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+			  </div>
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Modal 1 -->
+
+<div class="well-1">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+<tr>
+<td colspan="3">
+	<h1 align="center"><a href="/dish/{{object.dish.id}}">{{ object.dish }}</a></h1>
+	<div align="center">
+		<img src="/media/{{object.filename}}-med{{object.extension}}" class="img-rounded" width="100%">
+		<p>By: {{ object.owner|truncatechars:13 }}. {{ object.datetime|date:"N j, Y"}}
+			({{ likestotal }} <i style="display:inline;" title="Number of likes" class="glyphicon glyphicon-thumbs-up"></i>)
+		</p>
+	</div>
+	<form enctype='multipart/form-data' action="." method="POST" id="myform">
+		{% csrf_token %}
+		<div class="well well-white" style="margin-bottom:0px;">
+			<div class="col-xs-8" style="padding-left:0px;">
+				<p style="margin-top:-8px;"><b>I am the owner:</b></p>
+			</div>
+			<div class="col-xs-4">
+				{{ form.ownit }}
+			</div>
+		</div>
+		{% if form.ownit.value %}
+			<div class="fieldWrapper" id="creditsname" style="display:none;">
+				<label for="id_creditsname">Photo credits to:</label>
+				{{ form.creditsname }} {{ form.creditsname.errors }}
+			</div>
+			<div class="fieldWrapper" id="creditsurl" style="display:none;">
+				<label for="id_creditsurl">URL Location:</label>
+				{{ form.creditsurl }} {{ form.creditsurl.errors }}
+			</div>
+		{% else %}
+			<div class="fieldWrapper" id="creditsname">
+				<label for="id_creditsname">Photo credits to:</label>
+				{{ form.creditsname }} {{ form.creditsname.errors }}
+			</div>
+			<div class="fieldWrapper" id="creditsurl">
+				<label for="id_creditsurl">URL Location:</label>
+				{{ form.creditsurl }} {{ form.creditsurl.errors }}
+			</div>
+		{% endif %}
+	    <div class="fieldWrapper">
+    	    <label for="id_comments"><b>Photo extra info:</b></label>
+    	    {{ form.comments }} {{ form.comments.errors }}
+    	</div>
+		<br/>
+</td>
+</tr>
+<tr>
+<td width="48%">
+	<button class="btn btn-custom btn-lg btn-block" type="submit"/>Save</button>
+</td>
+<td width="4%">
+</td>
+<td width="48%">
+	<a class="btn btn-custom btn-lg btn-block" href="javascript:window.history.go(-1);">Cancel</a>
+	</form>
+</td></tr>
+</table>
+
+</div>
+{% endblock %}
+
+{% block extra-bottom %}
+<script src="{% static 'dist/jquery/validate/jquery.validate.min.js' %}"></script>
+<script type="text/javascript">
+$('#myform').validate();//Used to validate URL
+function loading(){
+	if($('#id_creditsurl-error').css('display') == 'none'){
+		//console.log('id_creditsurl-error Not pressent');
+		$("#myModal").modal('show');
+	};
+}
+$(document).ready(function (){
+	$("#id_ownit").click(function() {
+		//console.log(this.checked);
+        if(this.checked == true) {
+			//alert("Checked");
+			$('#id_creditsname').val("");
+			$('#id_creditsurl').val("");
+			$('#creditsname').hide();
+			$('#creditsurl').hide();
+		}else{
+			$('#creditsname').show();
+			$('#creditsurl').show();
+        }
+	});
+})
+</script>
+{% endblock %}

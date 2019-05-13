@@ -1,0 +1,174 @@
+{% extends '_base.html' %}
+{% block title %}WorldFood.Guide | Help{% endblock %}
+{% block content %}
+<h1>Help</h1>
+<div class="row">
+  <div class="col-md-6"> 
+	<div class="list-group" style="margin:4px;">
+	  <a class="list-group-item list-group-item-warning text-center"><b>Definitions</b></a>
+		<a class="list-group-item" href="#dish"><b>Dish</b></a>
+	    <a class="list-group-item" href="#cuisine"><b>Cuisine</b></a>
+		<a class="list-group-item" href="#photos"><b>Dish Photos</b></a>
+		<a class="list-group-item" href="#foodies"><b>Registered members, aka <em>Foodies </em></b></a>
+		<a class="list-group-item" href="#list"><b>List</b></a>
+	</div>
+  </div>
+  
+  <div class="col-md-6"> 
+	<div class="list-group" style="margin:4px;">
+		<a class="list-group-item list-group-item-warning text-center"><b>How to..</b></a>
+		<a class="list-group-item" href="#sign_up"><b>Sign Up</b></a>
+		<a class="list-group-item" href="#new_dish"><b>Create a new Dish</b></a>
+		<a class="list-group-item" href="#upload_photo"><b>Upload a dish photo</b></a>
+		<a class="list-group-item" href="#new_cuisine"><b>Create a new Cuisine</b></a>
+		<a class="list-group-item" href="#new_list"><b>Create a new List</b></a>
+	</div>
+  </div>
+</div>
+
+<h1><a id="definitions"></a>Definitions</h1>
+<div class="well well-white" style="padding-left: 20px;">
+    <h2><a id="dish"></a>Dish</h2>
+		<p>In WorldFood.Guide we are interested in traditional or well known dishes from different cuisines around the world. The following information is included with each dish: name, other names, ingredients, brief description and cuisine of origin.</p>
+		
+		<p><a id="ingredients"></a><b>Main Ingredients:</b></p>
+		<p>In the dish profile we specify only main ingredients or spices, ie, you don’t need to include salt and pepper. The ingredients should be written in singular and separated by commas. The list of main ingredients will allow users to search and filter dishes by individual ingredients. Let’s say you are uploading the dish “chicken soup”. For main ingredients you would write “chicken, broth, noodles.”</p>
+		<p>Some dishes can have a different main ingredient. For example, Pad Thai can be made with chicken, beef or shrimp. In this case, three different dishes will be created with their own photo (chicken/beef/shrimp).</p>
+
+	<div align="center"><hr width="80%" align="center"></div>
+
+	<h2><a id="cuisine"></a>Cuisine</h2>
+		<p>Our approach to cuisine is regional, mostly from countries or groups of countries (ie, Latin, Middle Eastern, etc). Sometimes cuisines have sub-cuisines. For example, Chinese cuisine is different according to the region from which the dish comes from. So Chinese food can be labeled according to its region, ie, sub-cuisine, such as Chinese-Cantonese and Chinese-Sichuan. If creating a sub-cuisine, make sure to write the cuisine <strong>first</strong> followed by a dash and then the sub-cuisine.</p>
+
+	<div align="center"><hr width="80%" align="center"></div>
+	
+    <h2><a id="photos"></a>Dish Photos</h2>
+		<p>A photo belongs to a dish and for this reason a photo can only be uploaded if the dish already exists. If the dish doesn’t exist, you can create the dish at the same time that you are uploading the photo.</p>
+		<p>The most common image formats can be uploaded. Photos must be a minimum of 800 pixels (width and height) in order to be uploaded. Photos taken with smartphones meet these standards. Basic edition features like cropping and rotating can be performed after uploading. Foodies can “like” photos and the photo with the most “likes” will be featured as the main photo of that dish.</p>
+		
+	<div align="center"><hr width="80%" align="center"></div>
+
+	<h2><a id="list"></a>List</h2>
+		<p>The feature “list” will allow Foodies to group dishes in the system into lists. For example: favorite dishes, dishes you want to try in the future, dishes you want to eat on an upcoming trip or vacation, vegetarian dishes from a specific cuisine, dishes you recommend, etc. The sky's the limit.</p>
+		<p>There are 3 types of lists:</p>
+		<ol type="1">
+			<li><strong>Personal list:</strong> Only the owner can edit the dishes and information about the list, but anybody can see the content of the list.</li>
+			<li><strong>Public list:</strong> Everybody can see the list, any foodie can add dishes to the list, but only the owner can delete dishes and update information about the list. Choose this if you want other foodies to contribute to the list.</li>
+			<li><strong>Private list:</strong> The list is visible only to the owner and can only be edited by the owner.</li>
+		</ol>
+
+	<div align="center"><hr width="80%" align="center"></div>
+	
+    <h2><a id="foodies"></a>Registered members, aka <em>Foodies</em></h2>
+		<p>We call our registered members “Foodies.” Why? Because if you enjoy taking photos of food, describing them, and uploading them... you are probably a foodie. Only registered members can own profiles, create cuisines or dishes, edit entries and upload photos, among other functions. <em>Foodies</em> make an important contribution by uploading photos and helping others select dishes they may have never tried before. You will be helping someone discover new dishes and expanding their palate.</p>
+		<p><em>Foodies</em> create a profile and their photos will be linked to their profile.</p>
+		<p>Members play the most important role in spreading their foodie knowledge. WorldFood.Guide can only have as much information as their foofies members share. The role of Foodies in WorldFood.Guide is the most important since it depends on Foodies sharing and spreading their knowledge and photos of food. Without them, WorldFood.Guide would be limited in its usefullness to users.</p>
+</div>
+<br />
+
+<h1><a id="how_to"></a>How To..</h1>
+<div class="well well-white" style="padding-left: 20px;">
+<h2><a id="sign_up"></a>Sign Up</h2>
+    <p>You can become a registered member (Foodie) by clicking the Sign Up button on the main menu or the link <a href="http://worldfood.guide/cuisinenew/">http://worldfood.guide/signup/</a></p>
+    <p><strong>Information to fill in the form:</strong></p>
+    <ol type="a">
+		<li><strong>First Name</strong> (Required) You must include your first name for our database but you can choose to keep this information hidden from the public.</li><br />
+		<li><strong>Last Name:</strong> (Required) You must include your last name for our database but you can choose to keep this information hidden from the public.</li><br />
+		<li><strong>Username:</strong> (Required)  Create a unique username which will be public and associated with your photos and information. Your username must be less than 30 characters and no blank spaces.</li><br />
+		<li><strong>Password:</strong>  (Required) Any characters can be used.</li><br />
+		<li><strong>Repeat Password: </strong> (Required) Checks consistency of your password by reentering it.</li><br />
+		<li><strong>E-mail: </strong> (Required) A valid email for account administration actions like password reset. It can be also hidden to the public.</li><br />
+		<li><strong> Repeat Email: </strong> (Required) Checks consistency of your email by reentering it.</li><br />
+		<li><strong>About you: </strong> A brief description about yourself and any other information you want to share related to food. This is optional.</li><br />
+		<li><strong>Photo: </strong>  (jpg formal, square shape) Your profile photo. Click the <img src="/media/images/help/choose_file.jpg" alt="Choose File" /> button and your device file manager and/or camera will let you either select a photo from your library or take a new picture.</li><br />
+		<li><strong>Show first and last name to the public: </strong> By default your name will be displayed to the public. Select <strong>No</strong> and you name will be hidden from the public.</li><br />
+		<li><strong>Show e-mail to the public: </strong> By default your email will be displayed to the public. Select <strong>No</strong> and your e-mail address will be hidden from the public. If you want to be contacted,  make sure your email is displayed.</li><br />
+		<li><strong>Sign up!: </strong> Press the <img src="/media/images/help/signup.jpg" alt="Sign Up" /> button to complete the submission of your information.</li>
+    </ol>
+	
+<div align="center"><hr width="80%" align="center"></div>
+
+<h2 style="margin-bottom:0px;"><a id="new_dish"></a>Create a new Dish</h2>
+<p class="smallfont" style="text-align:center;">(Registered users only)</p>
+    
+    <p>A dish can be created by clicking the “New Dish / Photo” button under the “Dish / Cuisine” dropdown button in the main menu or any page where you see a “New Dish” button or the link <a href="http://worldfood.guide/dishphotonew/">http://worldfood.guide/dishphotonew/</a></p>
+    <p dir="ltr"><strong>Information on how to fill in the “New Dish” form:</strong></p>
+    <ol type="a">
+		<li><strong>Name:</strong> <i>(Required)</i> Write a name in singular and only the use of alphanumeric characters, blank spaces and dashes are allowed. Sometimes there are variations of the dishes based on the used of a different main ingredient like Pad Thai, Chicken Pad Thai and Beef Pad Thai, in this case 3 different dishes should be created and maybe be linked as similar dishes. The original foreign name can be used as long as it can be written using alphanumeric characters.<br><br>
+		If there are dishes with the same or similar names already in the system. A list of similarities will show up. You can click on the dish if you want to edit it and/or add a new dish photo.</li><br />
+		<li><strong>Other Names: </strong> <i>(Separated by commas)</i> Variations of the name and name in the original language.</li><br />
+		<li><strong>Main ingredients:</strong> <i>(separated by commas)</i> Use plural for countable nouns e.g "tomatoes, onions, eggs" unless they are spices, condiments or uncountable nouns e.g. "rice, basil, milk". Only main ingredients that define the dish, not all the ingredients. Do not use “or” or “and” only commas.</li><br />
+		<li><strong>Description:</strong> <i>(Up to 9500 characters)</i> Brief description about the dish focused on the preparation and taste of the dish. The description can be extensive, containing additional history of the dish and any other important information but since the first 40 words will show as the preview in searches, it is suggested to include in the first paragraph information that provides a brief idea of the dish.</li><br />
+		<li><strong>Cuisines:</strong> This is a multi-selection option, since a dish may belong to one or more cuisines. If the dish belongs to a specific sub-cuisine like for example the Chinese-Cantonese cuisine please select also the chinese cuisine: (Chinese) and (Chinese-Cantonese)</li><br />
+		<li><strong>Photo: </strong> When you click the button<img src="/media/images/help/choose_file.jpg" alt="Choose File" /> your device file manager and/or camera will let you either select a photo from your library or take a new one. If done correctly, the name of your file will appear next to the Choose File button: <img src="/media/images/help/choose_file_photo.jpg" alt="Choose File"/> The height and width must be 800 pixels or greater.</li><br />
+		<li><strong>Photo details: </strong>
+			<ul>
+				<li><strong>I am the owner:</strong> Check it if you own the photo.</em></li>
+				<li><strong>Photo credits to:</strong> Name of the owner of the photo.</em></li>
+				<li><strong>URL Location:</strong> If the photo doesn’t belong to you then you must include the source.</li>
+				<li><strong>Photo extra info:</strong> You may add any additional information about the photo.</li>
+			</ul>
+		</li><br />
+		<li><strong>Save Dish:</strong> If there is one or more dishes with the same or similar names already in the system. A list of similarities will show up, at this point your dish hasn't been saved yet. If you still want to save your dish, press <img src="/media/images/help/save.jpg"  alt="New Cuisine" /> one more time. After the system have successfully saved your information.</li>
+    </ol>
+    <p>You can always come back and edit in the future if necessary.</p>
+
+<div align="center"><hr width="80%" align="center"></div>
+
+<h2 style="margin-bottom:0px;"><a id="upload_photo"></a>Upload a dish photo</h2>
+<p class="smallfont" style="text-align:center;">(Registered users only)</p>
+
+<p>There are two ways to upload a dish photo:</p>
+
+<ol type="1">
+	<li><strong>When the dish already exists:</strong> Since a photo is always associated with a dish, you can upload a photo from the dish’s page. First locate the dish. When dishes are listed, their main photo appears in the list. If the dish does not have a photo yet, an upload photo image <img src="/media/images/help/upload-thum-new.jpg" alt="Upload Photo"> will show instead. You can click on this icon to upload the first photo of the dish.</li></br>
+	
+	<li><strong><a target="_blank" href="{% url 'view_dishphotonew' %}">When the dish doesn’t exist:</a></strong> Since a dish has to exist first in order to upload a photo, you must first create the dish. Follow the steps on <a href="#new_dish">Create a new dish</a>. While creating the new dish, the system will show you a list of dishes with the same or similar names that are already in the system. If you see your dish, you will be able to click on the dish and upload the picture of that existing dish. For details on how to fill information in the form, please go to Photo details in Create a new Dish (link).<br>
+	<p><strong>Photo details: </strong></p></br>
+	<ul>
+		<li><strong>I am the owner:</strong> Check it if you own the photo.</em></li>
+		<li><strong>Photo credits to:</strong> Name of the owner of the photo.</em></li>
+		<li><strong>URL Location:</strong> If the photo doesn’t belong to you then you must include the source.</li>
+		<li><strong>Photo extra info:</strong> You may add any additional information about the photo.</li>
+	</ul>
+	
+	</li>
+</ol>
+
+<div align="center"><hr width="80%" align="center"></div>
+
+<h2 style="margin-bottom:0px;"><a id="new_cuisine"></a>Create a new Cuisine</h2>
+<p class="smallfont" style="text-align:center;">(Registered users only)</p>
+
+    <p>You can create a new cuisines straight from the main menu (<strong>Add New \ New Cuisine</strong>) from any <img src="/media/images/help/Button-New_cuisine.jpg" alt="New Cuisine" /> button or the link <a href="http://worldfood.guide/cuisinenew/">http://worldfood.guide/cuisinenew/</a></p>
+    <p dir="ltr"><strong>Information to fill in the form:</strong></p>
+    <ol type="a">
+		<li><strong>Name :</strong> (Required, Only alphanumeric characters) Use ampersand ”-” for sub cuisines like Chinese-Cantonese. The world cuisine doesn’t need to be added.</li><br />
+		<li><strong>Other Names:</strong> Separated by commas</li><br />
+		<li><strong>Description:</strong> Brief description of the cuisine. Also small list of common ingredients translations like for example in the Thai cuisine:
+		<p>Gai = Chicken<br />
+		Kai = Egg<br />
+		khing = Ginger<br />
+		Larb = Salad</p></li>
+		<li><strong> Save:</strong> The cuisine names are unique so you won’t be able to create a cuisine that already exist. A message will appear if the cuisine already exist.<br />
+		press <img src="/media/images/help/save.jpg"  alt="New Cuisine" /> to complete the submission of your information.</li>
+    </ol>
+    <p>You can always come back and edit in the future if necessary.</p>
+	
+<div align="center"><hr width="80%" align="center"></div>
+	
+<h2 style="margin-bottom:0px;"><a id="new_list"></a>Create a new List</h2>
+<p class="smallfont" style="text-align:center;">(Registered users only)</p>
+
+    <p>A list can be created by clicking the “New list” button under the “List” dropdown button in the main menu or any page where you see a “New list” button.</p>
+    <p dir="ltr"><strong>Information on how to fill in the “New List” form:</strong></p>
+    <ol type="a">
+		<li><strong>List name*</strong> <i>(Required)</i>  This is the title of the list and should describe your list in a few words. A maximum of 92 alphanumeric characters, single space and '-' are allowed.</li><br />
+		<li><strong>Description:</strong> Up to 9500 characters.</li><br />
+		<li><strong>Type of List:</strong> Select between personal, public or private.</li><br />
+		<li><strong>Save:</strong> By pressing save your list will be created. A URL based on your name will be created with your list http://worldfood.guide/list/name_you_gave</li>
+    </ol>
+    <p>After saving you will be redirected to the list page where you can add dishes.</p>
+
+</div>
+{% endblock %}

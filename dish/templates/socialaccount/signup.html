@@ -1,0 +1,49 @@
+{% extends "socialaccount/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Signup" %}{% endblock %}
+
+{% block content %}
+<h1>{% trans "Sign Up" %}</h1>
+<div class="well row">
+<p>{% blocktrans with provider_name=account.get_provider.name site_name=site.name %}You are about to use your {{provider_name}} account to log in to 
+{{site_name}}. Create or confirm username and email for World Food Guide:{% endblocktrans %}</p>
+<div class="col-md-9">
+<form class="signup" id="signup_form" method="post" action="{% url 'socialaccount_signup' %}">
+  {% csrf_token %}
+	<div class="fieldWrapper">
+		<label for="id_username">Username:</label> <i class="smallfont" style="color: #999;"> 30 characters or fewer. Letters, numbers and @/./+/-/_ characters can be used</i>
+		{{ form.username }}
+		{{ form.username.errors }}
+	</div>
+	<div class="fieldWrapper">
+		<label for="id_email">Email:</label>
+		{{ form.email }}
+		{{ form.email.errors }}
+	</div>
+	{% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+  {% endif %}
+  <button class="btn btn-custom btn-lg" type="submit">{% trans "Next..." %}</button>
+  <a class="btn btn-custom btn-lg" href="{% url 'view_signin' %}">Cancel</a>
+  <p class="smallfont">By signing up you agree with the <a href="{% url 'view_terms' %}" target="_blank">Terms of Service</a></p>
+</form>
+</div>
+</div>
+
+{% block extra-bottom %}
+	<script type="text/javascript">
+	//retrieves names from social account to use it as suggested username
+	$(document).ready(function(){
+		var fb_name = '{{account.extra_data.name}}';
+		if (fb_name.length > 1){
+			//fb_name = fb_name.replace(' ','_');
+			fb_name = fb_name.replace(/\s/g, '');
+			 $('#id_username').val(fb_name);
+		};
+	});
+	</script>
+{% endblock %}
+
+{% endblock %}

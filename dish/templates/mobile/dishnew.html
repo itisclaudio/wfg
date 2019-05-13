@@ -1,0 +1,414 @@
+{% extends '_base.html' %}
+{% block title %}New Dish-Photo{% endblock %}
+
+{% block super-extra-head %}
+	{% load static %}
+	<link href="{% static 'dist/jquery/autocomplete/jquery-ui.min.css' %}" rel="stylesheet" >
+	<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+<!--Modal 0 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="myModalLabel">Processing...</h1>
+      </div>
+      <div class="modal-body">
+		<div class="progress">
+			  <div class="progress-bar progress-bar-striped progress-bar-warning active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+			  </div>
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Modal 1 -->
+
+<table width="96%" border="0" cellspacing="0" cellpadding="0" align="center"><tr><td colspan="3">
+<h1 align="center">Add New Dish</h1>
+{% if list %}
+	<div class="alert alert-danger alert-dismissible" role="alert" style="padding:5px;">
+		<button type="button" class="close" data-dismiss="alert" style="position:inherit;">&times;</button>
+			<h2>The dish(es) already exist!</h2>
+			<p>Change the name or cuisines to save, otherwise cancel</p>
+		<table class="table" width="100%" style="margin-bottom:0px; background-color:white;" border="0" cellspacing="0" cellpadding="0">
+			<theader>
+			<tr>
+				<th width="50%" style="text-align:center;">Name</th>
+				<th width="30%" style="text-align:center;">Photo</th>
+				<th width="20%" style="text-align:center;">Edit</th>
+			</tr>
+			</theader>
+			{% for p in list %}
+				<tbody>
+				<tr>
+					<td><a class="btn btn-lg btn-custom btn-block" href="/dish/{{p.urlname}}/"><i class="glyphicon glyphicon-eye-open-white"></i> {{ p.name|truncatechars:20 }}</a>
+					{% if p.othernames %}
+						<p class="footer-rest" style="margin-top: 6px;">{{ p.othernames|truncatewords:5 }}</p>
+					{% endif %}
+					<br>
+					{% if p.cuisines.all|length > 0 %}
+						<p class="footer-rest">
+						{% for cuisine in p.cuisines.all|slice:":4" %}
+							(<a href="/cuisine/{{ cuisine.urlname }}/">{{ cuisine }}</a>)
+						{% endfor %}
+						{% if p.cuisines.all|length > 4 %}
+							...
+						{% endif %}
+						</p>
+					{% endif %}
+					</td>
+					<td>
+					{% if p.favphoto %}
+						<a href="/dish/{{p.urlname}}" title="Go to photo page">
+						<img src="/media/{{p.favphoto.filename}}-thum{{p.favphoto.extension}}" class="img-rounded" width="100%">
+						</a>
+					{% else %}
+						<a href="/photonew/{{p.id}}/"><img src="/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
+					{% endif %}
+					</td>
+					{% if user.is_authenticated %}
+						<td><a class="btn btn-default btn-lg" href="/dishedit/{{ p.id }}/"><li class="glyphicon glyphicon-pencil"></li> Edit </a></td>
+					{% endif %}
+				</tr>
+				</tbody>
+			{% endfor %}
+		</table>
+	</div>
+{% endif %}
+
+	<form enctype='multipart/form-data' action="." method="POST" id="myform">
+	<div class="form-group">
+		{% csrf_token %}
+		{{ form.non_field_errors }}
+		<div class="fieldWrapper">
+			<label for="id_name">Name: <a id="new" href="#" style="visibility:hidden;">Clear</a>
+			<a id="edit_dish_button" class="btn btn-custom btn-lg" style="visibility:hidden;">Edit Dish</a>
+			</label>
+			{{ form.name }}
+			{{ form.name.errors }}
+			<div class="alert alert-danger fade in" role="alert" id="alert_names" style="display:none;">
+				<p><b>This are already in the system:</b></p>
+				<ul id="dish_similar"></ul>
+			</div>
+			<div id="alert_chars" class="alert alert-danger fade in" role="alert" style="display:none;">
+			  Only alphanumeric characters and - ' (). are allowed
+			</div>
+		</div>
+		<div class="fieldWrapper">
+			<label for="id_othernames">Other names:</label>
+			{{ form.othernames }} {{ form.othernames.errors }}
+			<div class="alert alert-danger fade in" role="alert" id="alert_othernames" style="display:none;">
+				<h2 style="margin-top: 0px;margin-bottom: 0px;">This are already in the system:</h2>
+				<ul id="similar_othernames"></ul>
+			</div>
+		</div>
+		<div class="fieldWrapper">
+			<label for="id_ingredients">Main ingredients:</label>
+			{{ form.ingredients }} {{ form.ingredients.errors }}
+		</div>
+		<div class="fieldWrapper">
+			<label for="id_description">Description:</label>
+			{{ form.description }} {{ form.description.errors }}
+		</div>
+		<label for="id_cuisines">Cuisine(s): <em class="text-small">Control or command for multiple selections</em></label>
+		<select multiple="multiple" class="form-control" id="id_cuisines" name="cuisines">
+		{% for choice in form.cuisines.field.choices %}
+			<option value="{{choice.0}}" 
+				{% for cui in cuisines %}
+					{% ifequal cui.name choice.1 %}
+						selected="selected"
+					{% endifequal %}
+				{% endfor %}/>
+			{{choice.1|truncatechars:28}}</option>
+		{% endfor %}
+		</select>
+		<label for="id_features">Features:</label>
+		<div class="btn-group col-xs-12" data-toggle="buttons" id="id_features" style="padding-left:0px;padding-right:0px;">
+		{% for choice in form.features.field.choices %}
+			{% if choice.0 in feature_current_id_list %}
+				<label class="btn btn-default col-xs-6 active" style="margin-top:0px; border-radius:6px;" title="{{choice.1}}" id="feat_label">
+				<input type="checkbox" name="feature" id="{{choice.0}}" value="{{choice.1}}" checked>
+			{% else %}
+				<label class="btn btn-default col-xs-6" style="margin-top:0px; border-radius:6px;" title="{{choice.1}}" id="feat_label">
+				<input type="checkbox" name="feature" id="{{choice.0}}" value="{{choice.1}}">
+			{% endif %}
+			{{choice.1|truncatechars:28}} 
+			{% for ft3 in features %}
+				{% if ft3.name == choice.1 %}
+					<img src="/media/images/features/{{ft3.icon}}" width="25px">
+				{% endif %}
+			{% endfor %}
+			</label>
+		{% endfor %}
+		</div>
+		<div class="fieldWrapper" id="photo">
+    	    <label for="id_location">Photo:</label>
+    	    {{ form.location }} {{ form.location.errors }}
+    	</div>
+		<div class="well well-white" style="padding-top:20px;margin-bottom:0px; margin-top:10px;display:none;" id="check_onwnit">
+			<div class="col-xs-8" style="padding-left:0px;">
+				<p style="margin-top:-8px;"><b>I am the owner:</b></p>
+			</div>
+			<div class="col-xs-4">
+				{{ form.ownit }}
+			</div>
+		</div>
+		<div class="fieldWrapper" id="creditsname" style="display:none;">
+			<label for="id_creditsname">Photo credits to:</label>
+			{{ form.creditsname }} {{ form.creditsname.errors }}
+		</div>
+		<div class="fieldWrapper" id="creditsurl" style="display:none;">
+			<label for="id_creditsurl">URL Location:</label>
+			{{ form.creditsurl }} {{ form.creditsurl.errors }}
+		</div>
+	    <div class="fieldWrapper" id="photo_comments" style="display:none;">
+    	    <label for="id_comments">Photo extra info:</label>
+    	    {{ form.comments }} {{ form.comments.errors }}
+    	</div>
+		{{form.check.as_hidden}}
+		{{form.dish.as_hidden}}
+	</div>
+	</td></tr>
+	<tr>
+	<td width="48%" style="padding-top:6px;">
+		<button id="save_button" class="btn btn-custom btn-lg btn-block" onclick="loading();" type="submit"/>Save</button>
+	</td>
+	<td width="4%" style="padding-top:6px;">
+	</td>
+	<td width="48%" style="padding-top:6px;">
+		<a class="btn btn-custom btn-lg btn-block" href="{% url 'view_main' %}">Cancel</a>
+	</form></td></tr>
+</table>
+
+{% endblock %}
+
+{% block extra-bottom %}
+<script src="{% static 'dist/jquery/autocomplete/jquery-ui.min.js' %}"></script>
+<script src="{% static 'dist/jquery/validate/jquery.validate.min.js' %}"></script>
+<script>
+$('#myform').validate();
+$( function() {
+	var allowed = /^[a-zA-Z0-9-' .()]+$/;
+	$('#id_name').focus();
+	$('#alert_chars').hide();
+	//Using jQuery Autocomplete Widget to retrive dishes in the system as user types
+	$("#id_name").autocomplete({
+		minLength: 2,
+		source: '/ajax_autocom_dishes1/',
+		focus: function( event, ui ) {
+			return false;
+		},
+		select: function(event, ui) {
+			$('#id_dish_pk').val(ui.item.value);
+			//Shows new link since a dish was selected
+			$('#new').css('visibility', 'visible');
+			//Enable save button
+			$("#save_button").prop('disabled', false);
+			$('#id_location').focus();
+			//Retrieving information from the dish selected
+			$.ajax({
+				type: 'GET',
+				url: '/ajax_getdish/',
+				dataType:'json',
+				async: true,
+				data: {
+					'id':ui.item.value
+					},
+				success: searchSuccess
+			});
+			 return false;
+		}
+	});
+	$('#id_othernames').attr('autocomplete', 'off');
+	$("#id_othernames").on("change paste keyup", function() {
+		//$('#id_check').val(1);
+		$("#save_button").prop('disabled', false);
+	});
+	$("#id_cuisines").on("change keyup", function() {
+		$("#save_button").prop('disabled', false);
+	});
+	{# When the button CLEAR is pressed:: #}
+	$('#new').click(function() {
+		$("#id_name").prop('readonly', false);
+		$('#id_name').val("");
+		$('#id_dish_pk').val("");
+		$('#new').css('visibility', 'hidden');
+		{# enables all the Features buttons: #}
+		$( "label[id^='feat_label']" ).attr("disabled", false);
+		$('#edit_dish_button').css('visibility', 'hidden');
+		$("#save_button").prop('disabled', true);
+		$("#id_othernames").prop('readonly', false);
+		$("#id_ingredients").prop('readonly', false);
+		$("#id_description").prop('readonly', false);
+		$('#id_cuisines').prop('disabled', false);
+		$('#id_othernames').val("");
+		$('#id_ingredients').val("");
+		$('#id_description').val("");
+		$('#id_dish').val("");
+		$('select#id_cuisines option').removeAttr("selected");
+		$('#id_dish').val(0);
+		$('#id_name').focus();
+		$('#img').attr('src', "/media/images/upload.jpg");
+	});
+	// bind change event to photo input, if photo selected enabled save button
+	$('#photo input').bind('change', function () {
+		var url = $(this).val(); // get input value
+		if (url) { // require a URL
+			$('#photo_comments').show();
+			$('#check_onwnit').show();
+			$('#creditsname').show();
+			$('#creditsurl').show();
+			if ($('#new').css('visibility') == 'visible'){//checks if a dish from DB has been
+			//selected so it can enable save button. if new element visible then dish from DB locked
+			//If new element is hidden user is typing new dish so let the name input take care of consistency
+				//console.log('new is visible'); //dish from DB selected
+				$("#save_button").prop('disabled', false);
+			}
+			else{console.log('new is not visible');}
+		}
+		else{
+			$("#save_button").prop('disabled', true);
+			$('#photo_comments').val("");
+			$('#photo_comments').hide();
+			}
+		return false;
+	 });
+	$("#id_ownit").click(function() {
+		//console.log(this.checked);
+        if(this.checked == true) {
+			//alert("Checked");
+			$('#id_creditsname').val("");
+			$('#id_creditsurl').val("");
+			$('#creditsname').hide();
+			$('#creditsurl').hide();
+		}else{
+			$('#creditsname').show();
+			$('#creditsurl').show();
+        }
+	});
+	$("#id_name").on("paste keyup", function() {
+		var name = $('#id_name').val().trim();
+		if (name.length > 2){
+			var result = allowed.test(name);
+			if (result == false){
+				$('#alert_chars').show();
+				$("#save_button").prop('disabled', true);
+			}
+			else{
+				$('#alert_chars').hide();
+				$("#save_button").prop('disabled', false);
+			};
+		}
+	});
+	$("#id_name").on("paste keyup", function() {
+		var name = $('#id_name').val().trim();
+		if (name.length > 2){
+			var result = allowed.test(name);
+			if (result == false){
+				$('#alert_chars').show();
+				$("#save_button").prop('disabled', true);
+			}
+			else{
+				$('#alert_chars').hide();
+				$("#save_button").prop('disabled', false);
+			};
+		}
+	});
+	$("#id_othernames").on("paste keyup", function() {
+		$('.cl').remove();
+		$('#alert_othernames').hide();
+		var othernames = $('#id_othernames').val().trim();
+		//console.log('othernames.length: '+othernames.length);
+		if (othernames.length > 2){
+			$.ajax({
+				type: 'GET',
+				url: '/lookup_othernames/',
+				dataType:'json',
+				async: true,
+				data: {
+					'othernames':othernames
+					},
+				success: populateOthernames
+			});
+		};
+	});
+});
+function searchSuccess(json)
+{
+	{# funtion executed when user selects dish from autocomplete, meaning the dish exists:: #}
+	if (json != 0){
+		var cuisines = '';
+		$('select#id_cuisines option').removeAttr("selected");
+		for (i in json.cuisines) {
+			//Selects in dishes cuisines
+			cuisines += "("+json.cuisines[i]+")";
+			$("#id_cuisines option[value='"+i+"']").prop('selected', true);
+		};
+		{# disables all the Features buttons #}
+		$( "label[id^='feat_label']" ).attr("disabled", true);
+		//Enables edit dish button
+		$('#edit_dish_button').css('visibility', 'visible');
+		$('#edit_dish_button').attr('href', "/dishedit/"+json.id);
+		//Populates all field froms with dish information
+		$('#id_name').val(json.name);
+		$('#id_othernames').val(json.othernames);
+		$('#id_ingredients').val(json.ingredients);
+		$('#id_description').val(json.description);
+		$('#id_dish').val(json.id);
+		if (json.favphoto != "0"){
+			$('#img').attr('src', "/media/"+json.favphoto);
+		}
+		//Changes properties to non editable
+		$("#id_name").prop('readonly', true);
+		$("#id_othernames").prop('readonly', true);
+		$("#id_ingredients").prop('readonly', true);
+		$("#id_description").prop('readonly', true);
+		$("#id_cuisines").prop('disabled', true);
+		var url = $('#id_location').val();
+		if (url){
+			$("#save_button").prop('disabled', false);
+			}
+		else{$("#save_button").prop('disabled', true);}
+	};
+}
+function populateOthernames(json)
+{
+	if (json != 0){
+		$('#similar_othernames').empty();
+		$('#alert_othernames').show();
+		//console.log('-------------');
+		$.each(json, function(key, value){
+			//console.log(key+'-'+value.name+' ('+value.othernames+')');
+			var othernames1 = value.othernames.trim();
+			if (!othernames1 || othernames1.length < 1){
+				$("#similar_othernames").append('<li class="cl"><a href="/dish/'+value.urlname+'" title="Go to dish page"><b>'+value.name+'</b> '+value.cuisines+'</li></a>');
+			}
+			else{
+				$("#similar_othernames").append('<li class="cl"><a href="/dish/'+value.urlname+'" title="Go to dish page"><b>'+value.name+'</b> <i>'+value.othernames+'</i> '+value.cuisines+'</a></li>');
+			};
+		});
+	};
+}
+//function to show the modal "Processing" when loading results page
+function loading(){
+	//var urlErrorExists = document.getElementById("id_creditsurl-error");
+	if ($('#id_creditsurl-error').length > 0) {
+		//Error element exists
+		if($('#id_creditsurl-error').css('display') == 'none'){
+			//Error not visible, load modal because form is been sent
+			$('#id_cuisines').prop('disabled', false);//enables cuisines so POST can send info
+			$("#myModal").modal('show');
+		};
+	}
+	else{
+		//There is no error element, load modal
+		$('#id_cuisines').prop('disabled', false);//enables cuisines so POST can send info
+		$("#myModal").modal('show');
+	};
+}
+</script>
+{% endblock %}

@@ -1,0 +1,184 @@
+{% extends '_base.html' %}
+{% block title %} {{profile.user.username}} {% endblock %}
+
+{% block super-extra-head %}
+{% load static %}
+<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#more").click(function(){
+		document.getElementById('desc').style.display = "block";
+		document.getElementById('desc_mobile').style.display = "none";
+		$("#more").css({display:'none'});
+		document.getElementById('less').style.display = "block";
+	});
+	$("#less").click(function(){
+		document.getElementById('desc').style.display = "none";
+		document.getElementById('desc_mobile').style.display = "block";
+		document.getElementById('more').style.display = "block";
+	});
+	//--Fullscreem--
+	$("#foodie_photo").click(function(){
+		url = $("#foodie_photo").attr("name");
+		name = $("#title").html();
+		$("#pop-img").attr('src',url);
+		$("#pop-img").fadeIn(1000);
+		$("#close").fadeIn(1000);
+		$("#hide-pic").fadeOut(500);
+		positionPopup();
+	});
+	//close popup
+	$("#close").click(function(){
+		$("#pop-img").fadeOut(500);
+		$("#close").fadeOut(500);
+		$("#hide-pic").fadeIn(1000);
+	});
+});
+
+//position the popup at the center of the page
+function positionPopup(){
+  if(!$("#popup_img").is(':visible')){
+    return;
+  }
+  $("#popup_img").css({
+      left: 0,
+      top: 0,
+      position:'absolute',
+	  width: '100%'
+  });
+}
+
+//maintain the popup at center of the page when browser resized
+$(window).bind('resize',positionPopup);
+</script>
+
+	<meta name="description" content="WorldFood.Guide Foodie. Photo Uploads: {{profile.picture_set.count}}, Photo Likes: {{likes}}."/>
+	{% if profile.names_show = 1 %}
+		<meta property="og:title" content="{{profile.user.username}} {{profile.user.first_name}} {{profile.user.last_name}}" />
+	{% else %}
+		<meta property="og:title" content="{{profile.user.username}}" />
+	{% endif %}
+	<meta property="og:description" content="WorldFood.Guide Foodie. Photo Uploads: {{profile.picture_set.count}}, Photo Likes: {{likes}}." />
+	{% if profile.photo %}
+		<meta property="og:image" content="http://worldfood.guide/media/{{profile.photofilename}}{{profile.extension}}" />
+	{% else %}
+		<meta property="og:image" content="http://worldfood.guide/media/images/user.png"/>
+	{% endif %}
+
+<style>
+#pop-img{
+	position: absolute;left:0px;top:50px;
+	padding: 0px;
+	width:100%;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<img id="pop-img" src="" width="100%" style="display:none"/>
+<a id="close" class="btn btn-warning" style="display:none;position:absolute;right:0.7%;top:56px;" href="#" /><b>X</b></a>
+	
+<div class="well-mobile">
+
+<h1 style="margin-top:6px;margin-bottom:2px;">{{profile.user.username}}</h1>
+{% if profile.names_show = 1 %}
+	<h2 style="margin-top:2px;margin-bottom:2px;"><i>{{ profile.user.first_name }} {{ profile.user.last_name }}</i>
+	{% if user.is_authenticated %}
+		{% if user.id = profile.user.id %}
+			<a class="btn btn-custom" href="{% url 'view_myprofile' %}"><i class="glyphicon glyphicon-pencil icon-white"></i></a> 
+		{% endif %}
+	{% endif %}
+	</h2>
+{% endif %}
+</h1>
+
+<div align="center">
+	{% if profile.photo %}
+		<a href="#" id="pop">
+		<img id="foodie_photo" name="/media/{{profile.photofilename}}{{profile.extension}}" src="/media/{{profile.photofilename}}-med{{profile.extension}}" class="img-rounded" width="200px"/>
+		</a>
+	{% else %}
+		<img src="/media/images/user.png"  class="img-rounded"  width="200px"/>
+	{% endif %}
+</div>
+<br/>
+<div id="hide-pic">
+<ul id="list" class="list-group">
+  <li class="list-group-item">
+				<b>Username :</b> {{ profile.user.username }}
+</li>
+<li class="list-group-item">
+	<b>Names :</b> 
+	{% if profile.names_show = True %}
+		{{ profile.user.first_name }} {{ profile.user.last_name }}
+	{% else %}
+	<i>"Not Public"</i>
+	{% endif %}
+</li>
+<li class="list-group-item">
+	<b>Email :</b>
+	{% if profile.email_show = True %}
+		{{ profile.user.email }}
+	{% else %}
+		<i>"Not Public"</i>
+	{% endif %}
+</li>
+<li class="list-group-item">
+	<b>Photo Likes :</b> {{ likes }}
+</li>
+<li class="list-group-item" style="padding-top:10px;padding-bottom:10px;">
+	<b>Photo Uploads : </b>{{ profile.picture_set.count  }}
+	{% if profile.picture_set.count > 0 %}
+		<a class="btn btn-custom pull-right" style="margin-top:-8px;" href="/userphotos/{{ profile.user.username }}/1/">See all</a>
+	{% endif %}
+</li>
+<li class="list-group-item" style="padding-top:10px;padding-bottom:10px;">
+	<b>Public Lists : </b>{{listspublic_count}}
+	{% if listspublic_count > 0 %}
+		<a class="btn btn-custom pull-right" style="margin-top:-8px;" href="/lists_foodie/{{profile.user.username}}/1/">See all</a>
+	{% endif %}
+</li>
+<li class="list-group-item" style="padding-top:10px;padding-bottom:10px;">
+	<b>Personal Lists : </b>{{listspersonal_count}}
+	{% if listspersonal_count > 0 %}
+		<a class="btn btn-custom pull-right" style="margin-top:-8px;" href="/lists_foodie/{{profile.user.username}}/1/">See all</a>
+	{% endif %}
+</li>
+{% if user.is_authenticated and user.username = profile.user.username %}
+	<li class="list-group-item" style="padding-top:10px;padding-bottom:10px;">
+		<b>Private Lists : </b>{{ listsprivate_count  }}
+		{% if listsprivate_count > 0 %}
+			<a class="btn btn-custom pull-right" style="margin-top:-8px;" href="/lists_mine/{{profile.user.username}}/1/">See all</a> 
+		{% endif %}
+	</li>
+{% endif %}
+<li class="list-group-item">
+	<b>About {{ profile.user.username }}:</b>
+			{% if profile.about %}
+			{% if profile.about|wordcount > 50 %}
+				<div id='desc_mobile' style="display:block;">
+				{{ profile.about|urlizetrunc:45|escape|linebreaks|truncatewords:50 }}
+				<p class="comment pull-right"><a id="more" href="#"><i>...See more</i></a></p>
+				</div>
+				<div id="desc" style="display:none;">{{ profile.about|urlizetrunc:45|escape|linebreaks }}
+				<p class="comment pull-right"><a id="less" href="#"><i>...See less</i></a></p>
+				</div>
+			{% else %}
+				{{ profile.about|urlizetrunc:45|escape|linebreaks }}
+			{% endif %}
+		{% endif %}
+</li>
+</ul>
+{% if mensaje %}
+	<p>{{ mensaje }}</p>
+{% endif %}
+	{% load user_liked_photos_mobile %}
+	{% show_liked_photos profile %}
+	{% if user.is_authenticated %}
+		<a class="btn btn-custom btn-lg btn-block" href="/dishphotonew/">New Dish / Photo</a>		
+	{% endif %}
+<a class="btn btn-custom btn-lg btn-block" href="/userphotos/{{profile.user.username}}/1/">See All Photos</a>
+</div><!--Hide-pic-->
+</div>
+{% endblock %}

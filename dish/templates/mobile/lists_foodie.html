@@ -1,0 +1,150 @@
+{% extends '_base.html' %}
+{% block title %}Lists by {{profile|truncatechars:36}}{% endblock %}
+{% block content %}
+
+<div class="row" style="margin:2px 0px 2px 0px;">
+	<div class="col-xs-6"  style="padding-left:2px;padding-right:2px;">
+		<a class="btn btn-lg btn-custom btn-block" href="{% url 'view_listnew' %}">Create List</a>
+	</div>
+	<div class="col-xs-6"  style="padding-left:2px;padding-right:2px;">
+		<a class="btn btn-lg btn-custom btn-block" title="Create List" href="{% url 'view_list_search' %}">
+			Search List
+		</a>
+	</div>
+</div>
+{% if paginatorlist.paginator.count > 10 %}
+	<div class="row" style="margin:2px;">
+		<div class="col-xs-3" style="padding:1px;">
+			{% if paginatorlist.has_previous %}
+				<a class="btn btn-custom btn-block" href="/lists_foodie/{{profile}}/1">
+			{% else %}
+				<a class="btn btn-custom btn-block disabled">
+			{% endif %}
+			<span class="glyphicon glyphicon-fast-backward"></span></a>
+		</div>
+		<div class="col-xs-3" style="padding:1px;">
+			{% if paginatorlist.has_previous %}
+				<a class="btn btn-custom btn-block" href="/lists_foodie/{{profile}}/{{paginatorlist.previous_page_number}}">
+			{% else %}
+				<a class="btn btn-custom btn-block disabled">
+			{% endif %}
+			<span class="glyphicon glyphicon-step-backward"></span></a>
+		</div>
+		<div class="col-xs-3" style="padding:1px;">
+			{% if paginatorlist.has_next %}
+				<a class="btn btn-custom btn-block" href="/lists_foodie/{{profile}}/{{paginatorlist.next_page_number}}">
+			{% else %}
+				<a class="btn btn-custom btn-block disabled">
+			{% endif %}
+			<span class="glyphicon glyphicon-step-forward"></span></a>
+		</div>
+		<div class="col-xs-3" style="padding:1px;">
+			{% if paginatorlist.has_next %}
+				<a class="btn btn-custom btn-block" href="/lists_foodie/{{profile}}/{{paginatorlist.paginator.num_pages}}">
+			{% else %}
+				<a class="btn btn-custom btn-block disabled">
+			{% endif %}
+			<span class="glyphicon glyphicon-fast-forward"></span></a>
+		</div>
+	</div>
+{% endif %}
+
+<div class="list-group" style="margin-top:0px; margin-bottom:0px;">
+  <div class="list-group-item" style="background-color:#dddddd; padding-bottom:6px; padding-top:6px;">
+	<p style="margin-top:5px;margin-bottom:2px; text-align:center;">
+		<span class="label label-default" style="vertical-align:top;display:inline;">
+			{{paginatorlist.paginator.count}}</span>
+			Lists by <b>{{profile|truncatechars:36}}</b>
+			({{paginatorlist.number}} of {{paginatorlist.paginator.num_pages}})
+	</p>
+  </div>
+	{% if paginatorlist.paginator.count > 0 %}
+		{% for p in paginatorlist.object_list %}
+		<a class="list-group-item" href="/list/{{p.urlname}}" style="padding:4px;">
+			<h3 class="list-group-item-heading" style="color:#845505;margin-bottom:2px;"><b>{{p.name|truncatechars:100}}</b></h3>
+			<p class="text-small" style="margin-bottom:4px;">{{p.modified|date:"M yy"}} by <b>{{p.owner.user.username|truncatechars:20}}</b> ({{p.likestot}} <i class="glyphicon glyphicon-thumbs-up"></i>)
+				{% if p.type = '3' %}<i style="color:red;">Private List</i>{% endif %}
+				{% if p.type = '1' %} Personal List {% endif %}
+				{% if p.type = '2' %} Public List{% endif %}
+			</p>
+			<p class="text-small" style="margin-top:5px; margin-bottom:5px;">{{ p.description|truncatewords:48}}</p>
+			<div class="row" style="margin-left:0px; margin-right:0px; padding:0px;">
+			{% if p.dishes.all %}
+				{% for p in p.dishes.all|slice:":3"  %}
+					  <div class="col-md-4 col-xs-4" style="padding:2px;">
+						<div class="thumbnail" title="Go to dish page: {{p.name}}" style="font-size:14px; margin-bottom:0px;line-height:16px;">
+							{% if p.favphoto %}
+								<img src="/media/{{p.favphoto.filename}}-med{{p.favphoto.extension}}" class="img-rounded" width="100%">
+							{% else %}
+								<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+							{% endif %}
+							<b style="display:inline;" >{{p.name|truncatechars:22}}</b>
+							<b class="text-small" style="margin-bottom:4px; display:inline;">
+							{% if p.othernames %}
+								<i title="Othernames">{{p.othernames|truncatechars:26}}</i>
+							{% endif %}</b></b>
+							{% if p.cuisines.all %}
+							<p class="text-small" style="margin-bottom:4px;">
+								{% for cuisine in p.cuisines.all|slice:":2" %}
+									({{cuisine|truncatechars:20}})
+								{% endfor %}
+							{% endif %}
+							</p>
+						</div>
+					  </div>
+				{% endfor %}
+			{% else %}
+				<div class="thumbnail col-md-4 col-xs-4" title="Go to dish page: {{p.name}}" style="margin-bottom:0px;line-height:16px;">
+				<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+				<b style="display:inline;font-size:14px;" >There are no dishes</b>
+				</div>
+			{% endif %}
+			</div>
+		  </a>
+		{% endfor %}
+	{% else %}
+		<div class="well well-white" align="center">
+			<h2>This Foodie has not lists yet</h2>
+			<a class="btn btn-custom btn-lg" title="Create New List" href="{% url 'view_listnew' %}">Create New List</a>
+		</div>
+	{% endif %}
+</div>
+
+{% if paginatorlist.paginator.count > 10 %}
+	<div class="row" style="margin:2px;">
+		<div class="col-xs-3" style="padding:1px;">
+			{% if paginatorlist.has_previous %}
+				<a class="btn btn-custom btn-block" href="/lists_foodie/{{profile}}/1">
+			{% else %}
+				<a class="btn btn-custom btn-block disabled">
+			{% endif %}
+			<span class="glyphicon glyphicon-fast-backward"></span></a>
+		</div>
+		<div class="col-xs-3" style="padding:1px;">
+			{% if paginatorlist.has_previous %}
+				<a class="btn btn-custom btn-block" href="/lists_foodie/{{profile}}/{{paginatorlist.previous_page_number}}">
+			{% else %}
+				<a class="btn btn-custom btn-block disabled">
+			{% endif %}
+			<span class="glyphicon glyphicon-step-backward"></span></a>
+		</div>
+		<div class="col-xs-3" style="padding:1px;">
+			{% if paginatorlist.has_next %}
+				<a class="btn btn-custom btn-block" href="/lists_foodie/{{profile}}/{{paginatorlist.next_page_number}}">
+			{% else %}
+				<a class="btn btn-custom btn-block disabled">
+			{% endif %}
+			<span class="glyphicon glyphicon-step-forward"></span></a>
+		</div>
+		<div class="col-xs-3" style="padding:1px;">
+			{% if paginatorlist.has_next %}
+				<a class="btn btn-custom btn-block" href="/lists_foodie/{{profile}}/{{paginatorlist.paginator.num_pages}}">
+			{% else %}
+				<a class="btn btn-custom btn-block disabled">
+			{% endif %}
+			<span class="glyphicon glyphicon-fast-forward"></span></a>
+		</div>
+	</div>
+{% endif %}
+
+{% endblock %}

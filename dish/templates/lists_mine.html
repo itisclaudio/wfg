@@ -1,0 +1,142 @@
+{% extends '_base.html' %}
+{% block title %}Lists by {{user.username}}{% endblock %}
+
+{% block super-extra-head %}
+	{% load static %}
+	<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
+	<script type="text/javascript">
+		$(window).keydown(function(e) {
+			if(e.which === 39) {
+				$('#next')[0].click();
+			}
+			if(e.which === 37) {
+				$('#prev')[0].click();
+			}
+		});
+	</script>
+{% endblock %}
+
+{% block content %}
+<table width="100%" class="nolinetable nopadding">
+<tr>
+<td>
+	<h1 style="display:inline;">Lists by:</h1>
+	<a class="btn btn-custom hidden-xs" title="Go to Foodie Profile" href="/foodie/{{user.username}}" style="vertical-align:top;margin-top:-5px;">
+		{{user.username|truncatechars:13}}
+	</a>
+	<span class="label label-default" style="display:inline;vertical-align:top;">{{ paginatorlist.paginator.count }}</span>
+	{% if user.is_authenticated %}
+		<a class="btn btn-custom hidden-xs" style="vertical-align:top;margin-top:-5px;" title="Create New List" href="{% url 'view_listnew' %}"><span class="glyphicon glyphicon-plus"></span></a>
+	{% endif %}
+	<a class="btn btn-custom hidden-xs" style="vertical-align:top;margin-top:-5px;" title="Search List" href="{% url 'view_list_search' %}"><span class="glyphicon glyphicon-search"></span></a>
+</td>
+
+  {% if paginatorlist.paginator.count > 10 %}
+  <td style="vertical-align:bottom;">
+        <ul class="pagination pull-right" style="margin:0px 7px -1px 0px;">
+            {% if paginatorlist.has_previous %}
+				<li><a href="/lists_mine/1/"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+                <li><a href="/lists_mine/{{paginatorlist.previous_page_number}}" id="prev"><span class="glyphicon glyphicon-step-backward"></span></a><li>
+            {% else %}
+                <li class="disabled"><a><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+				<li class="disabled"><a><span class="glyphicon glyphicon-step-backward"></span></a><li>
+            {% endif %}
+			<li class="disabled hidden-xs"><a> Page {{paginatorlist.number}} of {{paginatorlist.paginator.num_pages}}  </a><li>
+            {% if paginatorlist.has_next %}
+                <li><a href="/lists_mine/{{paginatorlist.next_page_number}}" id="next"><span class="glyphicon glyphicon-step-forward"></span></a><li>
+				<li><a href="/lists_mine/{{paginatorlist.paginator.num_pages}}"><span class="glyphicon glyphicon-fast-forward"></span></a><li>
+            {% else %}
+                <li class="disabled"><a><span class="glyphicon glyphicon-step-forward"></span></a><li>
+				<li class="disabled"><a><span class="glyphicon glyphicon-fast-forward"></span></a><li>
+            {% endif %}
+        </ul>
+ </td>
+  {% endif %}
+
+</tr>
+</table>
+
+<div class="list-group" style="margin-top:0px; margin-bottom:0px;">
+	{% if paginatorlist.paginator.count > 0 %}
+		{% for p in paginatorlist.object_list %}
+		<div class="list-group-item">
+			<h2 style="color:#845505;margin-bottom:2px; margin-top:0px;text-align: left;"><a href="/list/{{p.urlname}}"><b>{{p.name|truncatechars:100}}</b></a></h2>
+			<p class="smallfont" style="margin-bottom:4px;">by <b>{{p.owner.user.username|truncatechars:20}}</b> ({{p.likestot}} <i class="glyphicon glyphicon-thumbs-up"></i>)
+				{% if p.type = '3' %}
+					<i style="color:red;">{{ p.get_type_display }}</i>
+				{% else %}
+					<i>{{ p.get_type_display }}</i>
+				{% endif %}
+			</p>
+			<p style="margin-top:5px;">{{ p.description|urlizetrunc:44|truncatewords:58}}</p>
+			{% if p.dishes.all %}
+
+				<div class="row" style="margin:0px;">
+				{% for p in p.dishes.all|slice:":6"  %}
+					  <div class="col-md-2 col-xs-3 {% if forloop.counter > 4 %} hidden-sm hidden-xs {% endif %}" style="padding:2px;">
+						<a class="thumbnail" href="/dish/{{p.urlname}}/" title="Go to dish page: {{p.name}}" style="font-size:14px; margin-bottom:0px;line-height:14px;">
+							{% if p.favphoto %}
+								<img src="/media/{{p.favphoto.filename}}-med{{p.favphoto.extension}}" class="img-rounded" width="100%">
+							{% else %}
+								<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+							{% endif %}
+							<b style="display:inline;" >{{p.name|truncatechars:22}}</b>
+							<b class="smallfont" style="margin-bottom:4px; display:inline;">
+							{% if p.othernames %}
+								<i title="Othernames">{{p.othernames|truncatechars:26}}</i>
+							{% endif %}</b></b>
+							{% if p.cuisines.all %}
+							<p class="smallfont" style="margin-bottom:4px;">
+								{% for cuisine in p.cuisines.all|slice:":3" %}
+									({{cuisine|truncatechars:26}})
+								{% endfor %}
+							{% endif %}
+							</p>
+						</a>
+					  </div>
+				{% endfor %}
+				</div>
+			{% else %}
+				<div class="row" style="margin:0px;">
+					<div class="thumbnail col-md-2 col-xs-3" title="Go to dish page: {{p.name}}" style="margin-bottom:0px;line-height:16px;">
+					<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+					<b style="display:inline;font-size:14px;" >There are no dishes</b>
+					</div>
+				</div>
+			{% endif %}
+		  </div>
+		{% endfor %}
+	{% else %}
+		<div class="well well-white" align="center">
+			<h2>You have no lists</h2>
+			<p>Create your first list!</p>
+			<a class="btn btn-custom btn-lg" title="Create New List" href="{% url 'view_listnew' %}">Create New List</a>
+		</div>
+	{% endif %}
+
+	{% if paginatorlist.paginator.count > 10 %}
+        <ul class="pagination pull-right" style="margin-top:0px;">
+            {% if paginatorlist.has_previous %}
+				<li><a href="/lists_mine/1/"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+                <li><a href="/lists_mine/{{paginatorlist.previous_page_number}}" id="prev"><span class="glyphicon glyphicon-step-backward"></span></a><li>
+            {% else %}
+                <li class="disabled"><a><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+				<li class="disabled"><a><span class="glyphicon glyphicon-step-backward"></span></a><li>
+            {% endif %}
+			<li class="disabled hidden-xs"><a> Page {{paginatorlist.number}} of {{paginatorlist.paginator.num_pages}}  </a><li>
+            {% if paginatorlist.has_next %}
+                <li><a href="/lists_mine/{{paginatorlist.next_page_number}}" id="next"><span class="glyphicon glyphicon-step-forward"></span></a><li>
+				<li><a href="/lists_mine/{{paginatorlist.paginator.num_pages}}"><span class="glyphicon glyphicon-fast-forward"></span></a><li>
+            {% else %}
+                <li class="disabled"><a><span class="glyphicon glyphicon-step-forward"></span></a><li>
+				<li class="disabled"><a><span class="glyphicon glyphicon-fast-forward"></span></a><li>
+            {% endif %}
+        </ul>
+	{% endif %}
+</div>
+
+	{% if user.is_authenticated %}
+		<a class="btn btn-custom pull-left" title="Create New List" href="{% url 'view_listnew' %}">Create New List</a>
+	{% endif %}
+
+{% endblock %}

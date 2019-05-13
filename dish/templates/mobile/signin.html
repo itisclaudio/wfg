@@ -1,0 +1,58 @@
+{% extends '_base.html' %}
+{% block title %}WorldFood.Guide | Signin{% endblock %}
+{% block content %}
+
+<!--Modal-start Showing loading bar -->
+<div class="modal fade" id="modalLoading" tabindex="-1" role="dialog" aria-labelledby="modalLoadingLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="modalLoadingLabel">Processing...</h1>
+      </div>
+      <div class="modal-body">
+		<div class="progress">
+			  <div class="progress-bar progress-bar-striped progress-bar-warning active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+			  </div>
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Modal end -->
+
+<h1>Sing in</h1>
+{% if mensa = '2' %}
+	<div class="alert alert-success alert-dismissible" role="alert">
+	  <button type="button" class="close" data-dismiss="alert" aria-label="Close">&times;</button>
+		<p>You don't have a password with WorldFood.Guide for now.</p>
+		<p>Use your social media account to sign in.</p>
+	</div>
+{% endif %}
+<div class="well well-white" style="margin:10px;">
+	<h2>I have an account:</h2><br/>
+	<a class="btn btn-lg btn-block btn-custom" style="padding:8px 18px;" href="/login/">Sign in with WFG</a>
+	<br/>
+	<a class="btn btn-lg btn-block" style="background-color:#3B5998;color:white;padding:4px 8px;" href="/accounts/facebook/login/?process=login">
+		<img src="/media/images/facebook-White.png" class="pull-left" width="32px">
+		<p style="font-size:17px;padding-top:8px;margin-bottom: 2px;">Sign in with Facebook</p>
+	</a>
+</div>
+<div class="well well-white" style="margin:10px;">
+	<h2>I don't have an account:</h2><br/>
+	<a class="btn btn-lg btn-block btn-custom" style="padding:8px 18px;" href="/signup/">Create a WFG account</a>
+	<br/>
+	<a class="btn btn-lg btn-block" style="background-color:#3B5998;color:white;padding:4px 8px;" href="/accounts/facebook/login/?process=login">
+		<img src="/media/images/facebook-White.png" class="pull-left" width="32px">
+		<p style="font-size:17px;padding-top:8px;margin-bottom: 2px;">Sign up with Facebook</p>
+	</a>
+</div>
+
+{% block extra-bottom %}
+	<script type="text/javascript">
+		function loading(){
+			$("#modalLoading").modal('show');
+		};
+	</script>
+{% endblock %}
+
+{% endblock %}

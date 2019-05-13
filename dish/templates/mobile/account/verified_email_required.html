@@ -1,0 +1,64 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Verify Your E-mail Address" %}{% endblock %}
+
+{% block content %}
+
+<!--Modal-start Showing loading bar -->
+<div class="modal fade" id="modalLoading" tabindex="-1" role="dialog" aria-labelledby="modalLoadingLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="modalLoadingLabel">Processing...</h1>
+      </div>
+      <div class="modal-body">
+		<div class="progress">
+			  <div class="progress-bar progress-bar-striped progress-bar-warning active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+			  </div>
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Modal end -->
+
+<h1>{% trans "Verify Your E-mail Address" %}</h1>
+<div class="well-mobile"><br/>
+	{% url 'account_email' as email_url %}
+
+	<p>{% blocktrans %}This part of the site requires us to verify that
+	you are who you claim to be. For this purpose, we require that you
+	verify ownership of your e-mail address {% endblocktrans %}
+	{% for emailaddress in user.emailaddress_set.all %}
+		{% if emailaddress.primary %} <b>{{ emailaddress.email }}</b> {% endif %}
+	{% endfor %}
+	</p>
+
+	<p>{% blocktrans %}We have sent an e-mail to you for
+	verification. Please click on the link inside this e-mail. Please
+	contact us if you do not receive it within a few minutes.{% endblocktrans %}</p>
+	
+
+
+	<p>{% blocktrans %}<strong>Note:</strong> you can still <a href="{{ email_url }}">change your e-mail address</a>.{% endblocktrans %}</p>
+
+	<a href="{% url 'view_main' %}" class="btn btn-custom btn-block btn-lg">Go Home</a>
+	{% if user.is_authenticated %}
+		<a href="{% url 'view_myprofile' %}" class="btn btn-custom btn-block btn-lg">Go to My Profile</a>
+		<a href="{{ email_url }}" onclick="loading();" class="btn btn-custom btn-block btn-lg">Manage e-mails</a>
+		<a href="/logout/" onclick="loading();" class="btn btn-custom btn-block btn-lg">Log out</a>
+	{% endif %}
+
+</div>
+
+	{% block extra-bottom %}
+		<script type="text/javascript">
+			function loading(){
+				$("#modalLoading").modal('show');
+			};
+		</script>
+	{% endblock %}
+
+{% endblock %}

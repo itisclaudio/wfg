@@ -1,0 +1,109 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Account" %}{% endblock %}
+
+{% block content %}
+
+<!--Modal-start Showing loading bar -->
+<div class="modal fade" id="modalLoading" tabindex="-1" role="dialog" aria-labelledby="modalLoadingLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="modalLoadingLabel">Processing...</h1>
+      </div>
+      <div class="modal-body">
+		<div class="progress">
+			  <div class="progress-bar progress-bar-striped progress-bar-warning active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+			  </div>
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Modal end -->
+
+    <h1>{% trans "Email Addresses" %}</h1>
+	
+	<div class="well-mobile">
+	
+		{% if user.emailaddress_set.all %}
+		<p>{% trans 'The following email addresses are associated with your WFG account:' %}</p>
+		<div class="well well-white" style="margin:10px;">
+			<form action="{% url 'account_email' %}" class="email_list" method="post">
+			{% csrf_token %}
+			<fieldset class="blockLabels">
+
+			  {% for emailaddress in user.emailaddress_set.all %}
+				<div class="ctrlHolder">
+					  <label for="email_radio_{{forloop.counter}}" class="{% if emailaddress.primary %}primary_email{%endif%}">
+
+					  <input id="email_radio_{{forloop.counter}}" type="radio" name="email" {% if emailaddress.primary or user.emailaddress_set.count == 1 %}checked="checked"{%endif %} value="{{emailaddress.email}}"/>
+
+				{{ emailaddress.email }}
+					{% if emailaddress.verified %}
+					<span class="verified text-small">({% trans "Verified" %})</span>
+					{% else %}
+					<span class="unverified text-small">({% trans "Unverified" %})</span>
+					{% endif %}
+					  {% if emailaddress.primary %}<span class="primary text-small">({% trans "Primary" %})</span>{% endif %}
+				</label>
+				</div>
+			  {% endfor %}
+			<br/>
+			<div class="buttonHolder">
+				  <button  onclick="loading();" class="secondaryAction btn btn-custom btn-lg btn-block" type="submit" name="action_primary" >{% trans 'Make Primary' %}</button>
+				  <button  onclick="loading();" class="secondaryAction btn btn-custom btn-lg btn-block" type="submit" name="action_send" >{% trans 'Send Verification' %}</button>
+				  <button  onclick="loading();" class="primaryAction btn btn-custom btn-lg btn-block" type="submit" name="action_remove" >{% trans 'Remove' %}</button>
+				  <p class="text-small">You can't remove a primary email and only verified emails can be primary emails.</p>
+			</div>
+			</fieldset>
+			</form>
+		</div>
+		{% else %}
+		<p><strong>{% trans 'Warning:'%}</strong> {% trans "You currently do not have any e-mail address set up. You should really add an e-mail address so you can receive notifications, reset your password, etc." %}</p>
+
+		{% endif %}
+		<a href="{% url 'view_myprofile' %}" class="btn btn-custom btn-block btn-lg">Go to My Profile</a>
+			<br/>
+			<h2>{% trans "Add Email Address" %}</h2>
+
+			<form method="post" action="{% url 'account_email' %}" class="add_email">
+				{% csrf_token %}
+				<div class="fieldWrapper">
+					<label for="id_description">Email:</label>
+					{{ form.email }}
+					{{ form.email.errors }}
+				</div>
+				<button class="btn btn-custom btn-lg btn-block" name="action_add" type="submit">{% trans "Add Email" %}</button>
+			</form>
+
+		{% endblock %}
+
+	</div>
+		{% block extra_body %}
+		<script type="text/javascript">
+		(function() {
+		  var message = "{% trans 'Do you really want to remove the selected email address?' %}";
+		  var actions = document.getElementsByName('action_remove');
+		  if (actions.length) {
+			actions[0].addEventListener("click", function(e) {
+			  if (! confirm(message)) {
+				e.preventDefault();
+			  }
+			});
+		  }
+		})();
+		</script>
+
+	{% block extra-bottom %}
+		<script type="text/javascript">
+			function loading(){
+				$("#modalLoading").modal('show');
+			};
+		</script>
+	{% endblock %}
+		
+		
+{% endblock %}

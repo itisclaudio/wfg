@@ -1,0 +1,416 @@
+{% extends '_base.html' %}
+{% block title %}Edit List Info{% endblock %}
+
+{% block super-extra-head %}
+	{% load static %}
+	<link href="{% static 'dist/jquery/autocomplete/jquery-ui.min.css' %}" rel="stylesheet" >
+{% endblock %}
+
+{% block content %}
+
+<!--Modal-0 Processing -->
+<div class="modal fade" id="modal_processing" tabindex="-1" role="dialog" aria-labelledby="modal_processingLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="myModalLabel">Processing...</h1>
+      </div>
+      <div class="modal-body">
+		<div class="progress">
+		  <div class="progress-bar progress-bar-striped progress-bar-warning active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+		  </div>
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Modal 0 -->
+
+<!-- Modal-1 Add dish -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+	<div class="modal-header" style="padding:10px;">
+		<input class="form-control ui-autocomplete-input" id="id_auto" name="auto" type="text" placeholder="type dish name here.." autocomplete="off"/>
+		<div class="row" style="margin-top: 10px;">
+			<div class="col-xs-6">
+				<a type="button" class="btn btn-custom btn-lg btn-block" onclick="processing();" href="" id="modal_select" style="visibility:hidden;">Add dish</a>
+			</div>
+			<div class="col-xs-6">
+				<button type="button" class="btn btn-default btn-lg btn-block" id="modal_cancel" data-dismiss="modal">Cancel</button>
+			</div>
+		</div>
+	</div>
+	<div class="modal-body" id="modal_dish" style="display:none; padding:10px;">
+		<div id="myAlert" class="alert alert-danger fade" role="alert" style="text-align:center; margin-bottom:5px; padding-top:10px; padding-bottom:10px;">
+		  <b>Dish already in the list!</b>
+		</div>
+		<h2 id="modal_dishname" style="display:inline-block;margin-top:0px;text-align:left;margin-bottom:0px;"></h2>
+		<p style="display:inline-block; margin-bottom:5px;"><b><i id="modal-othernames"></i></b> <i id="modal_cuisines"></i></p>
+		<img id="modal-image" src="" class="img-rounded" style="max-height:260px; max-width:100%; margin-bottom:6px; display: block;"/>
+		<p class="text-reg" id="modal-dishdescription"></p>
+	</div>
+</div>
+</div>
+</div>
+<!-- Modal-1 END-->
+
+<!-- Modal-2 Delete Dish -->
+<div class="modal fade" id="modal_delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+	<div class="modal-header" style="padding: 5px;">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h2 style="margin-top:0px;color:#993300;"><b>Delete Dish From List?</b></h2>
+	</div>
+	<div class="modal-footer" style="text-align:right;padding:5px;">
+		<div class="col-xs-6">
+			<a class="btn btn-custom btn-lg btn-block" onclick="processing();" href="" id="modaldelete_button">Delete dish</a>
+		</div>
+		<div class="col-xs-6">
+			<button type="button" class="btn btn-default btn-lg btn-block" id="modal_cancel" data-dismiss="modal">Cancel</button>
+		</div>
+	</div>
+	<div class="modal-body" id="modal_dish" style="padding-top:2px;">
+		<h2 id="modaldelete_dishname" style="display:inline-block;margin-top:0px;text-align:left;margin-bottom:0px;"></h2>
+		<p style="display:inline-block;"><b><i id="modaldelete_othernames"></i></b> <i id="modaldelete_cuisines"></i></p>
+		<img id="modaldelete_image" src="" class="img-rounded" style="max-height:260px; max-width:100%; margin-bottom:6px;"/>
+		<p class="text-reg" id="modaldelete_description"></p>
+	</div>
+</div>
+</div>
+</div>
+<!-- Modal-2 END-->
+
+{# Modal Add comment to dish: #}
+<div class="modal fade" id="modalComment" tabindex="-1" role="dialog" aria-labelledby="modalCommentLabel">
+  <div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header" style="padding: 10px 5px;">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h1 id="modalcomment_dishname" style="margin-top:0px;text-align:left;margin-bottom:0px;"></h1>
+	</div>
+      <div class="modal-body" style="padding: 0px 10px 5px 10px;">
+		<form action="/list_dish_comment_update/" method="POST">
+			{% csrf_token %}
+			<div class="form-group">
+				<label for="comments" class="control-label">Comments:</label>
+				<textarea rows="10" class="form-control" name="comments" id="id_comments"></textarea>
+				<input type="text" class="form-control" name="id_listdish" id="id_list_dish" style="display:none;"/>
+			</div>
+			<div class="modal-footer row">
+				<div class="col-xs-6">
+					<input id="save_comment" onclick="processing();" type="submit" class="btn btn-custom btn-lg btn-block" value="Save"/>
+				</div>
+				<div class="col-xs-6">
+					<button type="button" class="btn btn-default btn-lg btn-block" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</form>
+	   </div>
+    </div>
+  </div>
+</div>
+
+<h1 align="center" class="center" style="margin:0px 4px 0px 4px;">Editing...</h1>
+<h1 style="margin:0px 4px 0px 4px;"><a href="/list/{{list.urlname}}/">{{list.name|truncatechars:30}}</a></h1>
+<div class="well-tight row" style="padding:10px; margin-bottom:0px;">
+	<form enctype='multipart/form-data' action="." method="POST">
+	<div class="form-group">
+		{% csrf_token %}
+		{{ form.non_field_errors }}
+		{{ form.name_h.as_hidden }}
+		<div class="fieldWrapper">
+			<label for="id_name">List title:</label>
+			{{ form.name }}
+			{{ form.name.errors }}
+		</div>
+		<div class="fieldWrapper">
+			<label for="id_description">Description:</label>
+			{{ form.description }}
+			{{ form.description.errors }}
+		</div>
+		<div class="fieldWrapper">
+			<label for="id_type" style="vertical-align:baseline;">Type:</label>
+			{{ form.type }}
+			{{ form.type.errors }}
+		</div>
+	</div>
+	{% if dishes|length > 1 %}
+		<div class="col-xs-6" style="padding:3px;">
+			<button class="btn btn-custom btn-lg btn-block" onclick="processing();" type="submit"/>Save</button>
+		</div>
+		<div class="col-xs-6" style="padding:3px;">
+			<a class="btn btn-custom btn-lg btn-block" onclick="processing();" href="/list/{{list.urlname}}/">Back to list</a>
+		</div>
+		<div class="col-xs-6" style="padding:3px;">
+			<a class="btn btn-custom btn-lg btn-block" data-toggle="modal" data-target="#myModal">Add dish</a>
+		</div>
+		<div class="col-xs-6" style="padding:3px;">
+			<a class="btn btn-custom btn-lg btn-block" onclick="processing();" href="{% url 'view_listindexedit' urlname=list.urlname%}">Change  order</a>
+		</div>
+	{% else %}
+		<div class="col-xs-4" style="padding:3px;">
+			<button class="btn btn-custom btn-lg btn-block" onclick="processing();" type="submit"/>Save</button>
+		</div>
+		<div class="col-xs-4" style="padding:3px;">
+			<a class="btn btn-custom btn-lg btn-block" onclick="processing();" href="/list/{{list.urlname}}/">Back to list</a>
+		</div>
+		<div class="col-xs-4" style="padding:3px;">
+			<a class="btn btn-custom btn-lg btn-block" data-toggle="modal" data-target="#myModal">Add dish</a>
+		</div>
+	{% endif %}
+	</form>
+	</div>
+		<div class="well well-tight well-white" style="margin-top:8px;">
+		<h2>Dishes in List:</h2>
+		{% if dishes|length > 0 %}
+		<table class="table table-title" width="100%" border="0" style="vertical-align:top;">
+			<tbody>
+			{% for p in dishes %}
+			<tr>
+				<td width="40%" style="padding: 2px;">
+					{% if p.dish.favphoto %}
+						<a href="/photo/{{p.dish.favphoto.urlname}}">
+						<img id="url_{{p.dish.id}}" src="/media/{{ p.dish.favphoto.filename }}-thum{{p.dish.favphoto.extension}}" class="img-rounded" width="100%"></a>
+					{% else %}
+						<a href="/photonew/{{p.dish.id}}/">
+							<img  id="url_{{p.dish.id}}" src="/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
+					{% endif %}
+					<div id="{{p.dish.urlname}}" style="display:none;"></div>
+				</td>
+				<td width="60%" style="padding: 2px;vertical-align:top;">
+					<a class="btn btn-lg btn-warning btn-block" href="/dish/{{p.dish.urlname}}"  style="text-align:left;padding-left:4px;margin-bottom: 2px;">
+						{{p.index}}. <b id="dishname_{{p.dish.id}}">{{p.dish.name|truncatechars:20}} </b>
+					</a>
+					<a id="{{p.dish.id}}" style="display:inline-block;" name="delete_{{p.dish.id}}" class="btn btn-custom pull-right" title="Delete dish form list"><i class="glyphicon glyphicon-remove"></i></a>
+					<div class="text-reg" id="{{p.dish.urlname}}" style="display:none;"></div>
+					<p class="text-reg" style="margin-bottom: 5px;">
+					{% if p.dish.othernames %}
+						<b id="othernames_{{p.dish.id}}">{{p.dish.othernames}}</b>
+					{% endif %}
+					<b>
+						   {% for cuisine in p.dish.cuisines.all|slice:":3" %}
+							 ({{cuisine.name}})
+						   {% endfor %}
+						   {% if p.dish.cuisines.all|length > 3 %}
+								...
+						   {% endif %}
+					</b>
+					</p>
+					<div id="cuisines_{{p.dish.id}}" style="display:none;">
+						{% for c in p.dish.cuisines.all|slice:":4" %}
+							({{c.name|truncatechars:18}}) 
+						{% endfor %}
+					</div>
+					{### Dish description ###}
+					{% if p.dish.description %}
+						<p id="description_{{p.dish.id}}" class="text-reg" style="margin-bottom: 5px;">
+							  {{p.dish.description|urlizetrunc:32|escape|truncatewords:32}}
+						</p>
+					{% endif %}
+					{# to get dish name: #}
+					<div id="dishnamecomment_{{p.index}}" style="display:none;">
+						{{p.dish.name}}
+					</div>
+					{### Dish comments ###}
+					{% if p.description %}
+						<div class="well well-white" style="padding:5px;margin-bottom:2px;">
+							<!--<p style="margin-bottom:0px;">-->
+							<div id="small_{{p.index}}" style="display:block;" class="text-reg">
+								<i>{{p.description|urlizetrunc:20|truncatewords:20|escape|linebreaks}}</i>
+							</div>
+							{% if user.id = list.owner.user.id %}
+								<a class="btn btn-default" id="comment_{{p.id}}" name="{{p.index}}"  title="Edit comment"><i class="glyphicon glyphicon-pencil icon-white"></i></a>
+							{% endif %}
+						</div>
+						<p id="comment_whole_{{p.index}}" style="display:none;">
+							{{p.description}}
+						</p>
+					{% else %}
+						{% if user.id = list.owner.user.id %}
+						<div class="well well-white" style="padding:5px;margin-bottom:2px;">
+							<a class="btn btn-default" id="comment_{{p.id}}" name="{{p.index}}" title="Add comment"><i>Add comment...</i></a>
+						</div>
+						{% endif %}
+					{% endif %}
+					<p class="pull-right text-small" style="color:#777;"><i>(Added by: {{p.owner|truncatechars:18}})</i></p>
+				</td>
+			</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+		{% else %}
+				<br/>
+				<p style="text-align:center;"><i>No dishes yet in your list</i></p>
+					<a class="btn btn-custom btn-lg btn-block" data-toggle="modal" data-target="#myModal">Add dish</a>
+		{% endif %}
+		</div>
+
+{% block focus %}
+	<script type="text/javascript">
+		document.getElementById('id_name').focus();
+	</script>
+{% endblock %}
+
+{% endblock %}
+
+{% block extra-bottom %}
+
+<script src="{% static 'dist/jquery/autocomplete/jquery-ui.min.js' %}"></script>
+<script>
+$('#myModal').on('shown.bs.modal', function () {
+	$('#id_auto').focus()
+});
+$('#modalComment').on('shown.bs.modal', function () {
+	$('#id_comments').focus()
+});
+$( function() {
+	//When a new dish is entered:
+	$( "#id_auto" ).autocomplete({
+		minLength: 3,
+		source: '/dish_list/',
+		appendTo: "#myModal",
+		focus: function( event, ui ) {
+			return false;
+		},
+		//Additional intructions when new dish entered:
+		select: function( event, ui ) {
+			$("#id_auto").val("");
+			//Retrieving information from the dish selected
+			$.ajax({
+				type: 'GET',
+				url: '/ajax_getdish/',
+				dataType:'json',
+				async: true,
+				data: {
+					'id':ui.item.value
+					},
+				success: searchSuccess
+			});
+		return false;
+		},
+	});
+});
+function searchSuccess(json)
+{
+	//# function executed when user selects dish from autocomplete
+	//# receives json object with dish information. Ask if info comming:
+	if (json != 0){
+		//# There is dish information. Populate Modal with dish info
+		//# Create cuisines string from json object
+		var cuisines = '';
+		for (i in json.cuisines) {
+			//# Created a sting with all dish cuisines
+			cuisines += "("+json.cuisines[i]+")";
+		};
+		//# Displays part of modal with dish information
+		$('#modal_dish').css('display','block');
+		$('#modal_select').css('visibility', 'visible');
+		$('#modal_dishname').html(json.name);
+		if (cuisines != ""){
+			$('#modal_cuisines').html(cuisines);
+		};
+		if (json.othernames != ""){
+			$('#modal-othernames').html(json.othernames);
+		};
+		if (json.favphoto != "0"){
+			$('#modal-image').attr('src', "/media/"+json.favphoto);
+		}
+		else{
+			$('#modal-image').attr('src', "/media/images/upload-med.jpg");
+			};
+		if (json.description != "0"){
+			$('#modal-dishdescription').html(json.description.substring(0, 200));
+		};
+		//# Check if dish already exist in list:
+		if (document.getElementById(json.urlname)) {
+			//# Dish already in list
+			$('#myAlert').show(); //# Shows alert
+			$("#myAlert").addClass("in"); //# alert fades in? check!
+			$('#modal_select').addClass('disabled'); //# Disable button "Add dish"
+		}
+		else{
+			//# Dish selected is not in the list:
+			$('#myAlert').hide(); //# Hide "dish already in list" alert
+			$('#modal_select').removeClass('disabled'); //# Enable button "Add dish"
+			//# generate url for "Add dish" button:
+			var path = window.location.href; // #Whole path
+			var url_name = json.id;
+			var to_delete = "/listeditowner/{{list.urlname}}";
+			var main_path = path.replace(to_delete,'');
+			var url_delete = main_path+"list_add_dish/"+{{list.id}}+"/"+json.id+"/listeditowner";
+			$('#modal_select').attr("href",url_delete);
+		}
+	};
+}
+$('#modal_cancel').click(function(){
+	//Button cancel del modal pressed, clear modal from current dish
+	$('#modal-dishdescription').html("");
+	$('#modal_dish').css('display','none');
+});
+$('#myModal').on('hidden.bs.modal', function () {
+	//When modal desapears when click outside modal
+	$('#modal_dish').css('display','none');
+	$('#modal_select').css('visibility', 'hidden');
+	$('#modal_select').removeClass('disabled'); //# Enable button "Add dish"
+	$('#myAlert').hide();
+	$("#id_auto").val(""); //# Clears autocomplete input
+});
+$('#modal_delete').click(function(){
+	//Funtion activated when x pressed in dish to be deleted from list
+	$('#modal-dishdescription').html("");
+	$('#modal_dish').css('display','none');
+});
+$( "a[name^='delete_']" ).click(function() {
+	var dish_id = $(this).attr('id');
+	var dishname = $('#dishname_'+dish_id+'').html();
+	var othernames = $('#othernames_'+dish_id+'').html();
+	var cuisines = $('#cuisines_'+dish_id+'').html();
+	var description = $('#description_'+dish_id+'').html();
+	var urlimage = $('#url_'+dish_id+'').attr('src');
+	var med = urlimage.replace('-thum.','-med.');
+	//# builing url for delete button:
+	var path = window.location.href; // #Whole path
+	var to_delete = "/listeditowner/{{list.urlname}}";
+	var main_path = path.replace(to_delete,'');
+	var delete_path = main_path+"list_delete_dish/"+{{list.id}}+"/"+dish_id;
+	$('#modaldelete_dishname').html(dishname);
+	$('#modaldelete_othernames').html(othernames);
+	$('#modaldelete_cuisines').html(cuisines);
+	$('#modaldelete_description').html(description);
+	$('#modaldelete_image').attr('src',med);
+	$('#modaldelete_button').attr("href",delete_path);
+	$('#modal_delete').modal('show');
+});
+$('#modal_delete').on('hidden.bs.modal', function () {
+	//When modal desapears when click outside modal
+	// Clear elements so they don't show next time when new
+	// info doesn't come lile (othernames, cusines)
+	$('#modaldelete_description').html("");
+	$('#modaldelete_othernames').html("");
+	$('#modaldelete_cuisines').html("");
+	$('#modaldelete_image').attr('src',"");
+});
+// #Add comments to dishes:
+$( "a[id^='comment_']" ).click(function(){
+	var index = $(this).attr('name');
+	var comment = $('#comment_whole_'+index).text();
+	comment_id = $(this).attr('id')
+	$("#id_comments").val(comment.trim());
+	// <1> Get dish name for title:
+	var dishname = $('#dishnamecomment_'+index).text();
+	$('#modalcomment_dishname').html(dishname); 
+	//<1-end>
+	//alert(comment);
+	$("#id_list_dish").val(comment_id.replace('comment_',''));
+	$("#modalComment").modal('show');
+});
+function processing(){
+	$("#myModal").modal('hide');
+	$("#modal_delete").modal('hide');
+	$("#modalComment").modal('hide');
+	$("#modal_processing").modal('show');
+};
+</script>
+{% endblock %}

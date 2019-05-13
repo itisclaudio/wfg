@@ -1,0 +1,135 @@
+{% extends '_base.html' %}
+{% block title %} {{ cuisine.name }} Cuisine {% endblock %}
+
+{% block super-extra-head %}
+	<!--Sharethis script (Start)-->
+	<script type="text/javascript">var switchTo5x=true;</script>
+	<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+	<script type="text/javascript">stLight.options({publisher: "a17a5cbd-f11c-42a3-87a6-b63741c9d52c", doNotHash: true, doNotCopy: false, hashAddressBar: false});</script>
+	<!--Sharethis script (End)-->
+	<meta name="description" content="{{ cuisine.description|truncatechars:170 }}"/>
+	<meta property="og:title"  content="{{cuisine.name}} Cuisine" />
+	<meta property="og:description" content="{{ cuisine.description|truncatechars:170 }}" />
+	{% if cuisine.favphoto %}
+		<meta property="og:image" content="http://worldfood.guide/media/{{cuisine.favphoto.filename}}-reg{{cuisine.favphoto.extension}}" />
+	{% else %}
+		<meta property="og:image" content="http://worldfood.guide/media/images/worldfoodguide.png" />
+	{% endif %}
+	<!--Sharethis script (Start)-->
+	<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5bf2e117d741e40011ae96ac&product=social-ab' async='async'></script>
+	<!--Sharethis script (End)-->
+{% endblock %}
+
+{% block content %}
+<div class="well-mobile">
+	<h1>{{ cuisine.name }} Cuisine</h1>
+    {% if cuisine.othernames %}	
+			<h2 style=" text-align:center; margin-top:-4px;">{{ cuisine.othernames }}</h2>
+	{% endif %}
+	{% if cuisine.territory %}
+		<h3 style=" text-align:center; margin-top:-4px;">({{ cuisine.territory|truncatechars:20 }})</h3>
+	{% endif %}
+	{% if cuisine.favphoto %}
+		<img src="/media/{{cuisine.favphoto.filename}}-med{{cuisine.favphoto.extension}}" class="img-rounded" width="100%">
+	{% endif %}
+	<div style="margin:4px;">
+	<span class="label label-default">{{cuisine.dishes_count}} <img src="/media/images/icons/food-16-white.png"/></span>
+	<span class="label label-default">{{cuisine.pictures_count}} <i class="glyphicon glyphicon-camera icon-white"></i></span>
+	</div>
+	{% if cuisine.description %}
+		{{ cuisine.description|urlizetrunc:45|escape|linebreaks }}
+	{% else %}
+		There is no Description
+	{% endif %}
+	<div style="margin-top:5px; margin-bottom: 5px;">
+		{# Sharethis buttons #}
+		<div class="sharethis-inline-share-buttons"></div>
+	</div>
+	{% if user.is_authenticated %}
+		<a class="btn btn-custom btn-lg btn-block" href="/cuisineedit/{{ cuisine.id }}/">Edit Cuisine</a>
+		<a class="btn btn-custom btn-lg btn-block" href="{% url 'view_cuisinenew' %}">Create New Cuisine</a>
+		<a class="btn btn-custom btn-lg btn-block" href="/dishnew/{{cuisine.id}}/">Create New "{{cuisine.name|truncatechars:15}}" Dish</a>
+		{% if cuisine.owner.id = user.id %}
+			<a class="btn btn-custom btn-lg btn-block" href="/cuisinedelete/{{cuisine.urlname}}/">Delete "{{cuisine.name|truncatechars:15}}" Cuisine</a>
+		{% endif %}
+	{% endif %}
+		<a class="btn btn-custom btn-lg btn-block" href="/cuisinedishes/{{cuisine.urlname}}/1/">See all "{{cuisine.name|truncatechars:15}}" Dishes</a>
+	
+	<br>
+	
+	{## DISHES ##}
+	<div class="list-group" style="margin-bottom:0px;">
+	  <div class="list-group-item" style="background-color:#f5f5f5; padding-bottom:6px; padding-top:6px;">
+		<p style="margin-top:5px;margin-bottom:2px; text-align:center;">
+			<b>Dishes: {{ dishes_count }} / {{ dishes_total }}</b>
+		</p>
+	  </div>
+	  {% if dishes_count > 0 %}
+		  {% for p in liked_dishes %}
+			  <a class="list-group-item row" href="/dish/{{p.urlname}}/" style="margin-left:0px; margin-right:0px; padding:4px;">
+			  {% if p.name|length > 20 %}
+				<div class="col-xs-12" style="padding-left:2px;">
+					<h3 class="list-group-item-heading" style="color:#845505;margin-bottom:2px;"><b>{{p.name|truncatechars:56}}</b></h3>
+				</div>
+				<div class="col-xs-7" style="padding-left:2px;">
+					<p class="text-small" style="margin-bottom:2px;"><b><i>
+					({{p.likestot}} <i class="glyphicon glyphicon-thumbs-up"></i>) 
+					{% if p.othernames %}
+						{{p.othernames|truncatechars:20 }}
+					{% endif %}
+					{% if p.cuisines.all %}
+						{% for cuisine in p.cuisines.all|slice:":3"  %}
+							({{cuisine|truncatechars:20}})
+						{% endfor %}
+					{% endif %}
+					</i></b></p>
+					{% if p.description %}
+						<p class="text-small">{{p.description|truncatewords:20}}</p>
+					{% endif %}
+				</div>
+			  {% else %}
+				<div class="col-xs-7" style="padding-left:2px;">
+					<h3 class="list-group-item-heading" style="color:#845505;margin-bottom:2px;"><b>{{p.name}}</b></h3>
+					<p class="text-small" style="margin-bottom: 2px;"><b><i>
+					({{p.likestot}} <i class="glyphicon glyphicon-thumbs-up"></i>) 
+					{% if p.othernames %}
+						{{p.othernames|truncatechars:20 }}
+					{% endif %}
+					{% if p.cuisines.all %}
+						{% for cuisine in p.cuisines.all|slice:":3"  %}
+							({{cuisine|truncatechars:20}})
+						{% endfor %}
+					{% endif %}
+					</i></b></p>
+					{% if p.description %}
+						<p class="text-small">{{p.description|truncatewords:26}}</p>
+					{% endif %}
+				</div>
+			   {% endif %}
+				<div class="col-xs-5" style="padding-left:0px; padding-right:0px;">
+					{% if p.favphoto %}
+						<img src="/media/{{p.favphoto.filename}}-med{{p.favphoto.extension}}" class="img-rounded" width="100%">
+					{% else %}
+						<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+					{% endif %}
+				</div>
+			  </a>
+		  {% endfor %}
+		 {% else %}
+			<div class="list-group-item">
+				<p style="text-align:center;margin-top:10px;">No dishes yet.</p>
+				<p style="text-align:center;">Be the first one to add dish to the <b>{{cuisine.name|truncatechars:15}}</b> cuisine</p>
+				<a class="btn btn-custom btn-lg btn-block" href="/dishnew/{{cuisine.id}}/">Create New "{{cuisine.name|truncatechars:15}}" Dish</a>
+			</div>
+		 {% endif %}
+	</div>
+	{## END DISH ##}
+</div>
+	
+<script>
+//Sharethis script (Start)
+var options={ "publisher": "a17a5cbd-f11c-42a3-87a6-b63741c9d52c", "position": "left", "ad": { "visible": false, "openDelay": 5, "closeDelay": 0}, "chicklets": { "items": ["facebook", "twitter", "linkedin", "pinterest", "email", "sharethis"]}};
+var st_hover_widget = new sharethis.widgets.hoverbuttons(options);
+//Sharethis script (End)
+</script>
+{% endblock %}

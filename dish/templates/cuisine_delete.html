@@ -1,0 +1,49 @@
+{% extends '_base.html' %}
+{% block title %}Delete Cuisine{% endblock %}
+{% block content %}
+<h1>Delete cuisine</h1>
+{% if information = 1 %}
+	<div class="well well-white">
+		<p><b><a href="/cuisine/{{cuisine.urlname}}">{{cuisine.name}}</a></b> cuisine can not be deleted because the following dish(es) are associated to it.</p>
+		<p>To delete <b><a href="/cuisine/{{cuisine.urlname}}">{{cuisine.name}}</a></b> cuisine. The dish(es) bellow has(have) to be deleted or dissociated first.</p>
+		<div class="well">
+			<h2 style="margin:0px;">Dishes in Cuisine</h2> 
+			<table class="table table-title" width="100%">
+			{% for p in dishes|slice:":10"  %}
+			<tr>
+			<td width="40%">
+				{% if p.favphoto %}
+					<a href="/photo/{{p.favphoto.urlname}}/">
+					<img src="/media/{{p.favphoto.filename}}-med{{p.favphoto.extension}}"  class="img-rounded" width="200px">
+					</a>
+				{% else %}
+					<a href="/photonew/{{p.urlname}}/"><img src="/media/images/upload-med.jpg" class="img-rounded" height="200px" title="Upload new {{p.name|truncatechars:20}} photo" ></a>
+				{% endif %}
+			</td>
+			<td width="60%" style="text-align:top;">
+				<a class="btn btn-lg btn-block btn-marg btn-warning" href="/dish/{{p.urlname}}/"><b>{{ p.name|truncatechars:30 }}</b></a>
+				{% for c in p.cuisines.all %}
+				  (<a href="/cuisine/{{c.urlname}}/">{{c|truncatechars:20}}</a>)
+				{% endfor %}
+				<br/>
+				Created by: <a class="btn btn-default" href="/foodie/{{p.userprofile.user.username}}">{{p.userprofile}}</a><br>
+				{{ p.datetime|date:"N j, Y"}}				
+			</td>
+			</tr>
+			{% endfor %}
+			</table>
+		</div>
+	</div>
+	<a class="btn btn-custom btn-lg" href="/cuisine/{{cuisine.urlname}}/">Cancel</a>
+	
+{% else %}
+	<div class="well well-white">
+		<p>Are you sure you want to delete <b><a href="/cuisine/{{cuisine.urlname}}/">{{cuisine.name}} cuisine</a></b> for ever?</p>
+		<form action="." method="POST">
+		{% csrf_token %}
+			<button class="btn btn-lg btn-custom" type="submit"/>Yes delete</button>
+			<a class="btn btn-custom btn-lg" href="/cuisine/{{cuisine.urlname}}/">Cancel</a>
+		</form>
+	</div>
+{% endif %}
+{% endblock %}

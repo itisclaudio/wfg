@@ -1,0 +1,83 @@
+{% extends '_base.html' %}
+{% block title %}- Rotate Photo{% endblock %}
+
+{% block super-extra-head %}
+	{% load static %}
+{% endblock %}
+
+{% block content %}
+
+	<h1>Rotate photo</h1>
+	<div class="well">
+    <table border="0" align="center" cellpadding="2" cellspacing="2">
+  <tr>
+    <td style="vertical-align:middle;border-top:none;" width="50px">
+    	<a id="rotate-left" href="#"/>
+		<img id="icon-left" src="/media/images/rotate_left.png" title="Rotate Left" width="50px" style="vertical-align:middle;">
+		</a>
+    </td>
+    <td id="photo_holder" style="vertical-align:middle;border-top:none;" width="300px">
+	    <img id="photo" src="/media/{{ photo.filename }}-med{{photo.extension}}?cachebuster={%now 'H:i:s'%}" title="{{ photo.dish.name }}" width="300px" class="img-rounded" >
+		<!--<img id="photo" src="{{ MEDIA_URL }}images/test.jpg" alt="{{ photo.food }}" width="300px"  class="img-rounded" >-->
+    </td>
+    <td style="vertical-align:middle;border-top:none;" width="50px">
+    	<a id="rotate-right"  title="Rotate Right" href="#"/>
+		<img id="icon-right" src="/media/images/rotate_right.png" width="50px">
+		</a>
+    </td>
+</table>
+	</div>
+		<form action="." method="POST">
+		{% csrf_token %}
+			<div style="display:none">
+				{{ form.rotation }}
+			</div>
+		<button class="btn btn-lg btn-custom" type="submit"/>Save</button>
+		<a class="btn btn-lg btn-custom " href="/photo/{{photo.urlname}}">Cancel</a>
+		</form>
+
+
+{% endblock %}
+
+{% block extra-bottom %}
+<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
+<script src="{% static 'dist/jquery/jquery.rotate.1-1.js' %}"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+	$("#rotate-right").click(function(){
+		var p_w = $("#photo").width();
+		var p_h = $("#photo").height();
+		//alert ('width:'+ancho);
+		data = parseInt($("#id_rotation").val());
+		if (data == 0){
+			$("#id_rotation").val(270);
+		}
+		else{
+			$("#id_rotation").val(data - 90);
+		}
+		$("#photo").rotate(90);
+		$("#photo").css("width","p_h");
+		$("#photo").css("height","p_w");
+		$("#photo").attr('class', 'img-rounded');
+	});
+
+	$("#rotate-left").click(function(){
+		data = parseInt($("#id_rotation").val());
+		if (data == 270){
+			$("#id_rotation").val(0);
+		}
+		else{
+			$("#id_rotation").val(data + 90);
+		}
+		$("#photo").rotate(-90);
+		$("#photo").css("width","p_h");
+		$("#photo").css("height","p_w");
+		$("#photo").attr('class', 'img-rounded');
+	});
+	
+});
+</script>
+
+{% endblock %}

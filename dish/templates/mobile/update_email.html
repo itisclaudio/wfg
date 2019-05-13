@@ -1,0 +1,30 @@
+{% extends '_base.html' %}
+{% block title %}Update Email{% endblock %}
+{% block content %}
+<h1>Update Email</h1>
+<div class="well-mobile">
+	<form enctype='multipart/form-data' action="." method="POST">
+		{% csrf_token %}
+		{{ form.non_field_errors }}
+		<div class="fieldWrapper">
+			<label for="id_email">Email:</label>
+			{{ form.email }}
+			{{ form.email.errors }}
+		</div>
+        <div class="fieldWrapper">
+			<label for="id_email2">Repeat your email:</label>
+			{{ form.email2 }}
+			{{ form.email2.errors }}
+		</div>
+		<br>
+		<button class="btn btn-custom btn-block btn-lg" type="submit">Save</button>
+		<a class="btn btn-custom btn-block btn-lg" href="{% url 'view_myprofile' %}">Cancel</a>
+	</form>
+</div>
+{% block focus %}
+	<script type="text/javascript">
+			document.getElementById('id_email').focus();
+	</script>
+{% endblock %}
+
+{% endblock %}

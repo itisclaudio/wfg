@@ -1,0 +1,134 @@
+{% extends '_base.html' %}
+{% block title %}Dish Search Results{% endblock %}
+{% block content %}
+
+<table width="100%" class="paddingPagMob">
+<tr>
+<td width="10%">
+  {% if paginatorlist.has_previous %}
+	<a class="btn btn-custom btn-block" href="/dishes_result/{{search}}/1/">
+  {% else %}
+	<a class="btn btn-custom btn-block disabled">
+  {% endif %}
+  &lt;&lt;</a>
+</td>
+<td width="10%">
+  {% if paginatorlist.has_previous %}
+	<a class="btn btn-custom btn-block" href="/dishes_result/{{search}}/{{paginatorlist.previous_page_number}}">
+  {% else %}
+	<a class="btn btn-custom btn-block disabled">
+  {% endif %}
+  &lt;</a>
+</td>
+<td>
+<a class="btn btn-custom btn-block disabled">
+<b>All Dishes</b> [{{ paginatorlist.paginator.count }}] ({{paginatorlist.number}}/{{paginatorlist.paginator.num_pages}})</a></td>
+<td width="10%">
+  {% if paginatorlist.has_next %}
+	<a class="btn btn-custom btn-block" href="/dishes_result/{{search}}/{{paginatorlist.next_page_number}}">
+  {% else %}
+	<a class="btn btn-custom btn-block disabled">
+  {% endif %}
+  &gt;</a>
+</td>
+<td width="10%">
+  {% if paginatorlist.has_next %}
+	<a class="btn btn-custom btn-block" href="/dishes_result/{{search}}/{{paginatorlist.paginator.num_pages}}">
+  {% else %}
+	<a class="btn btn-custom btn-block disabled">
+  {% endif %}
+  &gt;&gt;</a>
+</td>
+</tr>
+</table>
+
+
+{% if paginatorlist.paginator.count > 0 %}
+    <table class="padding2" width="100%" border="0" style="margin-bottom:0px;">
+	<tbody>
+	{% for p in paginatorlist.object_list %}
+	<tr>
+	<td width="35%" rowspan="2">
+	{% if p.favphoto %}
+	  <a href="/photo/{{p.favphoto.urlname}}">
+		<img src="/media/{{p.favphoto.filename}}-med{{p.favphoto.extension}}" class="img-rounded" alt="{{p.name}}" width="100%">
+	  </a>
+	{% else %}
+	  <a href="/photonew/{{p.id}}/"><img src="/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
+	{% endif %}
+	</td>
+	<td  width="65%" colspan="2" style="padding:2px 0px 0px 0px; vertical-align:top;" height="20px">
+	  <a class="btn btn-lg btn-warning btn-block" href="/dish/{{p.urlname}}/"> {{p.name|truncatechars:25}}</a>
+	</td>
+    </tr>
+	<tr>
+	  <td style="border-top:none;vertical-align:top;">
+	  <p class="text-small">
+		   {% for cuisine in p.cuisines.all %}
+			 (<a href="/cuisine/{{cuisine.id}}/">{{cuisine.name}}</a>)
+		   {% endfor %}
+			{{p.description|urlizetrunc:35|escape|truncatewords:27}}
+	  </p>
+	  </td>
+	  <td style="border-top:none;vertical-align:top;" width="15%">
+		{% if user.is_authenticated %}
+			  <a class="btn btn-default btn-block" href="/dishedit/{{p.id}}/">
+				<li class="glyphicon glyphicon-pencil"></li>
+			  </a>
+			   <a style="margin-top: 2px;" class="btn btn-block btn-default" href="/photonew/{{p.id}}/"><li class="glyphicon glyphicon-camera"></li></a>
+		{% endif %}
+		</td>
+	 </tr>
+	 
+    {% endfor %}
+    </tbody>
+    </table>
+	
+	
+	<table width="100%" class="nolinetable paddingPagMob">
+	<tr>
+	<td width="10%">
+	  {% if paginatorlist.has_previous %}
+		<a class="btn btn-custom btn-block" href="/dishes_result/{{search}}/1/">
+	  {% else %}
+		<a class="btn btn-custom btn-block disabled">
+	  {% endif %}
+	  &lt;&lt;</a>
+	</td>
+	<td width="10%">
+	  {% if paginatorlist.has_previous %}
+		<a class="btn btn-custom btn-block" href="/dishes_result/{{search}}/{{paginatorlist.previous_page_number}}">
+	  {% else %}
+		<a class="btn btn-custom btn-block disabled">
+	  {% endif %}
+	  &lt;</a>
+	</td>
+	<td>
+	<a class="btn btn-custom btn-block disabled">
+	<b>All Dishes</b> [{{ paginatorlist.paginator.count }}] ({{paginatorlist.number}}/{{paginatorlist.paginator.num_pages}})</a></td>
+	<td width="10%">
+	  {% if paginatorlist.has_next %}
+		<a class="btn btn-custom btn-block" href="/dishes_result/{{search}}/{{paginatorlist.next_page_number}}">
+	  {% else %}
+		<a class="btn btn-custom btn-block disabled">
+	  {% endif %}
+	  &gt;</a>
+	</td>
+	<td width="10%">
+	  {% if paginatorlist.has_next %}
+		<a class="btn btn-custom btn-block" href="/dishes_result/{{search}}/{{paginatorlist.paginator.num_pages}}">
+	  {% else %}
+		<a class="btn btn-custom btn-block disabled">
+	  {% endif %}
+	  &gt;&gt;</a>
+	</td>
+	</tr>
+	</table>
+
+{% else %}
+    <div class="well">
+        <h3>There are no dishes</h3>
+    </div>
+{% endif %}
+
+{% endblock %}

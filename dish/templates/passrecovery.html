@@ -1,0 +1,35 @@
+{% extends '_base.html' %}
+{% block title %} Password Recovery {% endblock %}
+{% block content %}
+<h1>Password Recovery</h1>
+<div class="well row">
+<div class="col-md-9">
+	{% if mensa = 2 %}
+		<div class="alert alert-danger alert-dismissible" role="alert">
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close">&times;</button>
+			<p>There is no Foodie with the email: <b>{{email}}</b></p>
+			<p>Please user another email or <a class="btn btn-custom btn-lg" href="{% url 'view_signup' %}">sign up</a></p>
+		</div>
+	{% endif %}
+	<form action="." method="POST">
+		{% csrf_token %}
+        {{ form.non_field_errors }}
+	    <div class="fieldWrapper" style="margin-bottom:10px;">
+    	    <label for="id_email">Email:</label>
+    	    {{ form.email }}
+			{{ form.email.errors }}
+    	</div>
+		{{ mensaje }}
+		<p>Your password and username will be sent to the email entered above.</p>
+		<button class="btn btn-custom btn-lg">Send</button>
+		<a class="btn btn-custom btn-lg" href="{% url 'view_main' %}">Cancel</a>
+	</form>
+</div>
+</div>
+{% block focus %}
+	<script type="text/javascript">
+		document.getElementById('id_email').focus();
+	</script>
+{% endblock %}
+
+{% endblock %}

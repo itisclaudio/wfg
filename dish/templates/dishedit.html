@@ -1,0 +1,270 @@
+{% extends '_base.html' %}
+{% block title %}{{dish.name}} Editing...{% endblock %}
+{% block content %}
+
+<h1><a class="btn btn-custom btn-lg" href="/dish/{{dish.urlname}}/">{{dish.name|truncatechars:30}}</a>Editing...</h1>
+	{% if list %}
+	<div class="alert alert-danger alert-dismissible" role="alert">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<h2>The dish(es) already exist!</h2>
+		<p>Change the name or cuisines to save, otherwise cancel</p>
+		<div class="well" style="margin-bottom:0px;">
+			<table class="table table-hover" width="100%" style="margin-bottom:0px;">
+			<theader>
+			<tr>
+				<th width="50%">Name</th>
+				<th width="10%">Cuisine</th>
+				<th width="30%">Photo</th>
+				<th width="10%">Edit</th>
+			</tr>
+			</theader>
+			{% for p in list %}
+			<tbody>
+			<tr style="background-color:white;">
+				<td><a class="btn btn-lg btn-warning btn-block" href="/dish/{{p.urlname}}/"> {{ p.name|truncatechars:24 }}</a>
+				{% if p.othernames %}
+					<p style="margin-top: 6px;">{{p.othernames|truncatewords:5}}</p>
+				{% endif %}
+				</td>
+				<td style="vertical-align:top;">
+				{% for cuisine in p.cuisines.all %}
+				  (<a href="/cuisine/{{cuisine.urlname}}/">{{cuisine}}</a>)
+				{% endfor %}
+				</td>
+				<td>
+				{% if p.favphoto %}
+					<a href="/dish/{{p.urlname}}">
+					<img src="/media/{{p.favphoto.filename}}-thum{{p.favphoto.extension}}" class="img-rounded">
+					</a>
+				{% else %}
+					<a href="/photonew/{{p.id}}/"><img src="/media/images/upload-med.png" class="img-rounded" width="60%"></a>
+				{% endif %}
+				</td>
+				<td><a class="btn btn-default btn-lg" href="/dishedit/{{p.id}}/"><Li class="glyphicon glyphicon-edit"></Li> Edit </a></td>
+			</tr>
+			</tbody>
+			{% endfor %}
+			</table>
+		</div>
+	</div>
+	{% endif %}
+<div class="well">
+	<form enctype='multipart/form-data' action="." method="POST">
+		{% csrf_token %}
+		{{ form.non_field_errors }}
+		<div class="row" style="width:100%;margin-right:0px;">
+			<div class="col-md-8 col-sm-8 col-xs-8" style="margin-left:0px;">
+				<div class="fieldWrapper">
+					<label for="id_name">Name:</label>
+					{{ form.name }}
+					{{ form.name.errors }}
+					<div class="alert alert-danger fade in" role="alert" id="alert_names" style="display:none;">
+						<h2 style="margin-top: 0px;margin-bottom: 0px;">This are already in the system:</h2>
+						<ul id="dish_similar"></ul>
+					</div>
+					<div id="alert_chars" class="alert alert-danger fade in" role="alert" style="display:none;">
+					  Only alphanumeric characters and - ' .() are allowed
+					</div>
+				</div>
+				<div class="fieldWrapper">
+					<label for="id_othernames">Other names:</label>
+					{{ form.othernames }}
+					{{ form.othernames.errors }}
+					<div class="alert alert-danger fade in" role="alert" id="alert_othernames" style="display:none;">
+						<h2 style="margin-top: 0px;margin-bottom: 0px;">This are already in the system:</h2>
+						<ul id="similar_othernames"></ul>
+					</div>
+				</div>
+				<div class="fieldWrapper">
+					<label for="id_ingredients">Main ingredients:</label>
+					{{ form.ingredients }}
+					{{ form.ingredients.errors }}
+				</div>
+			</div>
+			<div class="col-md-4 col-sm-4 col-xs-4" style="margin-left:0px;padding:0px;">
+            <div style="padding-top:10px;">
+				{% if dish.favphoto %}
+					<a href="/photo/{{dish.favphoto.urlname}}" style="vertical-align:bottom;" align="bottom">
+						<img src="/media/{{dish.favphoto.filename}}-med{{dish.favphoto.extension}}" width="90%" class="img-rounded" style="margin-top:0px;" align="right"></a>
+				{% else %}
+					<a href="/photonew/{{dish.id}}/" style="vertical-align:bottom;" align="baseline"><img src="/media/images/upload.jpg" width="100%" class="img-rounded" style="margin-top:10px;" align="right"></a>
+				{% endif %}
+                </div>
+			</div>
+		</div>
+		{# single line comments #}
+		<label for="id_features">Features:</label>
+		<div class="btn-group col-xs-12" data-toggle="buttons" id="id_features" style="padding-left:0px;padding-right:0px;">
+		{% for choice in form.features.field.choices %}
+			{% if choice.0 in feature_current_id_list %}
+				<label class="btn btn-default active" style="margin-top:0px;" title="{{choice.1}}">
+				<input type="checkbox" name="feature" id="{{choice.0}}" value="{{choice.1}}" checked>
+			{% else %}
+				<label class="btn btn-default" style="margin-top:0px;" title="{{choice.1}}">
+				<input type="checkbox" name="feature" id="{{choice.0}}" value="{{choice.1}}">
+			{% endif %}
+			{% for ft3 in features %}
+				{% if ft3.name == choice.1 %}
+					<img src="/media/images/features/{{ft3.icon}}" width="25px">
+				{% endif %}
+			{% endfor %}
+			</label>
+		{% endfor %}
+		</div>
+		<div class="fieldWrapper">
+			<label for="id_description">Description:</label>
+			{{ form.description }}
+			{{ form.description.errors }}
+		</div>
+		<label for="id_cuisines">Select Cuisine(s): <em class="smallfont">Press control or command for multiple selections</em></label>
+		<select multiple="multiple" class="form-control" id="id_cuisines" name="cuisines" size="10">
+		{% for choice in form.cuisines.field.choices %}
+			<option value="{{choice.0}}" 
+				{% for cui in cuisines %}
+					{% ifequal cui.name choice.1 %}
+						selected="selected"
+					{% endifequal %}
+				{% endfor %}/>
+			{{choice.1|truncatechars:28}}</option>
+		{% endfor %}
+		</select>
+		<!--{{ form.check }}-->
+		{{ form.check.as_hidden }}
+		<button id="save_button" disabled class="btn btn-custom btn-lg">Save</button>
+		<a class="btn btn-custom btn-lg" href="/dish/{{dish.urlname}}/">Cancel</a>
+	</form>	
+
+{{ form.field_errors }}
+</div>
+{% endblock %}
+{% block extra-bottom %}
+<script>
+$( function() {
+	var allowed = /^[a-zA-Z0-9-' .()]+$/;
+	$('#id_name').focus();
+	$('#id_othernames').attr('autocomplete', 'off');
+	$("#id_othernames").on("change paste keyup", function() {
+		//$('#id_check').val(1);
+		$("#save_button").prop('disabled', false);
+	});
+	$("#id_features").on("change keyup", function() {
+		$("#save_button").prop('disabled', false);
+	});
+	$("#id_cuisines").on("change keyup", function() {
+		$("#save_button").prop('disabled', false);
+	});
+	$("#id_ingredients, #id_description").on("change keyup", function() {
+		$("#save_button").prop('disabled', false);
+	});
+	$("#id_name").on("paste keyup", function() {
+		//$('#id_name').unbind('keyup');
+		$('.cl').remove();
+		//$('#id_check').val(1);
+		var name = $('#id_name').val().trim();
+		//console.log('name.length: '+name.length);
+		if (name.length > 2){
+			//(1)Shows alert for forbidden chars what typed more than 2 chars
+			var result = allowed.test(name);
+			if (result == false){
+				$('#alert_chars').show();
+				$("#save_button").prop('disabled', true);
+			}
+			else{
+				$('#alert_chars').hide();
+				$("#save_button").prop('disabled', false);
+			};
+			//(1) End
+			//(2) Beginning of Ajax
+			$.ajax({
+				type: 'GET',
+				url: '/lookup_dish/',
+				dataType:'json',
+				async: true,
+				data: {
+					'name':name,
+					'id':{{dish.id}}
+					},
+				success: searchSuccess
+			});
+		}
+			//(2) End of Ajax
+		else{
+			//Less than 2 characters, hide alerts
+			$('#alert_chars').hide();
+			$('#alert_names').hide();
+		};
+	});
+	$("#id_othernames").on("paste keyup", function() {
+		//$('#id_name').unbind('keyup');
+		$('.cl').remove();
+		$('#alert_othernames').hide();
+		//$('#id_check').val(1);
+		var othernames = $('#id_othernames').val().trim();
+		console.log('othernames.length: '+othernames.length);
+		if (othernames.length > 2){
+			$.ajax({
+				type: 'GET',
+				//url: '/lookup_dish/',
+				url: '/lookup_othernames/',
+				dataType:'json',
+				async: true,
+				data: {
+					'othernames':othernames,
+					'id':{{dish.id}}
+					},
+				success: populateOthernames
+			});
+		}else{
+			//Less than 2 characters, hide alerts
+			$('#alert_othernames').hide();
+		};
+	});
+});
+function searchSuccess(json)
+{
+	if (json != 0){
+		//$('#id_name').unbind('keyup');
+		$('#dish_similar').empty();
+		$('#alert_names').show();
+		console.log('Json returnes data');
+		$.each(json, function(key, value){
+			console.log(key+'-'+value.name+' ('+value.othernames+')');
+			var othernames1 = value.othernames.trim();
+			//var othernames1 = value.othernames;
+			if (!othernames1 || othernames1.length < 1){
+				$("#dish_similar").append('<li class="cl"><a href="/dish/'+value.urlname+'" title="Go to dish page"><b>'+value.name+'</b> '+value.cuisines+'</li></a>');
+			}
+			else{
+				$("#dish_similar").append('<li class="cl"><a href="/dish/'+value.urlname+'" title="Go to dish page"><b>'+value.name+'</b> <i>'+value.othernames+'</i> '+value.cuisines+'</a></li>');
+			};
+			//var cuisines = value.cuisines;
+			//console.log(cuisines);
+		});
+		//$('#id_name').bind('keyup');
+	}
+	else{
+		$('#alert_names').hide();
+		console.log('Json DIDNT retur data!');
+	};
+}
+function populateOthernames(json)
+{
+	if (json != 0){
+		//$('#id_name').unbind('keyup');
+		$('#similar_othernames').empty();
+		$('#alert_othernames').show();
+		//console.log('-------------');
+		$.each(json, function(key, value){
+			console.log(key+'-'+value.name+' ('+value.othernames+')');
+			var othernames1 = value.othernames.trim();
+			if (!othernames1 || othernames1.length < 1){
+				$("#similar_othernames").append('<li class="cl"><a href="/dish/'+value.urlname+'" title="Go to dish page"><b>'+value.name+'</b> '+value.cuisines+'</li></a>');
+			}
+			else{
+				$("#similar_othernames").append('<li class="cl"><a href="/dish/'+value.urlname+'" title="Go to dish page"><b>'+value.name+'</b> <i>'+value.othernames+'</i> '+value.cuisines+'</a></li>');
+			};
+		});
+	};
+}
+</script>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends '_base.html' %}
+{% block title %}Create new List{% endblock %}
+
+{% block super-extra-head %}
+	{% load static %}
+	<link href="{% static 'dist/jquery/autocomplete/jquery-ui.min.css' %}" rel="stylesheet" >
+{% endblock %}
+
+{% block content %}
+<h1>Create new list</h1>
+<div class="well-mobile row">
+	<form enctype='multipart/form-data' role="form" action="." method="POST">
+		{% csrf_token %}
+		{{ form.non_field_errors }}
+			<div class="fieldWrapper">
+				<label for="id_name">List title:</label>
+				{{ form.name }}
+				{{ form.name.errors }}
+			</div>
+			<div class="fieldWrapper">
+				<label for="id_description">Description:</label>
+				{{ form.description }}
+				{{ form.description.errors }}
+			</div>
+			<div class="fieldWrapper">
+				<label for="id_type" style="vertical-align:baseline;">Type:</label>
+				{{ form.type}}
+				{{ form.type.errors }}
+			</div>
+		<div class="col-xs-6" style="padding:3px;">
+			<button  id="save_button" disabled class="btn btn-custom btn-lg btn-block" type="submit"/>Save</button>
+		</div>
+		<div class="col-xs-6" style="padding:3px;">
+			<a class="btn btn-custom btn-lg btn-block" href="/lists/">Cancel</a>
+		</div>
+	</form>
+
+</div>
+
+{% block focus %}
+	<script type="text/javascript">
+		document.getElementById('id_name').focus();
+	</script>
+{% endblock %}
+
+{% endblock %}
+
+{% block extra-bottom %}
+
+	<script src="{% static 'dist/jquery/autocomplete/jquery-ui.min.js' %}"></script>
+		<script>
+		$( function() {
+			//Funtion to activate save button when input name is not empty
+			$('#id_name').keyup(function() {
+				var empty = false;
+				$('#id_name').each(function() {
+					if ($(this).val() == '') {
+						empty = true;
+					}
+				});
+				if (empty) {
+					$('#save_button').attr('disabled', 'disabled');
+				} else {
+					var name = $("#id_name").val();
+					if (name) {
+						var letters = /^[a-zA-Z0-9- ]+$/;
+						var result = letters.test(name);
+						if (result == false){
+							$('#name_alert').show();
+							$('#save_button').attr('disabled', 'disabled');
+						}
+						else{$('#name_alert').hide();
+							$('#save_button').removeAttr('disabled');
+						}
+					}
+				}
+			});
+		});
+
+		</script>
+{% endblock %}

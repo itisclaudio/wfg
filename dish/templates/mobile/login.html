@@ -1,0 +1,70 @@
+{% extends '_base.html' %}
+{% block title %} Login {% endblock %}
+{% block content %}
+
+<h1 align="center" class="center">Log In</h1>
+{% if user.is_authenticated %}
+User authenticated: {{user}}
+{% endif %}
+<div class="well-mobile">
+{% if next %}
+	<form action="/login/?next={{next}}" method="post" >
+{%else%}
+	<form action="/login/" method="POST">
+{% endif %}
+		{% if mensa = 1 %}
+			<div class="alert alert-danger alert-dismissible" role="alert">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			"Wrong username and/or password"
+			</div>
+		{% endif %}
+		{% if mensa = 2 %}
+			<div class="alert alert-danger alert-dismissible" role="alert" style="text-align:center;">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				The user <a href="/foodie/{{user_req}}/"><b>{{user_req}}</b></a> doesn't have a password with WorldFood.Guide
+				<p>If you wish to create a WFG password you can do it after you sing in with your social account.</p>
+				<a class="btn btn-lg btn-block" style="background-color:#3B5998;color:white;padding:4px 8px;" href="/accounts/facebook/login/?process=login">
+					<img src="/media/images/facebook-White.png" class="pull-left" width="32px">
+					<p style="font-size:17px;padding-top:8px;margin-bottom: 2px;">Sing in with Facebook</p></a>
+			</div>
+		{% endif %}
+		{% if mensa = 3 %}
+			<div class="alert alert-success alert-dismissible" role="alert">
+			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">&times;</button>
+				<p>An email with your password has been sent to your email</p>
+			</div>
+		{% endif %}
+		{% if mensa = 4 %}
+			<!--User doesn't exist-->
+			<div class="alert alert-danger alert-dismissible" role="alert">
+			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">&times;</button>
+				<p>The username <b>{{user_req}}</b> doesn't exist!</p>
+			</div>
+		{% endif %}
+		{% csrf_token %}
+        {{ form.non_field_errors }}
+            <div class="fieldWrapper">
+                <label for="id_username">Username: <em class="text-small">(case sensitive)</em></label>
+            {{ form.username }}{{ form.username.errors }}
+            </div>
+            <div class="fieldWrapper">
+                <label for="id_password">Password: <em class="text-small">(case sensitive)</em></label>
+            {{ form.password }}{{ form.password.errors }}
+			</div>
+			<br>
+			
+<button class="btn btn-custom btn-lg btn-block">Login</button>
+<a class="btn btn-custom btn-lg btn-block" href="/cuisines/1/">Cancel</a>
+</form>
+
+<br>
+	<a href="{% url 'view_signup' %}">Sign Up</a> /
+	<a href="{% url 'view_passrecovery' %}">Forgot Username or Password</a>
+</div>
+	{% block focus %}
+		<script type="text/javascript">
+			document.getElementById('id_username').focus();
+		</script>
+	{% endblock %}
+
+{% endblock %}

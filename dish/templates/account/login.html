@@ -1,0 +1,32 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block head_title %}{% trans "log In" %}{% endblock %}
+
+{% block content %}
+<div class="well well-white">
+<h1>{% trans "Log In" %}</h1>
+
+{% get_providers as socialaccount_providers %}
+
+<div class="well row">
+	
+	<form class="login" method="POST" action="{% url 'account_login' %}">
+	  {% csrf_token %}
+	  <div class="col-md-9">
+	  {{ form.as_p }}
+	  {% if redirect_field_value %}
+	  <input class="form-control" type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+	  {% endif %}
+	  <button class="primaryAction btn btn-custom btn-lg" type="submit">{% trans "Sign In" %}</button>
+	  <a class="button secondaryAction btn btn-custom btn-lg" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+	  <a title="Log in with Facebook" style='padding-top:0px;padding-right:0px;' href="/accounts/facebook/login/?process=login">
+		<img alt="Sign up with Facebook" src="/media/images/facebook-login.png" width="160px">
+	  </a>
+	  </div>
+	</form>
+</div>
+</div>
+{% endblock %}

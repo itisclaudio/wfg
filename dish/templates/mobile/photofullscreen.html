@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head>
+<title>WorldFood.Guide</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+{% load static %}
+<link href="{% static 'dist/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" >
+<link href="{% static 'css/mobile.css' %}" rel="stylesheet" >
+<link rel="icon" href="/media/images/main_icon_32.png" sizes="32x32">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+$(document).keyup(function(e) {
+  if (e.keyCode == 27) { $('#esc').click(); }   // Scape
+});
+
+$("#esc").click(function(){
+	window.history.go(-1);
+});
+
+});
+</script>
+</head>
+<body style="background-color:black;">
+
+{% if object %}
+
+<!--<a class="btn btn-warning" style="position:absolute;right:0.5%;top:0.5%;" href="javascript:window.history.go(-1);" id="esc" />Exit Fullscreen</a>-->
+
+<div style="position:absolute;top:0px; background-color:black; opacity: 0.4; filter:alpha(opacity=40); height: 40px; width: 100%;"></div>
+
+<a class="btn btn-warning" style="position:absolute;right:0.5%;top:0.5%;" href="/photo/{{object.id}}" id="esc" />Exit Fullscreen</a>
+
+<a class="btn btn-custom" id="location" href="/dish/{{object.dish.urlname}}"  style="position:absolute;top:0.5%;left:0.5%;">
+{{object.dish.name}}
+</a>
+
+<!--
+<p style="position:absolute;top:35;left:10; color:#FFF">Picture by: <b id="owner">{{object.owner }}</b></p>
+-->
+<!--
+<p style="position:absolute;top:7%;left:10; color:#FFF">Likes: <b id="likes">{{ likes }}</b></p>
+<p style="position:absolute;top:9%;left:10; color:#FFF">Date Uploaded: <b id="uploaded">{{ object.datetime|date:"N j, Y"}} </b></p>
+-->
+<img id="image_element" name="0" alt="{{ object.food.name }}" src="/media/{{object.filename}}-reg{{object.extension}}" width="100%">
+
+{% else %}
+<h3>No Picture</h3>
+
+{% endif %}
+

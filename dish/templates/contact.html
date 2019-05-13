@@ -1,0 +1,56 @@
+{% extends '_base.html' %}
+{% block title %}WorldFood.Guide | Contact Us{% endblock %}
+
+{% block content %}
+<h1>Contact Us</h1>
+<div class="well">
+
+{% if is_robot %}
+	<h3>Robot Alert!</h3>
+	<p>Message not sent</p>
+{% else %}
+	{% if info_enviado %}
+		<h3>Thank you!</h3>
+		<p>Your comments are on its way to WorldFood.Guide</p>
+		<p>Your email: <b>{{email}}</b></p>
+		<p>Have a great day.</p>
+	{% else %}
+		<form action="." method="POST">
+			{% csrf_token %}
+			{{ form.non_field_errors }}
+			<div class="fieldWrapper">
+				{{ form.Email.errors }}
+				<label for="Email">Email :</label>
+				{{ form.Email }}
+			</div>
+			<div class="fieldWrapper">
+				{{ form.Title.errors }}
+				<label for="Title">Subject :</label>
+				{{ form.Title }}
+			</div>
+			<div class="fieldWrapper">
+				{{ form.Comment.errors }}
+				<label for="Comment">Comment :</label>
+				{{ form.Comment }}
+			</div>
+			<div class="fieldWrapper">
+				{{ form.text.errors }}
+				{{ form.text }}
+			</div>
+			<div class="fieldWrapper">
+				<label for="id_test">Select the list of food items:</label>
+				{{ form.test }}
+				{{ form.test.errors }}
+			</div>
+		 <input class="btn btn-custom btn-lg" type="submit" value="Submit">
+		</form>
+	{% endif %}
+{% endif %}
+</div>
+{% block focus %}
+	<script type="text/javascript">
+		document.getElementById('id_Email').focus();
+	</script>
+{% endblock %}
+
+{% endblock %}

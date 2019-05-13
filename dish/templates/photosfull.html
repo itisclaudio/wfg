@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head>
+<title>Dish Photos Fullscreen</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="icon" type="image/png" sizes="32x32" href="http://worldfood.guide/media/images/icons/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="http://worldfood.guide/media/images/icons/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="http://worldfood.guide/media/images/icons/favicon-16x16.png">
+<link rel="shortcut icon" type="image/x-icon" href="http://worldfood.guide/media/images/icons/favicon.ico" >
+<link rel="icon" href="/media/images/main_icon_32.png" sizes="32x32">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link href="{% static 'css/desktop.css' %}" rel="stylesheet" type="text/css" media="screen" />
+<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
+<!--<link href="{% static 'dist/bootstrap/css/bootstrap-responsive-mine.css' %}" rel="stylesheet"> -->
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+$(document).keyup(function(e) {
+  if (e.keyCode == 39) { $('#next').click(); }     // right or next
+  if (e.keyCode == 37) { $('#prev').click(); }   // left or prev
+  if (e.keyCode == 27) { $('#esc').click(); }   // Scape
+});
+
+$("#esc").click(function(){
+	window.history.go(-1);
+});
+
+$("#next").click(function(){
+	var current = $("#image_element").attr('name');
+	//alert(te);
+	//alert($("#title").html())
+	if (current == {{ list|length }}-1){
+		var nextp = 1;
+	}
+	else{
+		var nextp = parseInt(current) + 1;
+	}
+	var new_url = $('#photo' + nextp).attr('name');
+  $("#image_element").attr("src", '/media/' + new_url);
+  $("#image_element").attr("name", nextp);
+  $("#location").attr("href", '/dish/'+$('#data_urlname' + nextp).html());
+  $("#location").html($('#data_name' + nextp).html());
+  $("#owner").html($('#data_owner' + nextp).html());
+  $("#likes").html($('#data_likes' + nextp).html());
+  //$("#uploaded").html($('#data_uploaded' + nextp).html());
+});
+
+$("#prev").click(function(){
+	var current = $("#image_element").attr('name');
+	//alert(current)
+	if (current == 0){
+		var nextp = {{ list|length }}-1;
+	}
+	else{
+		var nextp = parseInt(current) - 1;
+	}
+	var new_url = $('#photo' + nextp).attr('name');
+  $("#image_element").attr("src", '/media/' + new_url);
+  $("#image_element").attr("name", nextp);
+  $("#location").attr("href", '/dish/'+$('#data_urlname' + nextp).html());
+  $("#location").html($('#data_name' + nextp).html());
+  //$("#title").html($('#data_name' + nextp).html());
+  $("#owner").html($('#data_owner' + nextp).html());
+  $("#likes").html($('#data_likes' + nextp).html());
+  //$("#uploaded").html($('#data_uploaded' + nextp).html());
+});
+});
+</script>
+
+</head>
+<body style="background-color:black;">
+
+{% if list %}
+<div style="position:absolute;top:0px; background-color:black; opacity: 0.4; filter:alpha(opacity=40); height: 50px; width: 100%;">
+</div>
+
+<a  class="btn btn-lg btn-warning" style="position:absolute;right:0.5%;top:0.5%;" href="javascript:window.history.go(-1);" id="esc" />Exit Fullscreen (Esc)</a>
+ 
+<a style="position:absolute; left:0.5%; top:40%;" href="#" id="prev" />
+<img src="/media/images/arrow-left.png"  alt="previous" />
+</a>
+
+<a style="position:absolute; right:0.5%; top:40%;" href="#" id="next"/>
+<!--<p style="font-size:36px;" class="icon-circle-arrow-right">1</p>-->
+
+<img src="/media/images/arrow-right.png" alt="next" />
+<!--<span class="icon-circle-arrow-right"></span>-->
+<!--<img src="/media/images/Arrow-right.jpg" alt="next" />-->
+</a>
+
+<h1 id="title" name="name" style="position:absolute;top:0.2%;left:10; color:#FFF">
+<a id="location" href="/dish/{{list.0.dish.urlname}}" style="color:#FFF">
+{{ list.0.dish.name }}
+</a>
+</h1>
+<p style="position:absolute;top:30;left:10; color:#FFF">Picture by: <b id="owner">{{list.0.owner}} </b> / Likes: <b id="likes">{{ list.0.likestot }}</b></p>
+<!--
+<p style="position:absolute;top:9%;left:10; color:#FFF">Date Uploaded: <b id="uploaded">{{ list.1.datetime|date:"N j, Y"}} </b></p>
+-->
+
+<!--
+<h1 id="title" name="name" style="position:absolute;top:0.3%;left:11; color:#FFF;">
+{{ list.0.dish.name }}
+</h1>
+-->
+
+
+<img id="image_element" name="0" src="/media/{{ list.0.location }}" width="100%">
+
+<div id="list_photos" name="{{ list|length }}" style="display:none">
+	{% for t in list %}
+	<div id="photo{{forloop.counter0}}" name="{{t.location}}">photo{{forloop.counter0}} - {{t.location}}</div>
+	<div id="data_urlname{{forloop.counter0}}">{{t.dish.urlname}}</div>
+	<div id="data_name{{forloop.counter0}}">{{t.dish.name}}</div>
+	<div id="data_owner{{forloop.counter0}}">{{t.owner}}</div>
+	<div id="data_likes{{forloop.counter0}}">{{t.likestot}}</div>
+	<!--<div id="data_uploaded{{forloop.counter0}}">{{t.datetime|date:"N j, Y"}}</div>-->
+	{% endfor %}
+
+</div>
+
+
+
+{% else %}
+<h3>No Pictures</h3>
+
+{% endif %}
+

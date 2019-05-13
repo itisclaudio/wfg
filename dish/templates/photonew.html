@@ -1,0 +1,118 @@
+{% extends '_base.html' %}
+{% block title %}Upload Photo{% endblock %}
+
+{% block super-extra-head %}
+	{% load static %}
+	<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<h1><a href="/dish/{{dish.urlname}}">{{ dish.name }}</a></h1>
+<!--Modal 0 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="myModalLabel">Processing...</h1>
+      </div>
+      <div class="modal-body">
+		<div class="progress">
+			  <div class="progress-bar progress-bar-striped progress-bar-warning active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+			  </div>
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Modal 1 -->
+<div class="well" id="content">
+	{% if information = 3 %}
+	<div class="alert alert-danger alert-dismissible" role="alert">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>"Incorrect Data"
+	</div>
+	{% endif %}
+	
+	<form enctype='multipart/form-data' action="." method="POST" id="myform">
+		{% csrf_token %}
+		{{ form.non_field_errors }}
+		<div class="fieldWrapper">
+    	    <label for="id_location">Photo:</label>
+    	    {{ form.location }} {{ form.location.errors }}
+    	</div>
+		<div class="well well-white" style="padding-top:20px;padding-bottom:20px;margin-top: 10px;">
+			<div class="col-lg-3 col-md-3 col-sm-3 col-xs-7">
+				<p style="font-size:16px;margin-top:-5px;margin-bottom:0px;"><b>I am the owner:</b></p>
+			</div>
+			<div class="col-lg-2 col-md-2 col-sm-2 col-xs-3">
+				{{ form.ownit }}
+			</div>
+		</div>
+		{% if ownit %}
+			<div class="fieldWrapper" id="creditsname" style="display:none;">
+				<label for="id_creditsname">Photo credits to:</label>
+				{{ form.creditsname }} {{ form.creditsname.errors }}
+			</div>
+			<div class="fieldWrapper" id="creditsurl" style="display:none;">
+				<label for="id_creditsurl">URL Location:</label>
+				{{ form.creditsurl }} {{ form.creditsurl.errors }}
+			</div>
+		{% else %}
+			<div class="fieldWrapper" id="creditsname">
+				<label for="id_creditsname">Photo credits to:</label>
+				{{ form.creditsname }} {{ form.creditsname.errors }}
+			</div>
+			<div class="fieldWrapper" id="creditsurl">
+				<label for="id_creditsurl">URL Location:</label>
+				{{ form.creditsurl }} {{ form.creditsurl.errors }}
+			</div>
+		{% endif %}
+	    <div class="fieldWrapper">
+    	    <label for="id_comments">Photo extra info:</label>
+    	    {{ form.comments }} {{ form.comments.errors }}
+    	</div>
+		<!--<button class="btn btn-lg btn-custom" type="submit" value="Submit"/>Save</button>-->
+		<button class="btn btn-lg btn-custom" type="submit" value="Submit" onclick="loading();"/>Save</button>
+		<a class="btn btn-custom btn-lg" href="javascript:window.history.go(-1);">Cancel</a>
+	</form>
+</div>
+{% endblock %}
+
+{% block extra-bottom %}
+<script src="{% static 'dist/jquery/validate/jquery.validate.min.js' %}"></script>
+<script type="text/javascript">
+document.getElementById('id_location').focus();
+//function to show the modal "Processing" when loading results page
+function loading(){
+	//var urlErrorExists = document.getElementById("id_creditsurl-error");
+	if ($('#id_creditsurl-error').length > 0) {
+		//Error element exists
+		if($('#id_creditsurl-error').css('display') == 'none'){
+			//Error not visible, load modal because form is been sent
+			$('#id_cuisines').prop('disabled', false);//enables cuisines so POST can send info
+			$("#myModal").modal('show');
+		};
+	}
+	else{
+		//There is no error element, load modal
+		$('#id_cuisines').prop('disabled', false);//enables cuisines so POST can send info
+		$("#myModal").modal('show');
+	};
+}
+$('#myform').validate();
+$(document).ready(function (){
+	$("#id_ownit").click(function() {
+		console.log(this.checked);
+        if(this.checked == true) {
+			//alert("Checked");
+			$('#id_creditsname').val("");
+			$('#id_creditsurl').val("");
+			$('#creditsname').hide();
+			$('#creditsurl').hide();
+		}else{
+			$('#creditsname').show();
+			$('#creditsurl').show();
+        }
+	});
+})
+</script>
+{% endblock %}

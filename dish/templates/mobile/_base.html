@@ -1,0 +1,165 @@
+{% extends '_site_base.html' %}
+{% load static %}
+{% block extra-head %}
+	<!-- stylesheets -->
+	<link href="{% static 'dist/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" >
+	<link href="{% static 'css/mobile.css' %}" rel="stylesheet" >
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style type="text/css">
+      body {
+        padding-top: 50px;
+		margin-bottom: 60px;
+        background-color:#FFFFE8;
+      }
+      @media (max-width: 980px) {
+        /* Enable use of floated navbar text */
+        .navbar-text.pull-right {
+          float: none;
+          padding-left: 5px;
+          padding-right: 5px;
+        }
+	  /*Mobile*/
+	  input {
+        /*height:40px;*/
+		font-size:22px;
+      }
+      }
+    </style>
+	<!--<link href="{{ MEDIA_URL }}bootstrap/css/bootstrap-responsive-mine.css" rel="stylesheet">-->
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+    <![endif]-->
+	
+{% endblock %}
+{% block extra-content-top %}
+<!--Navbar (start)-->
+<div class = "navbar navbar-inverse navbar-fixed-top">
+<div class = "container-fluid">
+	<!-- Brand and toggle get grouped for better mobile display -->
+	<div class="navbar-header">
+		<a class="navbar-brand" href="{% url 'view_main' %}">
+			<img alt="WorldFood.Guide" src="/media/images/worldfoodguide-logo-mobile.png" width="100px" style="margin-left:5px; margin-top:5px;">
+			<!--<img alt="WorldFood.Guide" src="/media/images/worldfoodguide-mobile-worldcup.png" width="100px" style="margin-left:5px; margin-top:5px;">-->
+			
+		</a>
+		<form class="navbar-brand col-lg-8 col-md-8 col-sm-7 col-xs-5" style="padding-top:8px;margin-left:0px;" role="search" action="/searchquick/" method="POST"  >
+			{% csrf_token %}
+			<input type="text" class="form-control" name="search" id="id_search_inbar"  placeholder="Quick search" style="padding-right:0px;"/>
+			<input type="text" id="source" name="source" style="display:none;" value="mobile{{request.path}}"/>
+			<input type="submit" value="submit" style="visibility:hidden;position:absolute"/>
+		</form>
+		<button class="navbar-toggle" style="margin:6px 6px 0px 6px;" data-toggle = "collapse" data-target = ".navHeaderCollapse" style="display:inline;">
+				<span class = "icon-bar"></span>
+				<span class = "icon-bar"></span>
+				<span class = "icon-bar"></span>
+				<span class="icon-bar"> </span>
+		</button>
+	</div>
+	<!-- Collect the nav links, forms, and other content for toggling -->
+	<div class = "collapse navbar-collapse navHeaderCollapse">
+		<ul class = "nav navbar-nav">
+			<li class="dropdown menu">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dish / Cuisine<b class="caret"></b></a>
+				<ul class = "dropdown-menu">
+					<!--<li><a href="/photonewnodish/">Photo Upload</a></li>-->
+					<li><a href="{% url 'view_dishphotonew' %}">New Dish / Photo</a></li>
+					<li><a href="{% url 'view_dishes' %}">All Dishes</a></li>
+					<li><a href="{% url 'view_searchadvance' %}">Search Dish(es)</a></li>
+					<li role="separator" class="divider"></li>
+					<li><a href="{% url 'view_cuisinenew' %}">New Cuisine</a></li>
+					<li><a href="{% url 'view_cuisines' %}">All Cuisines</a></li>
+					<li role="separator" class="divider"></li>
+					{% if user.is_authenticated %}
+						<li><a href="{% url 'view_userphotos' username=user.username %}">My Photos</a></li>
+					{% endif %}
+					<li><a href="{% url 'view_disheslatest' %}">Latest Dishes</a></li>
+					<li><a href="{% url 'view_latestphotos' %}">Latest Photos</a></li>
+					<li><a href="{% url 'view_photos' %}">Top 100 Photos</a></li>
+					<li><a href="{% url 'view_photosfull' %}">Photos - Fullscreen</a></li>
+				</ul>
+			</li>
+			<li class="dropdown menu">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Lists<b class="caret"></b></a>
+					<ul class="dropdown-menu">
+					<li><a href="{% url 'view_listnew' %}">New List</a></li>
+					<li><a href="{% url 'view_lists_mine' %}">My Lists</a></li>
+					<li><a href="{% url 'view_lists' %}">All Lists</a></li>
+					<li><a href="{% url 'view_list_search' %}">Search List(s)</a></li>
+					</ul>
+			</li>
+			<li class="dropdown menu">
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">More<b class="caret"></b></a>
+				<ul class="dropdown-menu">
+				{% if user.is_authenticated %}
+					<li><a href="{% url 'view_privacy' %}">Privacy Settings</a></li>
+					<li><a href="{% url 'view_myprofile' %}">My Profile</a></li>
+					<li><a href="{% url 'view_logout' %}">Log Out</a></li>
+				{% else %}
+					<li><a href="{% url 'view_signin' %}">Sign In</a></li>
+					<li><a href="{% url 'view_signup' %}">Sign Up</a></li>
+					<li><a href="{% url 'view_passrecovery' %}">Forgot my password</a></li>
+				{% endif %}
+				<li role="separator" class="divider"></li>
+				<li><a href="{% url 'view_foodies' %}">All Foodies</a></li>
+				</ul>
+			</li>
+		</ul>
+		{% if user.is_authenticated %}
+		<a href="{% url 'view_myprofile' %}">
+		<ul class="pull-right hidden-phone hidden-sm hidden-xs" style="margin:10px 0px 5px 0px;">
+			<li style="display:inline;"><b>{{user}}</b>
+				{% if user.userprofile.photo %}
+				<li style="display:inline;">
+					<img src="/media/{{user.userprofile.photofilename}}-thum{{user.userprofile.extension}}" class="img-rounded" width="30">
+				</li>
+				{% else %}
+					<i class="icon-user icon-black"></i>
+				{% endif %}
+			 </li>
+		</ul></a>
+		{% endif %}
+	</div>
+	
+</div>
+</div>
+<!--Navbar (end)-->
+<!--
+<div class="content-wrapper">
+	<div class="container">
+		<section id="content">
+			<div class="row" style="padding-top: 0px;">
+				<div class="span12">
+					<div class="well white">-->
+{% endblock %}
+{% block extra-content-botton %}
+
+<!--Stiky Footnote (start)-->
+<div class="navbar navbar-default footer-rest"  style="padding-top:0px;margin-bottom:0px;margin-top:0px;position: absolute;bottom: 0;width: 100%;height: 50px;">
+	<div class="container">
+		<p style="margin-top:2px;margin-bottom:0px;" class="navbar-text pull-left text-small"> &copy; WorldFood.Guide 2013 - Claudio Roman
+		<br>
+			<a href="{% url 'view_guidelines' %}">General Guidelines</a> |
+			<a href="{% url 'view_terms' %}">Terms of Service</a> |
+			<a href="{% url 'view_about' %}">About WorldFood.Guide</a> |
+			<a href="{% url 'view_contact' %}">Contact Us</a> |
+			<a href="{% url 'view_help' %}">Help</a> |
+			<a href="{% url 'view_siteindex' %}">Site Index</a></p>
+	</div>
+</div>
+<!--Stiky Footnote (end)-->
+
+					<!--</div>
+				</div>
+			</div>
+		</section>
+	</div>
+</div>
+<p></p>-->
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster 
+    <script src="{{ MEDIA_URL }}js/jquery-1.9.1.min.js"></script>
+    <script src="{{ MEDIA_URL }}js/bootstrap.min.js"></script>-->
+{% endblock %}

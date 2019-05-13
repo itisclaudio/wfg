@@ -1,0 +1,87 @@
+{% extends '_base.html' %}
+{% block title %} - Rotate Photo{% endblock %}
+
+{% block super-extra-head %}
+	{% load static %}
+{% endblock %}
+
+{% block content %}
+<div class="well-1">
+<h1 align="center">Rotate Photo</h1>
+<table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
+	<tr>
+    <td style="vertical-align:middle;border-top:none;padding-right:15px;" width="50%">
+    	<a id="rotate-left" href="#"/>
+		<img src="/media/images/rotate_left.png" width="50px" id="icon-left" style="vertical-align:right;" align="right">
+		</a>
+    </td>
+    <td style="vertical-align:left;border-top:none;padding-left:15px;" width="50%">
+    	<a id="rotate-right" href="#"/>
+		<img src="/media/images/rotate_right.png" width="50px" id="icon-right" align="left">
+		</a>
+    </td>
+	</tr>
+	<tr>
+	   <td style="vertical-align:middle;border-top:none;" colspan="2">
+			<div id="holder" align="center" >
+				<img id="photo" src="/media/{{ photo.filename }}-med{{photo.extension}}?cachebuster={%now 'H:i:s'%}" alt="{{ photo.food }}" width="300px" class="img-rounded"/>
+			</div>
+		</td>
+</table>
+<br/>
+	<form action="." method="POST">
+	{% csrf_token %}
+		<div style="display:none">
+			{{ form.rotation }}
+		</div>
+	<button class="btn btn-custom btn-lg btn-block" type="submit"/>Save</button>
+	<a class="btn btn-custom btn-lg btn-block" href="/photo/{{photo.urlname}}">Cancel</a>
+	</form>
+</div>
+{% endblock %}
+
+{% block extra-bottom %}
+<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
+<script src="{% static 'dist/jquery/jquery.rotate.1-1.js' %}"></script>
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+		//var alto = document.querySelector('#photo').naturalHeight;
+		//var newalto = alto/2;
+		//alert('alto:'+alto+', ancho:'+ancho+', newalto:'+newalto+', newancho:'+newancho);
+
+	$("#rotate-right").click(function(){
+		var p_w = $("#photo").width();
+		var p_h = $("#photo").height();
+		//alert ('width:'+ancho);
+		data = parseInt($("#id_rotation").val());
+		if (data == 0){
+			$("#id_rotation").val(270);
+		}
+		else{
+			$("#id_rotation").val(data - 90);
+		}
+		$("#photo").rotate(90);
+		$("#photo").css("width","p_h");
+		$("#photo").css("height","p_w");
+		$("#photo").attr('class', 'img-rounded');
+	});
+
+	$("#rotate-left").click(function(){
+		data = parseInt($("#id_rotation").val());
+		if (data == 270){
+			$("#id_rotation").val(0);
+		}
+		else{
+			$("#id_rotation").val(data + 90);
+		}
+		$("#photo").rotate(-90);
+		$("#photo").css("width","p_h");
+		$("#photo").css("height","p_w");;
+		$("#photo").attr('class', 'img-rounded');
+	});
+});
+</script>
+
+{% endblock %}

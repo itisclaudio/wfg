@@ -1,0 +1,708 @@
+{% extends '_base.html' %}
+{% block title %} {{dish.name}} 
+	{% if dish.cuisines.all %}
+		{% for p in dish.cuisines.all %}
+			| {{p}}
+		{% endfor %}
+	{% endif %}
+{% endblock %}
+{% block super-extra-head %}
+{% load static %}
+<meta name="description" content="{{ dish.description|truncatechars:170 }}
+	{% if dish.cuisines.all %}
+		{% for p in dish.cuisines.all %}
+			| {{p}}
+		{% endfor %}
+	{% endif %}
+"/>
+<meta property="og:title"  content="{{dish.name}} " />
+<meta property="og:description" content="{{ dish.description|truncatechars:170 }}" />
+	{% if photos|length > 0 %}
+		<meta property="og:image" content="https://worldfood.guide/media/{{photos.0.filename}}-reg{{photos.0.extension}}" />
+	{% else %}
+		<meta property="og:image" content="https://worldfood.guide/media/images/upload.jpg" />
+	{% endif %}
+<link href="{% static 'dist/jquery/autocomplete/jquery-ui.min.css' %}" rel="stylesheet" >
+<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
+<script type="text/javascript">
+
+$(document).ready(function(){
+	$("#more").click(function(){
+		document.getElementById('desc').style.display = "block";
+		document.getElementById('desc_small').style.display = "none";
+		//$("#desc").css({display:'yes'});
+		//$("#desc_small").css({display:'none'});
+		$("#more").css({display:'none'});
+		document.getElementById('less').style.display = "block";
+	});
+	$("#less").click(function(){
+		document.getElementById('desc').style.display = "none";
+		document.getElementById('desc_small').style.display = "block";
+		document.getElementById('more').style.display = "block";
+	});
+});
+</script>
+<!--Sharethis script (Start)-->
+<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5bf2e117d741e40011ae96ac&product=social-ab' async='async'></script>
+<!--Sharethis script (End)-->
+{% endblock %}
+
+{% block content %}
+
+<!--Modal-start Showing loading bar -->
+<div class="modal fade" id="modal_processing" tabindex="-1" role="dialog" aria-labelledby="modal_processingLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="myModalLabel">Processing...</h1>
+      </div>
+      <div class="modal-body">
+		<div class="progress">
+			  <div class="progress-bar progress-bar-striped progress-bar-warning active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+			  </div>
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Modal end -->
+
+<!-- Modal-2: Add dish to list -->
+<div class="modal fade" id="modal_adddish_tolist" tabindex="-1" role="dialog" aria-labelledby="modal_adddish_tolistLabel">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h2 style="margin-top:0px;">Search List</h2>
+		<input class="form-control ui-autocomplete-input" id="id_auto" name="auto" type="text" placeholder="type list name here.." autocomplete="off"/>
+	</div>
+	<div class="modal-body row" id="modal_list" style="display:none;">
+		<div class="col-sm-12">
+			<h2 id="modal_listname" style="margin-top:0px;text-align:left;margin-bottom:0px;"></h2>
+			<p id="modal_listdescription"></p>
+			<p><b>Dishes in list:</b> <i id="modal_dishes"></i></p>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<div class="col-xs-5">
+			<div id="myAlert" class="alert alert-danger fade" role="alert" style="margin-bottom:0px;padding-top:10px;padding-bottom:10px;text-align:center;">
+			  <b>Dish already in list</b>
+			</div>
+		</div>
+		<div class="col-xs-7">
+			<a type="button" class="btn btn-custom btn-lg" onclick="processing();" href="" id="modal_select" style="visibility:hidden;">Add dish to list</a>
+			<button type="button" class="btn btn-default btn-lg" id="modal_cancel" data-dismiss="modal">Cancel</button>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+<!-- Modal-2 END-->
+
+{# Modal-3 Add dish related #}
+<div class="modal fade" id="modal_adddish" tabindex="-1" role="dialog" aria-labelledby="modal_adddishLabel">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h2 style="margin-top:0px;">Search Related Dish</h2>
+		<input class="form-control ui-autocomplete-input" id="id_auto_similar" name="auto" type="text" placeholder="type dish name here.." autocomplete="off"/>
+	</div>
+	<div class="modal-body row" id="modal_dish" style="display:none;">
+		<div class="col-sm-5">
+			<h2 id="modal_dishname" style="margin-top:0px;text-align:left;margin-bottom:0px;"></h2>
+			<p><b><i id="modal-othernames"></i></b> <i id="modal_cuisines"></i></p>
+			<p id="modal-dishdescription"></p>
+		</div>
+		<div class="col-sm-7">
+			<img id="modal-image" src="" class="img-rounded" width="300px" style="margin-bottom: 6px;"/>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<div class="col-xs-6">
+			<div id="alert_similar" class="alert alert-danger fade" role="alert" style="margin-bottom:0px;padding-top:10px;padding-bottom:10px;text-align:center;">
+			  <b>Already related!</b>
+			</div>
+		</div>
+		<div class="col-xs-6">
+			<a type="button" class="btn btn-custom btn-lg" onclick="processing();" href="" id="button_similar" style="visibility:hidden;">Add dish</a>
+			<button type="button" class="btn btn-default btn-lg" id="modal_cancel" data-dismiss="modal">Cancel</button>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+{# Modal-3 END #}
+
+<div class="well well-white"><!--1-->
+<div class="row" style="padding:0px;"><!--2-->
+
+	<div class="col-xs-12"><!--Name-Start-->
+		<ul style="margin:0px;padding-left:0px;">
+		<li style="display:inline;">
+			<h1 style="display:inline;vertical-align:middle;padding-left:0px;" id="id_obj" name="{{dish.id}}" >{{dish.name}}</h1>
+		</li>
+		<li style="display:inline;margin-left:0px;padding-left:0px;vertical-align:top;">
+		{% if user.is_authenticated %}
+			<button id="likeaction" class="btn btn-custom" type="submit" title="Number of likes. Click to like or dislike dish" style="margin-top:0px;margin-left:0px;display:inline;padding-top:2px;padding-bottom:2px;">
+		{% else %}
+			<button id="likeaction" class="btn btn-custom btn disabled" title="Number of likes. Login to like or dislike dish" type="submit" style="margin-top:0px;margin-left:0px;display:inline;">
+		{% endif %}
+			<span id="likes" style="display:inline;">{{dish.likestot}}</span>
+				{% if liked = 1 %}
+					<li style="display:inline;" id="likeicon" class="glyphicon glyphicon-thumbs-down icon-white"></li>
+				{% else %}
+					<li style="display:inline;" id="likeicon" class="glyphicon glyphicon-thumbs-up icon-white"></li>
+				{% endif %}
+			</button>
+			
+			{## Dropdown actions button - Start ##}
+			<div class="dropdown" style="display:inline;">
+			  <button class="btn btn-custom dropdown-toggle" style="padding-bottom:3px; padding-top:3px; margin-top:0px;" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+				Actions
+				<span class="caret"></span>
+			  </button>
+			  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+			  <li><a href="{% url 'view_searchadvance' %}"><i class="glyphicon glyphicon-search icon-white"></i> Search dish</a></li>
+				{% if user.is_authenticated %}
+					<li><a href="{% url 'view_dishedit' id=dish.id %}"><i class="glyphicon glyphicon-pencil icon-white"></i> Edit dish</a></li>
+					<li><a href="{% url 'view_photonew' id=dish.id %}"><i class="glyphicon glyphicon-camera icon-white"></i> Upload photo</a></li>
+					<li><a href="{% url 'view_dishphotonew' id_cui=0 %}"><i class="glyphicon glyphicon-plus icon-white"></i> New dish</a></li>
+					<li><a type="button" data-toggle="modal" data-target="#modal_adddish_tolist"> <i class="glyphicon glyphicon-plus icon-white"></i> Add to list</a></li>
+					{% if dish.userprofile.id = user.id %}
+						<li><a href="{% url 'view_dishdelete' id=dish.id %}"><i class="glyphicon glyphicon-trash icon-white"></i> Delele dish</a></li>
+					{% endif %}
+				{% endif %}
+			  </ul>
+			</div>
+			
+		</li>
+		</ul>
+	</div><!--Name-End-->
+	<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="padding-right:0px;"><!--8-->
+		<p style="margin-bottom:5px; color:#777;"><i><b>
+			{% if dish.othernames %}
+				{{dish.othernames}}
+			{% endif %}
+		</b></i></p>
+		<p style="margin-bottom:4px;">{% for p in dish.cuisines.all %}
+				(<a href="/cuisine/{{p.urlname}}/">{{p}}</a>)
+			{% endfor %}
+		</p>
+		<div style="margin-bottom:6px;">
+			{% for p in dish.features.all %}
+				<img src="/media/images/features/{{p.icon}}" title="{{p.name}}" width="25px">
+			{% endfor %}
+		</div>
+		<p><i>
+			{% if dish.ingredients %}
+				{{dish.ingredients}}
+			{% else %}
+				<a href="/dishedit/{{dish.id}}/">add ingredients</a>
+			{% endif %}
+		</i></p>
+		{% if dish.description %}
+			{% if dish.description|wordcount > 80 %}
+				<div id='desc_small' style="display:block;">{{ dish.description|urlizetrunc:32|escape|linebreaks|truncatewords:80 }}
+				<p class="pull-right"><a id="more" href="#"><i>...See more</i></a></p><br clear="all" />
+				</div>
+				<div id="desc" style="display:none;">{{ dish.description|urlizetrunc:65|escape|linebreaks }}
+				<p class="pull-right"><a id="less" href="#"><i>...See less</i></a></p><br clear="all" />
+				</div>
+			{% else %}
+				{{ dish.description|urlizetrunc:32|escape|linebreaks }}
+			{% endif %}
+		{% else %}
+			<a href="/dishedit/{{dish.id}}/">add description</a>
+		{% endif %}
+		<p class="smallfont pull-right" style="margin-top:6px; margin-bottom:2px;"><i>{{dish.datetime|date:"N j, Y" }} - by: <a href="/profile/{{dish.userprofile}}">{{dish.userprofile|truncatechars:20}}</a></i></p><br clear="all" />
+		<div style="margin-top:5px; margin-bottom: 5px;">
+			{# Sharethis buttons #}
+			<div class="sharethis-inline-share-buttons"></div>
+		</div>
+  <div class="well" style="background-color:#f5f5f5; padding-bottom:4px; padding-top:4px;">
+	<h3 style="margin-top:5px;margin-bottom:2px;">Related:
+		<span class="label label-default" style="vertical-align:top;display:inline;" title="Lists">
+			{% if similar_total  > 5 %}5{% else %}{{similar_total}}{% endif %}</span> of 
+		<span class="label label-default" style="vertical-align:top;display:inline;" title="Lists">{{similar_total}}</span>
+	</h3>
+  </div>
+{% if similar_total > 0 %}
+	{% for p in similars|slice:":5" %}
+	<div class="well well-white row" style="padding:4px;">
+	{% if p.dish2.name|length > 20 %}
+		<div class="col-xs-12" style="padding:0px 0px 0px 4px;">
+			<a href="/dish/{{p.dish2.urlname}}/"><p style="color:#845505;margin-bottom:2px;"><b>{{p.dish2.name|truncatechars:56}}</b></p></a>
+		</div>
+		<div class="col-xs-6" style="padding:0px 0px 0px 4px; line-height:14px;">
+			<p class="smallfont" style="margin-bottom:4px;">
+			{% if p.dish2.othernames %}
+				<i>{{p.dish2.othernames|truncatechars:26}}</i>
+			{% endif %}
+			{% if p.dish2.cuisines.all %}
+				{% for cuisine in p.dish2.cuisines.all|slice:":3" %}
+					(<a href="/cuisine/{{cuisine.urlname}}/">{{cuisine|truncatechars:26}}</a>)
+				{% endfor %}
+			{% endif %}
+			</p>
+			{% if p.dish2.description %}
+				<p style="font-size:11px;line-height:11px; margin-bottom:2px; margin-top:2px">
+					{{p.dish2.description|truncatewords:20}}
+				</p>
+			{% endif %}
+		</div>
+	{% else %}
+		<div class="col-xs-6" style="padding:0px 0px 0px 4px; line-height:14px;">
+			<a href="/dish/{{p.dish2.urlname}}/"><p style="color:#845505;margin-bottom:2px; display:inline;"><b>{{p.dish2.name}}</b></p></a>
+			<p class="smallfont" style="margin-bottom:4px; display:inline;">
+			{% if p.dish2.othernames %}
+				<i>{{p.dish2.othernames|truncatechars:26}}</i>
+			{% endif %}
+			{% if p.dish2.cuisines.all %}
+				{% for cuisine in p.dish2.cuisines.all|slice:":3"  %}
+					(<a href="/cuisine/{{cuisine.urlname}}/">{{cuisine|truncatechars:26}}</a>)
+				{% endfor %}
+			{% endif %}
+			</p>
+			{% if p.dish2.description %}
+				<p style="font-size:11px;line-height:11px; margin-bottom:2px; margin-top:2px">
+					{{p.dish2.description|truncatewords:13}}
+				</p>
+			{% endif %}
+		</div>
+	{% endif %}
+		<div class="col-xs-6" style="padding:0px; text-align:-webkit-right; line-height:14px;">
+			{% if p.dish2.photo_main %}
+				<a href="/dish/{{p.dish2.urlname}}">
+					<img src="/media/{{p.dish2.filename}}-med{{p.dish2.extension}}" class="img-rounded img-responsive" style="max-height:100px;">
+				</a>
+			{% else %}
+				<a href="/photonew/{{p.dish2.id}}/"><img src="/media/images/upload-med.jpg" class="img-rounded" height="70px"></a>
+			{% endif %}
+		</div>
+	</div>
+	{% endfor %}
+		<div class="col-xs-12" style="padding:0px 0px 0px 0px;">
+		{% if user.is_authenticated %}
+			<a class="btn btn-custom btn-block" title="Add realted dish" type="button" data-toggle="modal" data-target="#modal_adddish"><i class="glyphicon glyphicon-plus icon-white"></i> Add Related Dish</a>
+			<a class="btn btn-custom btn-block" title="Add or delete related dishes" href="/dishsimilar/{{dish.urlname}}/">Edit, see all</a>
+		{% else %}
+			<a class="btn btn-custom btn-block disabled" title="Add realted dish (Sing in required)" type="button"><i class="glyphicon glyphicon-plus icon-white"></i> Add Related Dish</a>
+			<a class="btn btn-custom btn-block disabled" title="Add or delete related dishes (Sing in required)">Edit dishe(s)</a>
+		{% endif %}
+		</div>
+{% for p in similars %}<div id="{{p.dish2.urlname}}" style="display:none;">{{p.dish2.urlname}}</div>{% endfor %}
+{% endif %}
+{% if similar_total  == 0 %}
+	<div class="well well-tight well-white">
+		<p style="margin:10px;text-align:center;">There are no realted dishes.</p>
+		{% if user.is_authenticated %}
+			<a class="btn btn-custom btn-block" title="Add related dish" type="button" data-toggle="modal" data-target="#modal_adddish"><i class="glyphicon glyphicon-plus icon-white"></i>Add Related Dish</a>
+		{% else %}
+			<a class="btn btn-custom btn-block disabled" title="Add related dish" type="button" ><i class="glyphicon glyphicon-plus icon-white"></i>Add Related Dish</a>
+		{% endif %}
+	</div>
+{% endif %}
+<div style="margin-top:5px;">
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<!-- WFG Responsive -->
+	<ins class="adsbygoogle"
+		 style="display:block"
+		 data-ad-client="ca-pub-3566007766704147"
+		 data-ad-slot="2330569232"
+		 data-ad-format="auto"
+		 data-full-width-responsive="true"></ins>
+	<script>
+	(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+</div>
+</div><!--8!-->
+
+	<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12"><!--3-->
+		<div class="row" style="padding:0px;"><!--4-->
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><!--5-->
+			{% if photos|length > 0 %}
+				<a href="/photo/{{photos.0.urlname}}">
+					<img src="/media/{{photos.0.filename}}-reg{{photos.0.extension}}" style="margin-bottom:5px;" class="img-rounded" width="100%" alt="{{dish.name}}">
+				</a>
+				<p class="smallfont pull-right">Photo credit:
+					{% if photos.0.ownit|lower == 'true' %}
+						<a href="{% url 'view_profile' username=photos.0.owner.user.username %}">{{ photos.0.owner|truncatechars:30 }}</a>
+					{% else %}
+						{% if photos.0.creditsname %}
+							{% if photos.0.creditsurl %}
+								<a href="{{photos.0.creditsurl}}" target="_blank">{{ photos.0.creditsname }}</a>
+							{% else %}
+								{{ photos.0.creditsname }}
+							{% endif %}
+						{% else %}
+							{% if photos.0.creditsurl %}
+								<a href="{{photos.0.creditsurl}}" target="_blank">{{ photos.0.creditsurl|truncatechars:60 }}</a>
+							{% else %}
+								<a href="{% url 'view_profile' username=photos.0.owner.user.username %}">{{ photos.0.owner|truncatechars:30 }}</a>
+							{% endif %}
+						{% endif %}
+					{% endif %}
+				</p>
+			{% else %}
+				<a href="/photonew/{{dish.id}}/">
+					<img src="/media/images/upload.jpg" style="margin-bottom:5px;" width="100%" class="img-rounded">
+				</a>
+			{% endif %}
+			</div><!--5!-->
+			<div class="col-lg-12 col-md-12 col-sm-12 hidden-xs"><!--6-->
+			<!--<div class="col-md-12 hidden-phone hidden-sm hidden-xs">-->
+				<div class="col-lg-3 col-md-3 col-sm-3 hidden-xs" style="padding-left:0px;padding-right:2px;">
+				{% if photos|length > 1 %}
+					<a href="/photo/{{photos.1.urlname}}">
+						<img src="/media/{{photos.1.filename}}-med{{photos.1.extension}}" alt="{{dish.name}}" class="img-rounded" width="100%"></a>
+				{% else %}
+					<a href="/photonew/{{dish.id}}/"><img src="/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
+				{% endif %}
+				</div>
+				<div class="col-lg-3 col-md-3 col-sm-3 hidden-xs" style="padding-left:2px;padding-right:2px;">
+				{% if photos|length > 2 %}
+					<a href="/photo/{{photos.2.urlname}}">
+						<img src="/media/{{photos.2.filename}}-med{{photos.2.extension}}" class="img-rounded" alt="{{dish.name}}" width="100%"></a>
+					
+				{% else %}
+					<a href="/photonew/{{dish.id}}/"><img src="/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
+				{% endif %}
+				</div>
+				<div class="col-lg-3 col-md-3 col-sm-3 hidden-xs" style="padding-left:2px;padding-right:2px;">
+				{% if photos|length > 3 %}
+					<a href="/photo/{{photos.3.urlname}}">
+						<img src="/media/{{photos.3.filename}}-med{{photos.3.extension}}" class="img-rounded" width="100%"></a>
+				{% else %}
+					<a href="/photonew/{{dish.id}}/">
+						<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
+				{% endif %}
+				</div>
+				<div class="col-lg-3 col-md-3 col-sm-3 hidden-xs" style="padding-left:2px;padding-right:0px;">
+				{% if photos|length > 4 %}
+					<a href="/photo/{{photos.4.urlname}}">
+						<img src="/media/{{photos.4.filename}}-med{{photos.4.extension}}" class="img-rounded" width="100%"></a>
+				{% else %}
+					<a href="/photonew/{{dish.id}}/"><img src="/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
+				{% endif %}
+				</div>
+			</div><!--6!-->
+
+		</div><!--4!-->
+			<div class="list-group" style="margin-top:6px;">
+				<div class="list-group-item" style="background-color:#f5f5f5; padding-bottom: 4px;">
+				<h2 style="background-color:#f5f5f5;padding-bottom: 0px;padding-top: 0px;margin-top: 0px;margin-bottom: 0px;">Lists including this dish: 
+					<span class="label label-default" style="vertical-align:top;display:inline;" title="Lists">
+						{% if list_count  > 5 %}5{% else %}{{list_count}}{% endif %}</span> of 
+					<span class="label label-default" style="vertical-align:top;display:inline;" title="Lists">{{list_total}}</span>
+				</h2>
+				</div>
+				{% if list_count  > 0 %}
+					{% for p in lists|slice:":5" %}
+					<div class="list-group-item">
+						<h3 style="color:#845505;margin-bottom:2px; margin-top:0px;text-align: left;">
+							<a id="{{p.urlname}}" href="/list/{{p.urlname}}"><b>{{p.name|truncatechars:100}}</b></a>
+						</h3>
+						<p class="smallfont" style="margin-bottom:4px;">by <b>{{p.owner|truncatechars:20}}</b> ({{p.likestot}} <i class="glyphicon glyphicon-thumbs-up"></i>)
+							{% if p.type = '3' %}
+								<i style="color:red;">{{ p.get_type_display }}</i>
+							{% else %}
+								<i>{{ p.get_type_display }}</i>
+							{% endif %}
+						</p>
+						<p style="margin-top: 2px;margin-bottom: 2px;">{{ p.description|urlizetrunc:20|truncatewords:20}}</p>
+						{% if p.dishes.all %}
+							<div class="row" style="margin:0px;">
+							{% for p in p.dishes.all|slice:":4"  %}
+								  <div class="col-md-3 col-xs-3" style="padding:2px;">
+									<a class="thumbnail" href="/dish/{{p.urlname}}/" title="Go to dish page: {{p.name}}" style="font-size:14px; margin-bottom:0px;line-height:14px;">
+										{% if p.photo_main %}
+											<img src="/media/{{p.filename}}-med{{p.extension}}" class="img-rounded" width="100%">
+										{% else %}
+											<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+										{% endif %}
+										<b style="display:inline;" >{{p.name|truncatechars:22}}</b>
+										<b class="smallfont" style="margin-bottom:4px; display:inline;">
+										{% if p.othernames %}
+											<i title="Othernames">{{p.othernames|truncatechars:26}}</i>
+										{% endif %}</b></b>
+										{% if p.cuisines.all %}
+										<p class="smallfont" style="margin-bottom:4px;">
+											{% for cuisine in p.cuisines.all|slice:":3" %}
+												({{cuisine|truncatechars:26}})
+											{% endfor %}
+										{% endif %}
+										</p>
+									</a>
+								  </div>
+							{% endfor %}
+							</div>
+						{% else %}
+							<div class="row" style="margin:0px;">
+								<div class="thumbnail col-md-2 col-xs-3" title="Go to dish page: {{p.name}}" style="margin-bottom:0px;line-height:16px;">
+								<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+								<b style="display:inline;font-size:14px;" >There are no dishes</b>
+								</div>
+							</div>
+						{% endif %}
+					</div>
+					{% endfor %}
+				{% else %}
+					<div class="list-group-item" align="center">
+						<h3 style="margin-top:5px; margin-bottom:0px;">No list has this Dish</h3>
+					</div>
+				{% endif %}
+				<div class="well well-tight well-white" align="center">	
+				{% if user.is_authenticated %}
+					<a type="button" class="btn btn-custom btn-lg" data-toggle="modal" data-target="#modal_adddish_tolist"> 
+						Add this dish to list</a>
+					<a class="btn btn-custom btn-lg" title="Create New List" href="{% url 'view_listnew' %}">Create New List</a>
+				{% else %}
+					<a type="button" class="btn btn-custom disabled">Add this dish to list</a>
+					<a class="btn btn-custom disabled" title="Create New List">Create New List</a>
+				{% endif %}
+				</div>
+			</div>
+						<!--END- List sections-->
+			{# invisible list of all lists used to make sure the dish selected doesn't already exist in a list #}
+			{% for p in lists %}<div id="{{p.urlname}}" style="display:none;"></div>{% endfor %}
+    </div><!--3!-->
+
+</div><!--2!-->
+</div><!--1!-->
+
+{% endblock %}
+
+{% block extra-bottom %}
+
+<script src="{% static 'dist/jquery/autocomplete/jquery-ui.min.js' %}"></script>
+<script>
+///////////////////
+//{#  Script for adding dish to list  #}
+///////////////////
+
+//{#  Focuses on the input when modal is loaded  #}
+$('#modal_adddish_tolist').on('shown.bs.modal', function () {
+	$('#id_auto').focus()
+});
+
+$( function() {
+	//{#  When a new list is entered:  #}
+	$( "#id_auto" ).autocomplete({
+		minLength: 3,
+		source: '/lists_autocomplete/',
+		appendTo: "#modal_adddish_tolist",
+		focus: function( event, ui ) {
+			return false;
+		},
+		//{#  Additional intructions when list entered:  #}
+		select: function( event, ui ) {
+			$("#id_auto").val("");
+			//{#  Retrieving information from the list selected  #}
+			$.ajax({
+				type: 'GET',
+				url: '/ajax_getlist/',
+				dataType:'json',
+				async: true,
+				data: {
+					'id':ui.item.value
+					},
+				success: searchSuccess
+			});
+		return false;
+		},
+	});
+});
+function searchSuccess(json)
+{
+	//{#  function executed when user selects LIST from autocomplete  #}
+	//{#  receives json object with list information. Ask if info comming:  #}
+	if (json != 0){
+		//{#  There is list information. Populate Modal with list info  #}
+		//{#  Create dishes string from json object  #}
+		var dishes = '';
+		for (i in json.dishes) {
+			//{#  Created a sting with all list's dishes  #}
+			dishes += " ("+json.dishes[i]+")";
+		};
+		//{#  Displays part of modal with list information  #}
+		$('#modal_list').css('display','block');
+		$('#modal_select').css('visibility', 'visible');
+		html_title = "<a href='"+"/list/"+json.urlname+"/"+"'>"+json.name+"</a>"
+		$('#modal_listname').html(html_title);
+		if (dishes != ""){
+			$('#modal_dishes').html(dishes);
+			}
+		else{
+			$('#modal_dishes').html("There no dishes yet!");
+		};
+		if (json.owner != ""){
+			$('#modal_owner').html(json.owner);
+		};
+		if (json.description != "0"){
+			$('#modal_listdescription').html(json.description.substring(0, 300));
+		};
+		//{#  Check if dish already exist in list:  #}
+		if (document.getElementById(json.urlname)) {
+			//{#  Dish already in list  #}
+			$('#myAlert').show(); //{#  Shows alert  #}
+			$("#myAlert").addClass("in"); //{#  alert fades in? check!  #}
+			$('#modal_select').addClass('disabled'); //{#    #} //# Disable button "Add dish"
+		}
+		else{
+			//{#  Dish selected is not in the list:  #}
+			$('#myAlert').hide(); //{#  Hide "dish already in list" alert  #}
+			$('#modal_select').removeClass('disabled'); //{#  Enable button "Add dish"  #}
+			//{#  generate url for "Add dish" button:  #}
+			var url_delete = "{{BASE_URL}}"+"dish_addto_list/"+{{dish.id}}+"/"+json.id+"/dish";
+			$('#modal_select').attr("href",url_delete);
+			$('#modal_select').focus();
+		}
+	};
+}
+
+$('#modal_adddish_tolist').on('hidden.bs.modal', function () {
+	//{#  When modal desapears when click outside modal or closed  #}
+	$('#modal_list').css('display','none');
+	$('#modal_select').css('visibility', 'hidden');
+	$('#modal_select').removeClass('disabled'); //{#  Enable button "Add dish"  #}
+	$('#modal_listname').html("");
+	$('#myAlert').hide();
+	$("#id_auto").val(""); //{#  Clears autocomplete input  #}
+});
+
+/////////////////////////////////////////
+//{#  Scrip to add Related dish  #}
+/////////////////////////////////////////
+
+//{#  Focuses on the input when modal is loaded  #}
+$('#modal_adddish').on('shown.bs.modal', function () {
+	$('#id_auto_similar').focus()
+});
+$( function() {
+	//{#  When a new dish is entered:  #}
+	$( "#id_auto_similar" ).autocomplete({
+		minLength: 3,
+		//{#  Retrieves the list except the current dish  #}
+		source: '/dish_list/{{dish.id}}/',
+		appendTo: "#modal_adddish",
+		focus: function( event, ui ) {
+			return false;
+		},
+		//{#  Additional intructions when new dish entered:  #}
+		select: function( event, ui ) {
+			$("#id_auto_similar").val("");
+			//{#  Retrieving information from the dish selected  #}
+			$.ajax({
+				type: 'GET',
+				url: '/ajax_getdish/',
+				dataType:'json',
+				async: true,
+				data: {
+					'id':ui.item.value
+					},
+				success: searchSuccessSimilar
+			});
+		return false;
+		},
+	});
+});
+function searchSuccessSimilar(json)
+{
+	//{#  function executed when user selects dish from autocomplete  #}
+	//{#  receives json object with dish information. Ask if info comming:  #}
+	if (json != 0){
+		//{#  There is dish information. Populate Modal with dish info  #}
+		//{#  Create cuisines string from json object  #}
+		var cuisines = '';
+		for (i in json.cuisines) {
+			//{#  Created a sting with all dish cuisines  #}
+			cuisines += "("+json.cuisines[i]+")";
+		};
+		//{#  Displays part of modal with dish information  #}
+		$('#modal_dish').css('display','block');
+		$('#button_similar').css('visibility', 'visible');
+		$('#modal_dishname').html(json.name);
+		if (cuisines != ""){
+			$('#modal_cuisines').html(cuisines);
+		};
+		if (json.othernames != ""){
+			$('#modal-othernames').html(json.othernames);
+		};
+		if (json.favphoto != "0"){
+			$('#modal-image').attr('src', "/media/"+json.favphoto);
+		}
+		else{
+			$('#modal-image').attr('src', "/media/images/upload-med.jpg");
+			};
+		if (json.description != "0"){
+			$('#modal-dishdescription').html(json.description.substring(0, 300));
+		};
+		//{#  Check if dish already exist in list:  #}
+		if (document.getElementById(json.urlname)) {
+			//{#  Dish already in list  #}
+			$('#alert_similar').show(); //{#  Shows alert  #}
+			$("#alert_similar").addClass("in");  //{#  alert fades in? check!  #}
+			$('#button_similar').addClass('disabled'); //{#  Disable button "Add dish"  #}
+		}
+		else{
+			//{#  Dish selected is not in the list:  #}
+			$('#alert_similar').hide(); //{#  Hide "dish already in list" alert  #}
+			$('#button_similar').removeClass('disabled'); //{#  Enable button "Add dish"  #}
+			//{#  generate url for "Add dish" button:  #}
+			var url_delete = "{{BASE_URL}}"+"dish_addto_similar/"+{{dish.id}}+"/"+json.id+"/";
+			$('#button_similar').attr("href",url_delete);
+			$('#button_similar').focus();
+		}
+	};
+};
+$('#modal_adddish').on('hidden.bs.modal', function () {
+	//{#  When modal desapears when click outside modal  #}
+	$('#modal_dish').css('display','none');
+	$('#button_similar').css('visibility', 'hidden');
+	$('#button_similar').removeClass('disabled'); //{#  Enable button "Add dish"  #}
+	$('#alert_similar').hide();
+	$("#id_auto_similar").val(""); //{#  Clears autocomplete input  #}
+});
+//{#  Script for like action  #}
+$('#likeaction').click(function(){
+	var dish = $('#id_obj').attr("name");
+	$.ajax({
+		data: {'dish':dish},
+		url: '/dishlikeaction/',
+		type: 'get',
+		success: function(data){
+			//{#  data:(first char={1=liked,0=unliked} rest of char=total numer o likes)  #}
+			if (data.charAt(0) == "0"){
+				$('#likeicon').attr("class","glyphicon glyphicon-thumbs-up icon-white");
+				}
+			if (data.charAt(0) == "1"){
+				$('#likeicon').attr("class","glyphicon glyphicon-thumbs-down icon-white");
+			}
+			//{#  total number of likes starts at the second char of data  #}
+			$('#likes').html(data.substr(1));
+		}
+	});
+});
+
+//{#  function to show the modal "Processing" when loading results page  #}
+function processing(){
+	$("#modal_adddish_tolist").modal('hide');
+	$("#modal_adddish").modal('hide');
+	$("#modal_processing").modal('show');
+}
+//{#  Focus on quick search bar  #}
+document.getElementById('id_search_inbar').focus();
+
+//{#  Drops down "Actions" button when hover  #}
+$(document).ready(function(){
+    $('div.dropdown').hover(function() {
+      $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(200);
+    }, function() {
+      $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(200);
+    });  
+});
+
+</script>
+
+{% endblock %}

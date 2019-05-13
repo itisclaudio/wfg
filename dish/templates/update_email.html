@@ -1,0 +1,31 @@
+{% extends '_base.html' %}
+{% block title %}Update Email{% endblock %}
+{% block content %}
+<h1>Update Email</h1>
+<div class="well row">
+<div class="col-md-9">
+	<form enctype='multipart/form-data' action="." method="POST">
+		{% csrf_token %}
+		{{ form.non_field_errors }}
+		<div class="fieldWrapper">
+			<label for="id_email">Email:</label>
+			{{ form.email }}
+			{{ form.email.errors }}
+		</div>
+        <div class="fieldWrapper" style="margin-bottom:10px;">
+			<label for="id_email2">Repeat your email:</label>
+			{{ form.email2 }}
+			{{ form.email2.errors }}
+		</div>
+		<button class="btn btn-custom btn-lg" type="submit">Save</button>
+		<a class="btn btn-custom btn-lg" href="{% url 'view_myprofile' %}">Cancel</a>
+	</form>
+</div>
+</div>
+{% block focus %}
+	<script type="text/javascript">
+			document.getElementById('id_email').focus();
+	</script>
+{% endblock %}
+
+{% endblock %}

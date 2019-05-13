@@ -1,0 +1,161 @@
+{% extends '_base.html' %}
+{% block title %}Editing "{{cuisine.name}}" Cuisine{% endblock %}
+
+{% block content %}
+
+<h1>Editing "{{cuisine.name}}" Cuisine</h1>
+<div class="well">
+	{% if information = 4 %}
+		<div class="alert alert-warning alert-dismissible" role="alert">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<h3>We found similarities</h3>
+			<p>If your cuisine is not listed bellow press "Save" again</p>
+			</p>
+			<div class="list-group">
+				{% for p in similars %}
+					<a href="/cuisine/{{p.urlname}}/" class="list-group-item">
+					<h4 class="list-group-item-heading">{{ p.name|truncatechars:24 }} Cuisine</h4>
+					<p class="smallfont" style="margin-top: 2px;"><i>{{ p.othernames|truncatewords:5 }}</i></p>
+					<p class="list-group-item-text">{{ p.description|truncatewords:25 }}</p>
+					</a>
+				{% endfor %}
+			</div>
+		</div>
+	{% endif %}
+	{% if information = 1 %}
+	<div class="alert alert-danger alert-dismissible" role="alert">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<a class="btn btn-custom" href="/cuisine/{{rep.urlname}}/">{{rep.name}} Cuisine</a> Already in the system!
+	</div>
+	{% endif %}
+	{% if information = 2 %}
+	<div class="alert alert-success alert-dismissible" role="alert">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<a class="btn btn-custom" href="/cuisine/{{cuisine.urlname}}/">{{cuisine.name}}</a> Saved!
+	</div>
+	{% endif %}
+	{% if information = 3 %}
+		<div class="alert alert-danger alert-dismissible" role="alert">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			"Incorrect Data"
+		</div>
+	{% endif %}
+
+{% if user.is_authenticated %}
+	<form action="." method="POST">
+		{% csrf_token %}
+		{{ form.non_field_errors }}
+		<div class="fieldWrapper">
+			<label for="id_name">Name:</label>
+		{{ form.name }} {{ form.name.errors }}
+			<div class="alert alert-danger fade in" role="alert" id="alert_names" style="display:none;">
+				<h3 style="margin-top: 0px;margin-bottom: 0px;">This are already in the system:</h3>
+				<ul id="cui_similar"></ul>
+			</div>
+			<div id="alert_chars" class="alert alert-danger fade in alert-dismissible" role="alert" style="display:none;">
+			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				  <span aria-hidden="true">&times;</span>
+			  </button>
+			  Only alphanumeric characters and - ' are allowed
+			</div>
+		</div>
+		<div class="fieldWrapper">
+			<label for="id_othernames">Other names:</label>
+		{{ form.othernames }} {{ form.othernames.errors }}
+		</div>
+		<div class="fieldWrapper">
+			<label for="id_territory">Territory:</label>
+		{{ form.territory }} {{ form.territory.errors }}
+		</div>
+		<div class="fieldWrapper">
+			<label for="id_description">Description:</label>
+		{{ form.description }} {{ form.description.errors }}
+		</div>
+		<!--{{ form.check }}-->
+		{{ form.check.as_hidden }}
+		<button id="save_button" disabled class="btn btn-custom btn-lg">Save</button> 
+		<a class="btn btn-custom btn-lg" href="/cuisine/{{cuisine.id}}">Cancel</a>
+	</form>
+{% else %}
+	<br>
+	<h3>You have to "log in" or "sign up" first!</h3>
+	<br>
+	<a class="btn btn-custom btn-lg" href="{% url 'view_login' %}"><i class="icon-pencil icon-white"></i> Log In</a> 
+	<a class="btn btn-custom btn-lg" href="{% url 'view_signup' %}"><i class="icon-user icon-white"></i> Sign Up</a>
+{% endif %}
+
+</div>
+
+{% endblock %}
+
+{% block extra-bottom %}
+<script>
+$( function() {
+	var allowed = /^[a-zA-Z0-9-' ]+$/;
+	$('#id_name').focus();
+	/*
+	$('#id_name').focus(function(){
+		$('.cl').remove();
+		$('#alert_names').hide();
+	});*/
+	//$('#id_name').attr('autocomplete', 'off');
+	//$("#id_name,#id_othernames").keydown(function(event) { $('#id_check').val(1); })
+	$("#id_othernames").on("change paste", function() {
+		$('#id_check').val(1);
+	});
+	//$('#id_check').val({{check}});
+	if ({{check}}==0){
+		 $("#save_button").prop('disabled', false);
+	};
+	//$('#id_name').focusout(function(){
+	$("#id_name").on("paste keyup", function() {
+	
+		$('.cl').remove();
+		$('#alert_names').hide();
+		$('#id_check').val(1);
+		var name = $('#id_name').val().trim();
+		
+		if (name.length > 0){
+				var result = allowed.test(name);
+				if (result == false){
+					$('#alert_chars').show();
+					$("#save_button").prop('disabled', true);
+				}
+				else{
+					$('#alert_chars').hide();
+					$("#save_button").prop('disabled', false);
+				};
+		};
+		if (name.length > 2){
+			$.ajax({
+				type: 'GET',
+				url: '/lookup_cui/',
+				dataType:'json',
+				async: true,
+				data: {
+					'name':name,
+					'id':{{cuisine.id}}
+					},
+				success: searchSuccess
+			});
+		};
+		
+	});
+});
+function searchSuccess(json)
+{
+	if (json != 0){
+		$('#alert_names').show();
+		$.each(json, function(key, value){
+			var othernames1 = value.fields.othernames.trim();
+			if (!othernames1 || othernames1.length < 1){
+				$("#cui_similar").append('<li class="cl"><a href="/cuisine/'+value.fields.urlname+'" title="Go to cuisine page"><b>'+value.fields.name+' Cuisine</b></a></li>');
+			}
+			else{
+				$("#cui_similar").append('<li class="cl"><a href="/cuisine/'+value.fields.urlname+'" title="Go to cuisine page"><b>'+value.fields.name+' Cuisine </b> <i>'+value.fields.othernames+'</i></a></li>');
+			};
+		})
+	};
+}	
+</script>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends '_base.html' %}
+{% block title %}WorldFood.Guide - Error 500{% endblock %}
+{% block content %}
+
+<h1 align="center" class="center">URL Broken</h1>
+
+<div class="well well-mobile well-white" style="text-align:center;">
+
+<h3>The URL you are trying to access:<br/>
+
+		<b style="color:red;">http://worldfood.guide{{patherror}}</b><br/>
+		
+		doesn't exist or is broken</h3>
+		
+		<a href="http://worldfood.guide/"><img style="margin-bottom:15px;" src="http://worldfood.guide/media/images/broken_plate-small.jpg"></a>
+
+		<p>Click <a href="http://worldfood.guide/" rel="nofollow">here</a> to go to the main page</p>
+		<p class="navbar-text text-small">(Error 500)</p>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,19 @@
+<table border="0">
+{% for p in latest_photos %}
+<tr>
+<td style="padding:3px;">
+	<a href="/photo/{{p.urlname}}/">
+	{% if p.location.width  > p.location.height %}
+		<img src="/media/{{p.filename}}-thum{{p.extension}}" class="img-rounded" width="80px">
+	{% else %}
+		<img src="/media/{{p.filename}}-thum{{p.extension}}" class="img-rounded" height="80px">
+	{% endif %}
+	</a>
+</td>
+<td>
+	<a href="/dish/{{p.dish.urlname}}/"><b>{{p.dish.name}}</b></a>
+	<p class="smallfont">by <a href="/foodie/{{p.owner.user.username}}/">{{p.owner}}</a></p>
+</td>
+</tr>
+{% endfor %}
+</table>

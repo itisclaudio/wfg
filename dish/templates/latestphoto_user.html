@@ -1,0 +1,23 @@
+{% if latest_photos_user.count > 0 %}
+	<table>
+	{% for photo in latest_photos_user %}
+	<tr>
+	<td style="padding:3px;">
+		<a href="/photo/{{photo.urlname}}/">
+		{% if photo.location.width  > photo.location.height %}
+			<img src="/media/{{photo.filename}}-thum{{photo.extension}}" class="img-rounded" width="80px">
+		{% else %}
+			<img src="/media/{{photo.filename}}-thum{{photo.extension}}" class="img-rounded" height="80px">
+		{% endif %}
+		</a>
+	</td>
+	<td>
+		<a href="/dish/{{photo.dish.urlname}}/"> {{ photo.dish.name }} </a>
+	</td>
+	</tr>
+	{% endfor %}
+	</table>
+{% else %}
+	<p>Upload you first photo.</p>
+	<a href="/dishnew/0/"><img src="/media/images/upload-med.jpg" width="100%" class="img-rounded"></a>
+{% endif %}

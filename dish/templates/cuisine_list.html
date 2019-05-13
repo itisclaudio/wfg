@@ -1,0 +1,51 @@
+{% extends '_base.html' %}
+{% block title %}WorldFood.Guide | Ajax{% endblock %}
+
+{% block super-extra-head %}
+	{% load static %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="well col-md-6">
+    <h1>Cuisine Search:</h1>
+	<input type="text" id="search" name="search" />
+	{% csrf_token %}
+	<ul id="search-results">
+	
+	</ul>
+  </div>
+  <div class="well col-md-6">
+      <h1>Cuisines</h1>
+	  {{cuisines}}
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra-bottom %}
+	<script type="text/javascript">
+
+		$(function(){
+			$('#search').keyup(function(){
+				//e.preventDefault()
+				$.ajax({
+					type:"POST",
+					url:"/search_cuisine/",
+					data:{
+						'search_text': $('#search').val(),
+						'csrfmiddlewaretoken':$('input[name="csrfmiddlewaretoken"]').val()
+					},
+					success: searchSuccess,
+					dataType:'html'
+				});
+			});
+		});
+
+		function searchSuccess(data, textStatus, jqXHR)
+		{
+			$('#search-results').html(data);
+		}
+
+	</script>
+{% endblock %}

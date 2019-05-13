@@ -1,0 +1,120 @@
+{% extends '_base.html' %}
+{% block title %} Cuisine Results {% endblock %}
+
+{% block super-extra-head %}
+	{% load static %}
+	<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
+	<script type="text/javascript">
+		$(document).keydown(function(e) {
+			if(e.keyCode === 39) {
+				document.getElementById('next').click()
+			}
+			if(e.keyCode === 37) {
+				document.getElementById('prev').click()
+			}
+		});
+	</script>
+{% endblock %}
+
+{% block content %}
+<table width="100%" class="nolinetable nopadding">
+<tr>
+<td>
+	<h1 style="display:inline;">Cuisine Results</h1>
+	<span class="label label-default hidden-xs" style="display:inline;vertical-align:top;">{{ paginatorlist.paginator.count }}</span>
+	{% if user.is_authenticated %}
+		<a class="btn btn-custom hidden-xs" style="vertical-align:top;margin-top:-5px;" title="Add New Cuisine" href="{% url 'view_cuisinenew' %}">Add Cuisine</a>
+	{% endif %}
+</td>
+
+{% if paginatorlist.paginator.count > 10 %}
+  <td style="vertical-align:bottom;">
+        <ul class="pagination pull-right" style="margin:0px 7px -1px 0px;">
+            {% if paginatorlist.has_previous %}
+				<li><a href="/cuisines_result/{{search}}/1/"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+                <li><a href="/cuisines_result/{{search}}/{{paginatorlist.previous_page_number}}" id="prev"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+            {% else %}
+                <li class="disabled"><a><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+				<li class="disabled"><a><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+            {% endif %}
+			<li class="disabled hidden-xs"><a> Page {{paginatorlist.number}} of {{paginatorlist.paginator.num_pages}}  </a><li>
+            {% if paginatorlist.has_next %}
+                <li><a href="/cuisines_result/{{search}}/{{paginatorlist.next_page_number}}" id="next"><span class="glyphicon glyphicon-step-forward"></span></a><li>
+				<li><a href="/cuisines_result/{{search}}/{{paginatorlist.paginator.num_pages}}"><span class="glyphicon glyphicon-fast-forward"></span></a><li>
+            {% else %}
+                <li class="disabled"><a><span class="glyphicon glyphicon-step-forward"></span></a><li>
+				<li class="disabled"><a><span class="glyphicon glyphicon-fast-forward"></span></a><li>
+            {% endif %}
+        </ul>
+ </td>
+{% endif %}
+
+</tr>
+</table>
+
+<div class="list-group" style="margin-bottom:0px;">
+{% if paginatorlist.paginator.count > 0 %}
+	{## LIST ##}
+	{% for p in paginatorlist.object_list %}
+	  <div class="list-group-item row" style="margin-left:0px; margin-right:0px; padding:4px;">
+		<div class="col-sm-3 col-xs-12" style="padding-left:2px;">
+		{% if p.favphoto %}
+			<a href="/photo/{{p.favphoto.urlname}}">
+				<img src="/media/{{p.favphoto.filename}}-med{{p.favphoto.extension}}" class="img-rounded" width="100%">
+			</a>
+		{% else %}
+			<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+		{% endif %}
+		</div>
+		<div class="col-sm-9 col-xs-12" style="padding-left:2px;">
+			<a href="/cuisine/{{p.urlname}}">
+				<h3 class="list-group-item-heading" style="color:#845505;margin-bottom:2px;display:inline;"><b>{{p.name|truncatechars:66}} Cuisine</b></h3>
+			</a>
+			{% if p.othernames %}
+				<p style="display:inline;" title="{{p.othernames }}"><b>({{p.othernames|truncatechars:30 }})</b></p>
+			{% endif %}
+			<p class="text-small" style="margin-bottom:2px;"><i>
+			{% if p.territory %}
+				<b title="{{p.territory }}">{{p.territory|truncatechars:40 }}</b> |
+			{% endif %}
+			<b>{{p.dishes_count}} dishes, 
+			{{p.pictures_count}} photos</b>
+			</i></p>
+			{% if p.description %}
+				<p class="text-small">{{p.description|truncatewords:40}}</p>
+			{% endif %}
+		</div>
+	  </div>
+	{% endfor %}
+	{## END LIST ##}
+
+	{% if paginatorlist.paginator.count > 10 %}
+        <ul class="pagination pull-right" style="margin:0px 7px -1px 0px;">
+            {% if paginatorlist.has_previous %}
+				<li><a href="/cuisines_result/{{search}}/1/"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+                <li><a href="/cuisines_result/{{search}}/{{paginatorlist.previous_page_number}}" id="prev"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+            {% else %}
+                <li class="disabled"><a><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+				<li class="disabled"><a><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+            {% endif %}
+			<li class="disabled hidden-xs"><a> Page {{paginatorlist.number}} of {{paginatorlist.paginator.num_pages}}  </a><li>
+            {% if paginatorlist.has_next %}
+                <li><a href="/cuisines_result/{{search}}/{{paginatorlist.next_page_number}}" id="next"><span class="glyphicon glyphicon-step-forward"></span></a><li>
+				<li><a href="/cuisines_result/{{search}}/{{paginatorlist.paginator.num_pages}}"><span class="glyphicon glyphicon-fast-forward"></span></a><li>
+            {% else %}
+                <li class="disabled"><a><span class="glyphicon glyphicon-step-forward"></span></a><li>
+				<li class="disabled"><a><span class="glyphicon glyphicon-fast-forward"></span></a><li>
+            {% endif %}
+        </ul>
+	{% endif %}
+{% else %}
+	<div class="well">
+        <h3>There are no Cuisines</h3>
+    </div>
+{% endif %}
+
+</div>
+	{% if user.is_authenticated %}
+		<h1 style="padding-top:0px;"><a class="btn btn-custom pull-left"  title="Add New Dish" href="{% url 'view_cuisinenew' %}">Add Cuisine</a></h1>
+	{% endif %}
+{% endblock %}

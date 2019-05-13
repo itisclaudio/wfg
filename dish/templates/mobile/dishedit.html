@@ -1,0 +1,288 @@
+{% extends '_base.html' %}
+{% block title %}{{dish.name}} Editing...{% endblock %}
+{% block content %}
+
+<!--Modal 0 Processing -->
+<div class="modal fade" id="modal_processing" tabindex="-1" role="dialog" aria-labelledby="modal_processingLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="modal_processingLabel">Processing...</h1>
+      </div>
+      <div class="modal-body">
+		<div class="progress">
+			  <div class="progress-bar progress-bar-striped progress-bar-warning active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+			  </div>
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Modal 1 -->
+
+<table width="96%" border="0" cellspacing="0" cellpadding="0" align="center"><tr><td colspan="3">
+<h1 align="center" class="center" style="margin:0px 4px 0px 4px;"><a href="/dish/{{dish.urlname}}/">{{dish.name|truncatechars:30}}</a> Editing...</h1>
+	{% if list %}
+		<div class="alert alert-danger alert-dismissible" role="alert" style="padding:5px;">
+			<button type="button" class="close" data-dismiss="alert" style="position: inherit;">&times;</button>
+			<h2>The dish(es) already exist!</h2>
+			<p>Change the name or cuisines to save, otherwise cancel</p>
+			<table class="table" width="100%" style="margin-bottom:0px; background-color:white;" border="0" cellspacing="0" cellpadding="0">
+				<theader>
+				<tr>
+					<th width="50%" style="text-align:center;">Name</th>
+					<th width="30%" style="text-align:center;">Photo</th>
+					<th width="20%" style="text-align:center;">Edit</th>
+				</tr>
+				</theader>
+				{% for p in list %}
+					<tbody>
+					<tr>
+						<td>
+						<a class="btn btn-lg btn-custom btn-block" href="/dish/{{p.urlname}}/"><i class="glyphicon glyphicon-eye-open-white"></i> {{ p.name|truncatechars:20}}</a>
+						{% if p.othernames %}
+							<p class="footer-rest" style="margin-top: 6px;">{{ p.othernames|truncatewords:5 }}</p>
+						{% endif %}
+						<br>
+						{% if p.cuisines.all|length > 0 %}
+							<p class="footer-rest">
+							{% for cuisine in p.cuisines.all|slice:":4" %}
+								(<a href="/cuisine/{{ cuisine.id }}/">{{ cuisine }}</a>)
+							{% endfor %}
+							{% if p.cuisines.all|length > 4 %}
+								...
+							{% endif %}
+							</p>
+						{% endif %}
+						</td>
+						<td>
+						{% if p.favphoto %}
+							<a href="/dish/{{p.urlname}}" title="Go to photo page">
+							<img src="/media/{{p.favphoto.filename}}-thum{{p.favphoto.extension}}" class="img-rounded" width="100%">
+							</a>
+						{% else %}
+							<a href="/photonew/{{p.id}}/"><img src="/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
+						{% endif %}
+						</td>
+						{% if user.is_authenticated %}
+							<td><a class="btn btn-default btn-lg" href="/dishedit/{{ p.id }}/"><li class="glyphicon glyphicon-pencil"></li> Edit </a></td>
+						{% endif %}
+					</tr>
+					</tbody>
+				{% endfor %}
+			</table>
+		</div>
+	{% endif %}
+
+	<form enctype='multipart/form-data' action="." method="POST">
+	<div class="form-group">
+		{% csrf_token %}
+		{{ form.non_field_errors }}
+		<div class="fieldWrapper">
+			<label for="id_name">Name:</label>
+			{{ form.name }} {{ form.name.errors }}
+			<div class="alert alert-danger fade in" role="alert" id="alert_names" style="display:none;">
+				<p><b>This are already in the system:</b></p>
+				<ul id="dish_similar"></ul>
+			</div>
+			<div id="alert_chars" class="alert alert-danger fade in" role="alert" style="display:none;">
+			  Only alphanumeric characters and - ' . are allowed
+			</div>
+		</div>
+		<div class="fieldWrapper">
+			<label for="id_othernames">Other names:</label>
+			{{ form.othernames }} {{ form.othernames.errors }}
+			<div class="alert alert-danger fade in" role="alert" id="alert_othernames" style="display:none;">
+				<h2 style="margin-top: 0px;margin-bottom: 0px;">This are already in the system:</h2>
+				<ul id="similar_othernames"></ul>
+			</div>
+		</div>
+		<div class="fieldWrapper">
+			<label for="id_ingredients">Main ingredients:</label>
+			{{ form.ingredients }} {{ form.ingredients.errors }}
+		</div>
+		<div class="fieldWrapper">
+			<label for="id_description">Description:</label>
+			{{ form.description }} {{ form.description.errors }}
+		</div>
+		<label for="id_cuisines">Cuisine(s): <em class="text-small">Control or command for multiple selections</em></label>
+		<select multiple="multiple" class="form-control" id="id_cuisines" name="cuisines">
+		{% for choice in form.cuisines.field.choices %}
+			<option value="{{choice.0}}" 
+				{% for cui in cuisines %}
+					{% ifequal cui.name choice.1 %}
+						selected="selected"
+					{% endifequal %}
+				{% endfor %}/>
+			{{choice.1|truncatechars:28}}</option>
+		{% endfor %}
+		</select>
+		<label for="id_features">Features:</label>
+		<div class="btn-group col-xs-12" data-toggle="buttons" id="id_features" style="padding-left:0px;padding-right:0px;">
+		{% for choice in form.features.field.choices %}
+			{% if choice.0 in feature_current_id_list %}
+				<label class="btn btn-default col-xs-6 active" style="margin-top:0px; border-radius:6px;" title="{{choice.1}}">
+				<input type="checkbox" name="feature" id="{{choice.0}}" value="{{choice.1}}" checked>
+			{% else %}
+				<label class="btn btn-default col-xs-6" style="margin-top:0px; border-radius:6px;" title="{{choice.1}}">
+				<input type="checkbox" name="feature" id="{{choice.0}}" value="{{choice.1}}">
+			{% endif %}
+			{{choice.1|truncatechars:28}} 
+			{% for ft3 in features %}
+				{% if ft3.name == choice.1 %}
+					<img src="/media/images/features/{{ft3.icon}}" width="25px">
+				{% endif %}
+			{% endfor %}
+			</label>
+		{% endfor %}
+		</div>
+		{{ form.check.as_hidden }}
+	</div>
+	</td></tr>
+	<tr>
+	<td width="48%" style="padding-top:6px;">
+		<button  id="save_button" disabled onclick="processing();" class="btn btn-custom btn-lg btn-block" type="submit"/>Save</button>
+	</td>
+	<td width="4%" style="padding-top:6px;">
+	</td>
+	<td width="48%" style="padding-top:6px;">
+		<a class="btn btn-custom btn-lg btn-block" href="/dish/{{dish.urlname}}/">Cancel</a>
+	</form></td></tr>
+</table>
+{% endblock %}
+
+{% block extra-bottom %}
+<script>
+$( function() {
+	var allowed = /^[a-zA-Z0-9-' .()]+$/;
+	$('#id_name').focus();
+	$('#id_othernames').attr('autocomplete', 'off');
+	$("#id_othernames").on("change paste keyup", function() {
+		//$('#id_check').val(1);
+		$("#save_button").prop('disabled', false);
+	});
+	$("#id_features").on("change keyup", function() {
+		$("#save_button").prop('disabled', false);
+	});
+	$("#id_cuisines").on("change keyup", function() {
+		$("#save_button").prop('disabled', false);
+	});
+	$("#id_ingredients, #id_description").on("change keyup", function() {
+		$("#save_button").prop('disabled', false);
+	});
+	$("#id_name").on("paste keyup", function() {
+		//$('#id_name').unbind('keyup');
+		$('.cl').remove();
+		//$('#id_check').val(1);
+		var name = $('#id_name').val().trim();
+		//console.log('name.length: '+name.length);
+		if (name.length > 2){
+			//(1)Shows alert for forbidden chars what typed more than 2 chars
+			var result = allowed.test(name);
+			if (result == false){
+				$('#alert_chars').show();
+				$("#save_button").prop('disabled', true);
+			}
+			else{
+				$('#alert_chars').hide();
+				$("#save_button").prop('disabled', false);
+			};
+			//(1) End
+			//(2) Beginning of Ajax
+			$.ajax({
+				type: 'GET',
+				url: '/lookup_dish/',
+				dataType:'json',
+				async: true,
+				data: {
+					'name':name,
+					'id':{{dish.id}}
+					},
+				success: searchSuccess
+			});
+		}
+			//(2) End of Ajax
+		else{
+			//Less than 2 characters, hide alerts
+			$('#alert_chars').hide();
+			$('#alert_names').hide();
+		};
+	});
+	$("#id_othernames").on("paste keyup", function() {
+		//$('#id_name').unbind('keyup');
+		$('.cl').remove();
+		$('#alert_othernames').hide();
+		//$('#id_check').val(1);
+		var othernames = $('#id_othernames').val().trim();
+		console.log('othernames.length: '+othernames.length);
+		if (othernames.length > 2){
+			$.ajax({
+				type: 'GET',
+				//url: '/lookup_dish/',
+				url: '/lookup_othernames/',
+				dataType:'json',
+				async: true,
+				data: {
+					'othernames':othernames,
+					'id':{{dish.id}}
+					},
+				success: populateOthernames
+			});
+		}else{
+			//Less than 2 characters, hide alerts
+			$('#alert_othernames').hide();
+		};
+	});
+});
+function searchSuccess(json)
+{
+	if (json != 0){
+		//$('#id_name').unbind('keyup');
+		$('#dish_similar').empty();
+		$('#alert_names').show();
+		console.log('Json returnes data');
+		$.each(json, function(key, value){
+			console.log(key+'-'+value.name+' ('+value.othernames+')');
+			var othernames1 = value.othernames.trim();
+			//var othernames1 = value.othernames;
+			if (!othernames1 || othernames1.length < 1){
+				$("#dish_similar").append('<li class="cl"><a href="/dish/'+value.urlname+'" title="Go to dish page"><b>'+value.name+'</b> '+value.cuisines+'</li></a>');
+			}
+			else{
+				$("#dish_similar").append('<li class="cl"><a href="/dish/'+value.urlname+'" title="Go to dish page"><b>'+value.name+'</b> <i>'+value.othernames+'</i> '+value.cuisines+'</a></li>');
+			};
+			//var cuisines = value.cuisines;
+			//console.log(cuisines);
+		});
+		//$('#id_name').bind('keyup');
+	}
+	else{
+		$('#alert_names').hide();
+		console.log('Json DIDNT retur data!');
+	};
+}
+function populateOthernames(json)
+{
+	if (json != 0){
+		//$('#id_name').unbind('keyup');
+		$('#similar_othernames').empty();
+		$('#alert_othernames').show();
+		//console.log('-------------');
+		$.each(json, function(key, value){
+			console.log(key+'-'+value.name+' ('+value.othernames+')');
+			var othernames1 = value.othernames.trim();
+			if (!othernames1 || othernames1.length < 1){
+				$("#similar_othernames").append('<li class="cl"><a href="/dish/'+value.urlname+'" title="Go to dish page"><b>'+value.name+'</b> '+value.cuisines+'</li></a>');
+			}
+			else{
+				$("#similar_othernames").append('<li class="cl"><a href="/dish/'+value.urlname+'" title="Go to dish page"><b>'+value.name+'</b> <i>'+value.othernames+'</i> '+value.cuisines+'</a></li>');
+			};
+		});
+	};
+}
+//function to show the modal "Processing" when loading results page
+function processing(){
+	$("#modal_processing").modal('show');
+}
+</script>
+{% endblock %}

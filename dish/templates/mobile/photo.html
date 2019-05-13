@@ -1,0 +1,179 @@
+{% extends '_base.html' %}
+{% block title %} {{ object.dish }} Photo 
+  {% if object.dish.cuisines.all %}
+	  {% for cuisine in object.dish.cuisines.all %}
+		| {{cuisine}}
+	  {% endfor %}
+  {% endif %}
+  {% endblock %}
+  
+{% block super-extra-head %}
+{% load static %}
+<meta property="og:title"  content="{{object.dish}} photo by {{object.owner.user.username}}" />
+<meta property="og:image" content="https://worldfood.guide/media/{{object.location}}" />
+<meta name="description" content="{{ object.dish.description|truncatechars:170 }}"/>
+{# Sharethis script (Start) #}
+<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5bf2e117d741e40011ae96ac&product=social-ab' async='async'></script>
+{# Sharethis script (End) #}
+<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
+{% endblock %}
+  
+{% block content %}
+<div class="well-1" style="margin:4px;">
+	<div class="row" style="margin:0px;">
+	<a class="list-group-item row" id="id_obj" name="{{object.id}}" href="/dish/{{object.dish.urlname}}" style="margin-left:0px; margin-right:0px; padding:4px;">
+		<div class="col-xs-4" style="padding:1px;">
+			<img src="/media/{{object.dish.favphoto.filename}}-med{{object.dish.favphoto.extension}}" class="img-rounded" width="100%">
+		</div>
+		<div class="col-xs-8" style="padding:1px;">
+			<h3 class="list-group-item-heading" style="color:#845505;margin-bottom:2px;"><b>{{object.dish|truncatechars:28 }}</b></h3>
+			<p class="text-small" style="margin-bottom: 2px;"><b><i>
+			{% if object.dish.othernames %}
+				{{object.dish.othernames|truncatechars:20 }}
+			{% endif %}
+			{% if object.dish.cuisines.all %}
+				{% for cuisine in object.dish.cuisines.all|slice:":3"  %}
+					({{cuisine|truncatechars:20}})
+				{% endfor %}
+			{% endif %}
+			</i></b></p>
+			{% if object.dish.description %}
+				<p class="text-small">{{object.dish.description|truncatewords:26}}</p>
+			{% endif %}
+			
+		</div>
+	</a>
+	</div>
+	<div class="row" style="margin:0px;">
+		<div class="col-xs-3" style="padding:1px;">
+			{# Button Previous #}
+			{% if prev %}
+				<a class="btn btn-custom btn-block" href="/photo/{{prev}}">
+					<span class="glyphicon glyphicon-step-backward"></span>
+				</a>
+			{% else %}
+				<a class="btn btn-custom btn-block disabled">
+					<span class="glyphicon glyphicon-step-backward"></span>
+				</a>
+			{% endif %}
+		</div>
+		<div class="col-xs-4" style="padding:1px;">
+			<a class="btn btn-custom btn-block disabled">
+			{{index}} of {{photos}} photos
+			</a>
+		</div>
+		<div class="col-xs-3" style="padding:1px;">
+			{# Button Next #}
+			{% if next %}
+				<a class="btn btn-custom btn-block" href="/photo/{{next}}">
+					<span class="glyphicon glyphicon-step-forward"></span>
+				</a>
+			{% else %}
+				<a class="btn btn-custom btn-block disabled">
+					<span class="glyphicon glyphicon-step-forward"></span>
+				</a>
+			{% endif %}
+		</div>
+		<div class="col-xs-2" style="padding:1px;">
+			{# Like button #}
+			{% if user.is_authenticated %}
+				<button id="likeaction" class="btn btn-custom btn-block" type="submit" style="margin-top:0px;margin-left:0px;"/>
+			{% else %}
+				<button id="likeaction" class="btn btn-custom disabled btn-block" type="submit" style="margin-top:0px;margin-left:0px;"/>
+			{% endif %}
+				<span id="likes">{{object.likestot}}</span>
+					{% if liked = 1 %}
+						<li id="likeicon" class="glyphicon glyphicon-thumbs-down icon-white"></li>
+					{% else %}
+						<li id="likeicon" class="glyphicon glyphicon-thumbs-up icon-white"></li>
+					{% endif %}
+				</button>
+		</div>
+	</div>
+
+	<a href="/photofullscreen/{{object.id}}/">
+	{% if reload = '1' %}
+		<img id="photo" src="/media/{{object.filename}}-reg{{object.extension}}?cachebuster={%now 'H:i:s'%}" alt="{{ object.dish }}" class="img-rounded" width="100%" style="margin-top:6px;margin-bottom:10px;"/>
+	{% else %}
+		<img id="photo" src="/media/{{object.filename}}-reg{{object.extension}}" alt="{{ object.dish }}" class="img-rounded" width="100%" style="margin-top:6px;margin-bottom:10px;"/>
+	{% endif %}
+	</a>
+	<div style="margin-top:5px; margin-bottom: 5px;">
+		{# Sharethis buttons #}
+		<div class="sharethis-inline-share-buttons"></div>
+	</div>
+	{% if object.ownit|lower == 'true' %}
+		<p><b>Photo credit: </b><a href="{% url 'view_profile' username=object.owner.user.username %}">{{ object.owner|truncatechars:30 }}</a></p>
+	{% else %}
+		{% if object.creditsname %}
+			{% if object.creditsurl %}
+				<p><b>Photo credit: </b><a href="{{object.creditsurl}}" target="_blank">{{ object.creditsname|truncatechars:30 }}</a></p>
+			{% else %}
+				<p><b>Photo credit: </b>{{ object.creditsname|truncatechars:30 }}</p>
+			{% endif %}
+		{% else %}
+			{% if object.creditsurl %}
+				<p><b>Photo credit: </b><a href="{{object.creditsurl}}" target="_blank">{{ object.creditsurl|truncatechars:30 }}</a></p>
+			{% endif %}
+		{% endif %}
+	{% endif %}
+	<p><b>Uploaded by: </b><a href="/foodie/{{object.owner.user.username}}">{{object.owner|truncatechars:30}}</a></p>
+	<p><b>Uploaded: </b>{{ object.datetime|date:"N j, Y"}}</p>
+	<p><b>Comments: </b>{{ object.comments|urlizetrunc:45 }}</p>
+{% if user.is_authenticated %}
+<a class="btn btn-custom btn-lg btn-block" href="/photonew/{{ object.dish.id }}/">Upload Photo
+	<i class="fa fa-cloud-upload fa-lg"></i> 
+	<i class="fa fa-picture-o fa-lg"></i>
+</a>
+<a class="btn btn-custom btn-lg btn-block" href="/dishnew/0/">New Dish
+	<i class="fa fa-magic fa-lg"></i> 
+	<i class="fa fa-cutlery fa-lg"></i>
+</a>
+	{% if user.username = object.owner.user.username %}
+		<a class="btn btn-custom btn-lg btn-block" href="/photoedit/{{ object.id }}/">Edit Information 
+			<i class="fa fa-pencil-square-o fa-lg"></i> 
+			<i class="fa fa-file-text-o fa-lg"></i>
+		</a>
+		<a class="btn btn-custom btn-lg btn-block" href="/photorotate/{{object.id}}/">Rotate Photo 
+			<i class="fa fa-refresh fa-lg"></i> 
+			<i class="fa fa-picture-o fa-lg"></i>
+		</a>
+		<a class="btn btn-lg btn-custom btn-block" href="/photodelete/{{object.id}}/">Delete Photo 
+			<i class="fa fa-trash fa-lg"></i> 
+			<i class="fa fa-picture-o fa-lg"></i>
+		</a>
+		<a class="btn btn-lg btn-custom btn-block" href="/photocrop/{{object.id}}/">Crop Photo 
+			<i class="fa fa-trash fa-lg"></i> 
+			<i class="fa fa-picture-o fa-lg"></i>
+		</a>
+	{% endif %}
+{% endif %}
+
+</div>
+
+<script>
+
+$('#likeaction').click(function(){
+	var photo = $('#id_obj').attr("name");
+	$.ajax({
+		data: {'photo':photo},
+		url: '/photolikeaction/',
+		type: 'get',
+		success: function(data){
+			//data:(first char={1=liked,0=unliked} rest of char=total numer o likes)
+			if (data.charAt(0) == "0"){
+				$('#likeicon').attr("class","glyphicon glyphicon-thumbs-up icon-white");
+				}
+			if (data.charAt(0) == "1"){
+				$('#likeicon').attr("class","glyphicon glyphicon-thumbs-down icon-white");
+			}
+			//total number of likes starts at the second char of data
+			$('#likes').html(data.substr(1));
+		}
+	});
+});
+
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head>
+	<title>WorldFood.Guide</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	{% load static %}
+	<link href="{% static 'dist/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" >
+	<link href="{% static 'css/mobile.css' %}" rel="stylesheet" >
+	<link href="{% static 'dist/jcrop/css/jquery.Jcrop.css' %}" rel="stylesheet"/>
+	<link rel="icon" href="/media/images/main_icon_32.png" sizes="32x32">
+</head>
+<body style="background-color:#FFFFE8;">
+	<div class="well-1">
+		<h1 align="center">Crop Photo</h1>
+		<p> Click on the photo, resize and press crop</p>
+	</div>
+	<div id="holder" align="center" >
+		<img id="photo" src="/media/{{photo.filename}}-med{{photo.extension}}?cachebuster={%now 'H:i:s'%}" alt="{{ photo.food }}"/>
+	</div>
+<br/>
+<div class="well-1">
+	<form action="." method="POST">
+	{% csrf_token %}
+		<div style="display:none">
+			{{ form }}
+		<p>width: <input id="width" type="text" name="width"></p>
+		<p>height: <input id="height" type="text" name="height"></p>
+		</div>
+	<button class="btn btn-custom btn-lg btn-block" type="submit"/>Crop and Save</button>
+	<a class="btn btn-custom btn-lg btn-block" href="/photo/{{photo.urlname}}">Cancel</a>
+	</form>
+</div>
+
+
+<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
+<script src="{% static 'dist/jcrop/js/jquery.Jcrop.js' %}"></script>
+<script type="text/javascript">
+
+function updateCoords(c)
+	{
+		$("#id_x").val(Math.round(c.x));
+		$("#id_y").val(Math.round(c.y));
+		$("#id_w").val(Math.round(c.w));
+		$("#id_h").val(Math.round(c.h));
+	}
+
+$(document).ready(function(){
+	var img = document.getElementById('photo');
+	var w1 = document.getElementById("photo").width; 
+	var h1 = document.getElementById("photo").height;
+	$('#width').val(w1);
+	$('#height').val(h1);
+	//Jcrop -Start-
+	$("#photo").Jcrop({
+		onSelect: updateCoords,
+		onchange: updateCoords,
+		minSize: [200,200]
+	});
+	//Jcrop -End-
+
+});
+</script>
+</body>
+</html>

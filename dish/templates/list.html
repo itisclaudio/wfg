@@ -1,0 +1,430 @@
+{% extends '_base.html' %}
+{% block title %}{{list.name}} {% endblock %}
+
+{% block super-extra-head %}
+{% load static %}
+<meta name="description" content="{{ list.description|truncatechars:170 }}"/>
+<meta property="og:title"  content="{{list.name}} " />
+<meta property="og:description" content="{{ list.description|truncatechars:170 }}" />
+	{% if counter > 0 %}
+		{% for p in dishes|slice:":1" %}
+			{% if p.photo_main %}
+				<meta property="og:image" content="https://worldfood.guide/media/{{p.dish.filename}}-reg{{p.dish.extension}}" />
+			{% endif %}
+		{% endfor %}
+	{% else %}
+		<meta property="og:image" content="https://worldfood.guide/media/images/worldfoodguide.png" />
+	{% endif %}
+<link href="{% static 'dist/jquery/autocomplete/jquery-ui.min.css' %}" rel="stylesheet" >
+<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
+<script type="text/javascript">
+
+$(document).ready(function(){
+	$("#see_more").click(function(){
+		document.getElementById('desc').style.display = "block";
+		document.getElementById('desc_small').style.display = "none";
+		$("#see_more").css({display:'none'});
+		document.getElementById('see_less').style.display = "block";
+	});
+	$("#see_less").click(function(){
+		document.getElementById('desc').style.display = "none";
+		document.getElementById('desc_small').style.display = "block";
+		$("#see_less").css({display:'none'});
+		document.getElementById('see_more').style.display = "block";
+	});
+});
+</script>
+<!--Sharethis script (Start)-->
+<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5bf2e117d741e40011ae96ac&product=social-ab' async='async'></script>
+<!--Sharethis script (End)-->
+{% endblock %}
+
+{% block content %}
+<!--Modal-0 Processing -->
+<div class="modal fade" id="modal_processing" tabindex="-1" role="dialog" aria-labelledby="modal_processingLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="modal_processingLabel">Processing...</h1>
+      </div>
+      <div class="modal-body">
+		<div class="progress">
+			  <div class="progress-bar progress-bar-striped progress-bar-warning active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+			  </div>
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Modal-0 end -->
+
+<!-- Modal-1 Delete list -->
+<div class="modal fade" id="modal_deletelist" tabindex="-1" role="dialog" aria-labelledby="modal_deletelistLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h1 class="modal-title" id="modal_deletelistLabel" style="text-align:center;">Delete list forever?</h1>
+      </div>
+      <div class="modal-body">
+		<h2 style="margin:2px; text-align:left;"><b>{{list.name}}</b></h2>
+		<p class="smallfont">by: {{list.owner}}, created: {{list.created|date:"d M Y"}}, updated: {{list.modified|date:"d M Y"}}
+		{% if list.private == False %} (Public){% endif %}
+		</p>
+		<p>{{ list.description|urlizetrunc:32|escape|linebreaks|truncatewords:80 }}</p>
+      </div>
+      <div class="modal-footer">
+		<a id="delete_button" class="btn btn-custom btn-lg" onclick="processing();" href="/list_delete/{{list.id}}/" title="Delete similar dish">Yes delete</a>
+		<button type="button" class="btn btn-default btn-lg" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal END-->
+
+<!-- Modal-2 Add dish -->
+<div class="modal fade" id="modal_adddish" tabindex="-1" role="dialog" aria-labelledby="modal_adddishLabel">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h1 style="margin-top:0px;">Search Dish</h1>
+		<input class="form-control ui-autocomplete-input" id="id_auto" name="auto" type="text" placeholder="type dish name here.." autocomplete="off"/>
+	</div>
+	<div class="modal-body row" id="modal_dish" style="display:none;">
+		<div class="col-sm-5">
+			<h2 id="modal_dishname" style="margin-top:0px;text-align:left;margin-bottom:0px;"></h2>
+			<p><b><i id="modal-othernames"></i></b> <i id="modal_cuisines"></i></p>
+			<p id="modal-dishdescription"></p>
+		</div>
+		<div class="col-sm-7">
+			<img id="modal-image" src="" class="img-rounded" width="300px" style="margin-bottom: 6px;"/>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<div class="col-xs-6">
+			<div id="myAlert" class="alert alert-danger fade" role="alert" style="margin-bottom:0px;padding-top:10px;padding-bottom:10px;text-align:center;">
+			  <b>Dish already in the list!</b>
+			</div>
+		</div>
+		<div class="col-xs-6">
+			<a type="button" class="btn btn-custom btn-lg" onclick="processing();" href="" id="modal_select" style="visibility:hidden;">Add dish</a>
+			<button type="button" class="btn btn-default btn-lg" id="modal_cancel" data-dismiss="modal">Cancel</button>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+<!-- Modal-2 END-->
+
+<div class="well well-white" style="margin-bottom:0px;padding-top:0px;padding-bottom:5px;">
+{% if alert = 2 %}
+	<div class="alert alert-warning alert-dismissible" role="alert">
+	  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		  <span aria-hidden="true">&times;</span>
+	  </button>
+	  <strong>Warning!</strong> You can't edit this list since it doesn't belong to you
+	</div>
+{% endif %}
+{% if alert = 1 %}
+	{# alert = 1, there is list #}
+	{## Head of the list ##}
+	<ul style="margin:5px 0px 0px 0px;padding-left:0px;">
+	<li style="display:inline;">
+		<h1 style="display:inline;vertical-align:middle;padding-left:0px;" id="id_obj" name="{{list.id}}" >
+		{{list.name}}
+		</h1>
+	</li>
+	<li style="display:inline;margin-left:0px;padding-left:0px;vertical-align:top;">
+		{% if user.is_authenticated %}
+			<button id="likeaction" class="btn btn-custom" type="submit" style="margin-left:0px;display:inline;padding-top:2px;padding-bottom:2px;" title="Like or Dislike this list">
+		{% else %}
+			<button id="likeaction" class="btn btn-custom btn disabled" type="submit" style="margin-left:0px;display:inline;" title="Login to like or dislike this list">
+		{% endif %}
+			<span id="likes" style="display:inline;">{{list.likestot}}</span>
+				{% if liked = 1 %}
+					<li style="display:inline;" id="likeicon" class="glyphicon glyphicon-thumbs-down icon-white"></li>
+				{% else %}
+					<li style="display:inline;" id="likeicon" class="glyphicon glyphicon-thumbs-up icon-white"></li>
+				{% endif %}
+			</button>
+			<div class="dropdown" style="display:inline;">
+			  <button class="btn btn-custom dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+				Actions
+				<span class="caret"></span>
+			  </button>
+			  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+				{% if list.type = '2' %}
+					<li><a type="button" data-toggle="modal" data-target="#modal_adddish"><i class="glyphicon glyphicon-plus icon-white"></i> Add Dish</a></li>
+					<li><a href="{% url 'view_listedit' urlname=list.urlname%}"><i class="glyphicon glyphicon-pencil icon-white"></i> Edit list</a></li>
+				{% else %}
+					{% if user.id = list.owner.user.id %}
+						<li><a data-toggle="modal" data-target="#modal_adddish"><i class="glyphicon glyphicon-plus icon-white"></i> Add Dish</a></li>
+						<li><a href="{% url 'view_listedit' urlname=list.urlname%}"><i class="glyphicon glyphicon-pencil icon-white"></i> Edit list </a></li>
+						<li><a id="delete" data-toggle="modal" data-target="#modal_deletelist" title="Delete list"><i class="glyphicon glyphicon-trash"></i> Delele list</a></li>
+					{% endif %}
+				{% endif %}
+				{% if user.is_authenticated %}
+					<li><a href="{% url 'view_listnew' %}" title="Create New List"><i class="glyphicon glyphicon-plus icon-white"></i> Create new list
+					</a></li>
+				{% endif %}
+				<li><a title="Search list" href="{% url 'view_list_search' %}"><i class="glyphicon glyphicon-search icon-white"></i> Search list</a></li>
+				<li>
+					<a href="/lists_foodie/{{list.owner}}/1/" title="See all lists by: {{list.owner}}">Lists by "{{list.owner|truncatechars:13}}"</a></li>
+			  </ul>
+			</div>
+	</li>
+	</ul>
+
+	<p class="smallfont">by: <a href="/foodie/{{list.owner.user.username}}/">{{list.owner}}</a>, created: {{list.created|date:"d M Y"}}, updated: {{list.modified|date:"d M Y"}}
+	{{ list.get_type_display }}
+	</p>
+	{% if list.type == '3' %} <p style="color:red;"><b><i>This list is "private" (only you can see it)</i></b>
+	<a href="/listedit/{{list.urlname}}" title="Edit {{p.name|truncatechars:26}} List">(Edit)</a>
+	</p>{% endif %}
+	{% if list.description %}
+		{% if list.description|wordcount > 80 %}
+			<div id='desc_small' style="display:block;"><p>{{ list.description|urlizetrunc:32|escape|linebreaks|truncatewords:80 }}</p>
+			</div>
+			<div id="desc" style="display:none;"><p>{{ list.description|urlizetrunc:65|escape|linebreaks }}</p>
+			</div>
+		{% else %}
+			{{ list.description|urlizetrunc:32|escape|linebreaks }}
+		{% endif %}
+	{% else %}
+		<p><i>There is no description</i></p>
+	{% endif %}
+	{% if list.description|wordcount > 80 %}
+		<a id="see_more" href="#" class="pull-right smallfont"><i>...See more</i></a>
+		<a id="see_less" href="#" class="pull-right smallfont" style="display:none;"><i>...See less</i></a>
+	{% endif %}
+	
+	<div style="margin-top:5px; margin-bottom: 5px;">
+		{# Sharethis buttons #}
+		<div class="sharethis-inline-share-buttons"></div>
+	</div>
+	
+</div>
+
+<div class="well well-white row" style="margin-bottom:0px; padding-bottom:0px;">
+{## Dishes in list: ##}
+{% if counter > 0 %}
+	{% for p in dishes %}
+	{# There are dishes: #}
+		<div class="col-sm-5">
+			<h2 style="margin-top:10px; display:inline-block; margin-bottom: 2px; text-align:left;"><b>{{p.index}}.
+			<a id="dishname_{{p.dish.id}}" href="/dish/{{p.dish.urlname}}/" title="Go to Dish page">{{ p.dish.name|truncatechars:34 }}</a></b>
+			</h2>
+			{% if p.dish.othernames %}
+				<p style="display:inline-block; margin-bottom: 2px;"><b id="othernames_{{p.dish.id}}">{{p.dish.othernames}}</b></p>
+			{% endif %}
+			{% for c in p.dish.cuisines.all|slice:":3" %}
+			   <p style="display:inline-block; margin-bottom: 2px;"><b>
+				(<a href="/cuisine/{{c.urlname}}/" title="Go to Cuisine page">{{c.name}}</a>)</b>
+			   </p>
+			{% endfor %}
+			{% if p.dish.cuisines.all|length > 3 %}
+				<p style="display:inline-block; margin-bottom: 2px;"><b>(...)</b></p>
+			{% endif %}
+			{{ p.dish.description|escape|truncatewords:32|linebreaks|urlizetrunc:44 }}
+			<div id="{{p.dish.urlname}}" style="display:none;"></div>
+			{# Comments #}
+			{% if p.description %}
+				<div class="well well-white" style="padding:5px;">
+				<!--<p style="margin-bottom:0px;">-->
+				<div id="small_{{p.index}}" style="display:block;">
+					<i>{{p.description|urlizetrunc:44|truncatewords:32|escape|linebreaks}}</i>
+				</div>
+				{% if p.description|wordcount > 32 %}
+					<div id="big_{{p.index}}" style="display:none;">
+						<i>{{p.description|urlizetrunc:44|escape|linebreaks}}</i>
+					</div>
+					<i><a class="btn btn-default" id="more_{{p.index}}" data-content="toggle-text">more</a></i>
+				{% endif %}
+					<p id="comment_whole_{{p.index}}" style="display:none;">
+						{{p.description}}
+					</p>
+				</div>
+			{% endif %}
+			<p class="pull-right smallfont"><i>(Added by: <a href="/foodie/{{p.owner}}/" title="Go to: {{p.owner}}">{{p.owner|truncatechars:18}}</a>)</i></p>
+		</div>
+		<div class="col-sm-7">
+			{% if p.dish.photo_main %}
+				<a href="/dish/{{p.dish.urlname}}" title="Go to photo page">
+					<img src="/media/{{p.dish.filename}}-med{{p.dish.extension}}" class="img-rounded"  alt="{{p.dish.name}}" width="100%">
+				</a>
+			{% else %}
+				<a href="/photonew/{{p.dish.id}}/" title="Upload photo for {{p.dish.name|truncatechars:24}}"><img src="/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
+			{% endif %}
+		</div>
+	<br clear="all">
+	<hr>
+	{% endfor %}
+{% else %}
+	<p><i>There are no dishes in this list!</i></p>
+	{% if user.is_authenticated and user.id = list.owner.user.id %}
+		<a class="btn btn-custom btn-lg" type="button" data-toggle="modal" data-target="#modal_adddish"><i class="glyphicon glyphicon-plus icon-white"></i> Add first dish</a>
+	{% endif %}
+{% endif %}
+	
+</div>
+	
+{% else %}
+		<h3>There is no list with that name</h3>
+{% endif %}
+
+{% endblock %}
+</div>
+{% block extra-bottom %}
+
+<script src="{% static 'dist/jquery/autocomplete/jquery-ui.min.js' %}"></script>
+<script>
+$('#modal_adddish').on('shown.bs.modal', function () {
+	$('#id_auto').focus()
+});
+$( function() {
+	//When a new dish is entered:
+	$( "#id_auto" ).autocomplete({
+		minLength: 3,
+		source: '/dish_list/',
+		appendTo: "#modal_adddish",
+		focus: function( event, ui ) {
+			return false;
+		},
+		//Additional intructions when new dish entered:
+		select: function( event, ui ) {
+			$("#id_auto").val("");
+			//Retrieving information from the dish selected
+			$.ajax({
+				type: 'GET',
+				url: '/ajax_getdish/',
+				dataType:'json',
+				async: true,
+				data: {
+					'id':ui.item.value
+					},
+				success: searchSuccess
+			});
+		return false;
+		},
+	});
+});
+function searchSuccess(json)
+{
+	//# function executed when user selects dish from autocomplete
+	//# receives json object with dish information. Ask if info comming:
+	if (json != 0){
+		//# There is dish information. Populate Modal with dish info
+		//# Create cuisines string from json object
+		var cuisines = '';
+		for (i in json.cuisines) {
+			//# Created a sting with all dish cuisines
+			cuisines += "("+json.cuisines[i]+")";
+		};
+		//# Displays par of modal with dish information
+		$('#modal_dish').css('display','block');
+		$('#modal_select').css('visibility', 'visible');
+		$('#modal_dishname').html(json.name);
+		if (cuisines != ""){
+			$('#modal_cuisines').html(cuisines);
+		};
+		if (json.othernames != ""){
+			$('#modal-othernames').html(json.othernames);
+		};
+		if (json.favphoto != "0"){
+			$('#modal-image').attr('src', "/media/"+json.favphoto);
+		}
+		else{
+			$('#modal-image').attr('src', "/media/images/upload-med.jpg");
+			};
+		if (json.description != "0"){
+			$('#modal-dishdescription').html(json.description.substring(0, 300));
+		};
+		//# Check if dish already exist in list:
+		if (document.getElementById(json.urlname)) {
+			//# Dish already in list
+			$('#myAlert').show(); //# Shows alert
+			$("#myAlert").addClass("in"); //# alert fades in? check!
+			$('#modal_select').addClass('disabled'); //# Disable button "Add dish"
+		}
+		else{
+			//# Dish selected is not in the list:
+			$('#myAlert').hide(); //# Hide "dish already in list" alert
+			$('#modal_select').removeClass('disabled'); //# Enable button "Add dish"
+			//# generate url for "Add dish" button:
+			var path = window.location.href; // #Whole path
+			var url_name = json.id;
+			var to_delete = "/list/{{list.urlname}}";
+			var main_path = path.replace(to_delete,'');
+			var url_delete = main_path+"list_add_dish/"+{{list.id}}+"/"+json.id+"/list";
+			$('#modal_select').attr("href",url_delete);
+			$('#modal_select').focus();
+		}
+	};
+}
+$('#modal_adddish').on('hidden.bs.modal', function () {
+	//When modal desapears when click outside modal
+	$('#modal_dish').css('display','none');
+	$('#modal_select').css('visibility', 'hidden');
+	$('#modal_select').removeClass('disabled'); //# Enable button "Add dish"
+	$('#myAlert').hide();
+	$("#id_auto").val(""); //# Clears autocomplete input
+});
+$(document).ready(function(){
+    //$("#big").hide();
+    $("a[id^='more_']").on("click", function () {
+		var index_ = $(this).attr('id');
+		var index = index_.replace('more_','')
+    	var query = $('#big_'+index);
+        var isVisible = query.is(':visible');
+        if (isVisible == false){
+			//alert('Big not showing, show it');
+			$('#big_'+index).css({display:'block'});
+			$('#small_'+index).css({display:'none'});
+			$('#more_'+index).text('less');
+          }
+         else{
+			//alert('Big showing, hide it');
+			$('#big_'+index).css({display:'none'});
+			$('#small_'+index).css({display:'block'});
+			$('#more_'+index).text('more');
+        };
+    });
+});
+$('#likeaction').click(function(){
+	var list = $('#id_obj').attr("name");
+	$.ajax({
+		data: {'list':list},
+		url: '/listlikeaction/',
+		type: 'get',
+		success: function(data){
+			//data:(first char={1=liked,0=unliked} rest of char=total numer o likes)
+			if (data.charAt(0) == "0"){
+				$('#likeicon').attr("class","glyphicon glyphicon-thumbs-up icon-white");
+				}
+			if (data.charAt(0) == "1"){
+				$('#likeicon').attr("class","glyphicon glyphicon-thumbs-down icon-white");
+			}
+			//total number of likes starts at the second char of data
+			$('#likes').html(data.substr(1));
+		}
+	});
+});
+//function to show the modal "Processing" when loading results page
+function processing(){
+	$("#modal_adddish").modal('hide');
+	$("#modal_deletelist").modal('hide');
+	$("#modal_processing").modal('show');
+}
+
+//Drops down "Actions" button when hover
+$(document).ready(function(){
+    $('div.dropdown').hover(function() {
+      $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(200);
+    }, function() {
+      $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(200);
+    });  
+});
+
+</script>
+{% endblock %}

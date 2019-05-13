@@ -1,0 +1,183 @@
+{% extends '_base.html' %}
+{% block super-extra-head %}
+<meta name="description" content="Foods from all cuisines around the world, including photos, descriptions and ingredients. Users can create, upload and edit information about new dishes, cuisines and photos">
+<meta name="keywords" content="International food, food photos, foodies, foody, food porn, food guide, what to eat, restaurant guide, cuisines, eating guide" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+	{% load static %}
+	<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
+{% endblock %}
+{% block title %}WorldFood.Guide{% endblock %}
+
+{% block content %}
+
+<div class="row">
+	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+	<h1 style="margin:0px 0px 5px 0px; text-align:center">Top 5 Photos</h1>
+		<div class="well well-white">
+		{% if photos_count > 0 %}
+			{% for p in photos|slice:":1" %}
+			<a href="/photo/{{p.urlname}}">
+				<img src="/media/{{p.filename}}-reg{{p.extension}}" class="img-rounded" width="100%">
+			</a>
+			<ul style="margin-top:10px; padding-left:0px;">
+				<li style="display:inline; padding-left:0px">
+					<a href="/dish/{{p.dish.urlname}}">
+						<p style="margin:0px; display:inline; font-size:20px;"><b>1. {{p.dish.name}}</b></p>
+					</a>
+				</li>
+				<li style="display:inline;">by 
+					<a href="/profile/{{p.owner.user.username}}/">{{p.owner.user.username}}</a>
+				</li>
+				<li style="display:inline;">({{p.likestot}} <i class="glyphicon glyphicon-thumbs-up"></i>)
+				</li>
+			</ul>
+			{% endfor %}
+			<table style="margin-bottom:5px;" class="table-thum">
+			<tbody>
+			{% for p in photos|slice:"1:5" %}
+			<tr>
+				<td width="60%">
+				<a href="/dish/{{p.dish.urlname}}"><h4>{{forloop.counter|add:"1"}}. {{ p.dish.name }} </h4></a>
+				<ul>
+				<li style="display:inline;">by </li> 
+				<li style="display:inline;"> <a href="/profile/{{p.owner.user.username}}/">{{p.owner.user.username}}</a></li>
+				<li style="display:inline;">({{p.likestot}} <i class="glyphicon glyphicon-thumbs-up"></i>)</li>
+				</ul>
+				</td>
+				
+				<td width="40%">
+				<a href="/photo/{{p.urlname}}">
+				<img src="/media/{{ p.filename }}-med{{p.extension}}" class="img-rounded" width="100%"></a></td>
+			</tr>
+			{% endfor %}
+			</tbody>
+			</table>
+		
+		{% else %}
+			<h3>There are no Pictures</h3><a href="/photonewnodish/"><img src="/media/images/upload.jpg" width="100%" class="img-rounded"></a>
+		{% endif %}
+		{% if user.is_authenticated %}
+			<a class="btn btn-custom btn-block btn-lg" href="{% url 'view_cuisinenew' %}">New Cuisine</a>
+			<a class="btn btn-custom btn-block btn-lg" href="/dishnew/0/">New Dish / Photo</a>
+			<!--<a class="btn btn-custom btn-block btn-lg" href="/photonewnodish/">Upload Picture</a>-->
+		{% endif %}
+		<a class="btn btn-custom btn-block btn-lg" href="/cuisines/1/">See all Cuisines</a>
+		</div>
+	</div>
+	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+		<div class="well well-small well-white">
+		{% if top_dishes %}
+			<table class="table table-small" style="margin-bottom:5px;">
+			<thead>
+			<tr>
+				<th width="15%" colspan="2" style="text-align:center;padding:5px 5px;">Top 5 Dishes</th>
+			</tr>
+			</thead>
+			{% for p in top_dishes %}
+			<tr>
+				<td width="30%" style="padding:1px 1px;">
+					{% if p.favphoto %}
+						<a href="/dish/{{p.favphoto.dish.urlname}}">
+						<img src="/media/{{ p.favphoto.filename }}-thum{{p.favphoto.extension}}" class="img-rounded" height="70px"></a>
+					{% else %}
+						<a href="/photonew/{{p.id}}/"><img src="/media/images/upload-med.jpg" class="img-rounded" height="70px"></a>
+					{% endif %}
+				</td>
+				<td width="70%" style="text-align:left;padding:1px 1px;">
+					<ul style="margin-bottom:0px;padding-left:0px;">
+						<a class="btn btn-default" href="/dish/{{p.urlname}}" title="{{p.name}}">
+							<b>{{p.name|truncatechars:25}}</b>
+						</a>
+						<li style="display:inline;">{{p.likestot}} <i class="glyphicon glyphicon-thumbs-up"></i></li>
+					</ul>
+					{% if p.cuisines.all|length > 0 %}
+						{% for p in p.cuisines.all|slice:":7" %}
+							(<a href="/cuisine/{{p.urlname}}/">{{p}}</a>)
+						{% endfor %}
+						{% if p.cuisines.all|length > 7 %}
+							...
+						{% endif %}
+					{% endif %}
+				</td>
+			</tr>
+			{% endfor %}
+			</table>
+		{% else %}
+			<h3>There are no dishes</h3>
+		{% endif %}
+		</div>
+		<h1 style="margin:0px 0px 5px 0px; text-align:center">Most Uploaded Cuisines</h1>
+		<div class="well well-small well-white">
+		{% if cuisine_top %}
+			<table class="table table-small" style="margin-bottom:5px;">
+			<thead>
+			<tr>
+				<th width="44%" style="text-align:left;padding:1px 3px 1px 6px;"><a class="btn btn-custom" href="/cuisines/1/" title="See all Cuisines"><b>Cuisines</b></a></th>
+				<th width="11%"><i class="fa fa-camera fa-lg"></i></th>
+				<th width="15%">Dishes</th>
+                <th width="30%" style="text-align:center;">View</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for p in cuisine_top %}
+			<tr>
+				<td style="text-align:left;padding:1px 3px 1px 6px;"><a class="btn btn-default" href="/cuisine/{{p.urlname}}/"><b>{{p.name|truncatechars:16}}</b></a></td>
+				<td style="text-align:center;padding:6px 3px 1px 3px;">{{ p.dish__picture__count }}</td>
+				<td style="text-align:center;padding:6px 3px 1px 3px;">{{ p.dish__count }}</td>
+				<td style="text-align:center;padding:1px 3px 1px 3px;">
+					{% if p.dish__count > 0 %}
+					<a class="btn btn-default" href="/cuisinedishes/{{p.urlname}}/1/">All</a>
+					{% else %}
+					<a class="btn btn-default disabled"> All </a>
+					{% endif %}
+				</td>
+			</tr>
+			{% endfor %}
+			</tbody>
+			</table>
+		
+		{% else %}
+			<h3>There are no cuisines</h3>
+		{% endif %}
+		</div>
+
+		
+		<h1 style="margin:5px 0px 0px 0px; text-align:center">Top Foodies</h1>
+		<div class="well well-small well-white">
+			<table class="table table-small" style="margin-bottom:5px;">
+			<thead>
+			<tr>
+				<th style="text-align:left;padding:1px 3px 1px 6px;" width="55%">
+				<a class="btn btn-custom" href="/foodies/1/" title="See all Foodies"><b>Foodies</b></a>
+				</th>
+				<th width="10%"><i class="fa fa-camera fa-lg"></i></th>
+				<th width="35%" style="text-align:center;">View</th>
+			</tr>
+			</thead>
+			{% for foodie in foofies_top %}
+			<tbody>
+			<tr>
+				<td style="text-align:left;padding-top:1px;padding-bottom:1px;"><a class="btn btn-default" href="/profile/{{foodie.user.username}}/"><b>{{foodie.user.username|truncatechars:18}}</b></a></td>
+				<td style="padding-top:6px;padding-bottom:1px;">{{ foodie.picture__count }}</td>
+				<td style="text-align:center;padding-top:1px;padding-bottom:1px;">
+					{% if foodie.picture__count > 0 %}
+					<a class="btn btn-default" href="/userphotos/{{foodie.user.username}}/1/"> All </a>
+					{% else %}
+					<a class="btn btn-default disabled">All </a>
+					{% endif %}
+				</td>
+			</tr>
+			</tbody>
+			{% endfor %}
+			</table>
+		</div>
+	</div>
+</div>
+
+{% block focus %}
+	<script type="text/javascript">
+		document.getElementById('id_search_inbar').focus();
+	</script>
+{% endblock %}
+
+{% endblock %}

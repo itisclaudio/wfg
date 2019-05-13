@@ -1,0 +1,90 @@
+{% extends "socialaccount/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Account Connections" %}{% endblock %}
+{% block content %}
+
+<!--Modal-start Showing loading bar -->
+<div class="modal fade" id="modalLoading" tabindex="-1" role="dialog" aria-labelledby="modalLoadingLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="modalLoadingLabel">Processing...</h1>
+      </div>
+      <div class="modal-body">
+		<div class="progress">
+			  <div class="progress-bar progress-bar-striped progress-bar-warning active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+			  </div>
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Modal end -->
+
+<h1>{% trans "Account Connections" %}</h1>
+<div class="row">
+<div class="well well-white col-md-7">
+	{% if form.accounts %}
+	<p>{% blocktrans %}You have successfully connected to the account(s) below. You can now login to WFG using your Facebook login.{% endblocktrans %}</p>
+
+	
+	<form method="post" action="{% url 'socialaccount_connections' %}">
+	{% csrf_token %}
+
+	<fieldset>
+	{% if form.non_field_errors %}
+	<div id="errorMsg">{{ form.non_field_errors }}</div>
+	{% endif %}
+	<div class="well">
+		{% for base_account in form.accounts %}
+		{% with base_account.get_provider_account as account %}
+		<div>
+		<label for="id_account_{{ base_account.id }}">
+		<input id="id_account_{{ base_account.id }}" type="radio" name="account" value="{{ base_account.id }}"/>
+		<span class="socialaccount_provider {{ base_account.provider }} {{ account.get_brand.id }}">{{account.get_brand.name}}</span>
+		{{ account }}
+		</label>
+		</div>
+		{% endwith %}
+		{% endfor %}
+	</div>
+
+	<button onclick="loading();" type="submit" class="btn btn-lg btn-custom">{% trans 'Remove Selected' %}</button>
+	<p class="pull-left smallfont">You can remove accounts by selecting and pressing the "Remove Selected" button</p>
+
+
+	</fieldset>
+
+	</form>
+	{% else %}
+		<p>{% trans 'You currently have no social network accounts connected to this WFG account.' %}</p>
+<p>If there is currently a social media account open in the background, that account may be linked to a different WFG account. Logout from both the WFG and the social media accounts and sign in to WFG using the social account option.</p>
+	{% endif %}
+
+	{% include "socialaccount/snippets/login_extra.html" %}
+</div>
+<div class="col-md-5">
+	<a href="{% url 'view_main' %}" class="btn btn-custom btn-block btn-lg">Go Home</a>
+	{% load socialaccount %}
+	{% get_social_accounts user as accounts %}
+	{% if not accounts.facebook %}
+		<a class="btn btn-custom btn-block btn-lg" href="{% provider_login_url 'facebook' process='connect' %}" title="Connect your Facebook account to WorldFood.Guide" onclick="loading();">Connect to Facebook</a>
+	{% endif %}
+	{% if user.is_authenticated %}
+		<a href="{% url 'view_myprofile' %}" class="btn btn-custom btn-block btn-lg">Go to My Profile</a>
+		<a href="/logout/" onclick="loading();" class="btn btn-custom btn-block btn-lg">Log out</a>
+	{% endif %}
+</div>
+</div>
+
+	{% block extra-bottom %}
+		<script type="text/javascript">
+			function loading(){
+				$("#modalLoading").modal('show');
+			};
+		</script>
+	{% endblock %}
+
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends '_base.html' %}
+{% block title %} My Profile {% endblock %}
+{% block content %}
+<h1>Privacy Settings</h1>
+<div class="well-mobile">
+<br/>
+<p style="font-size:16px;"><b>Username: </b> {{user.username}}</p>
+<form method="post" action="">
+	{% csrf_token %}
+    {{ form.management_form }}
+	<div class="well well-white" style="padding-bottom:40px;">
+		<div class="col-xs-8">
+			<p><b>Names public:</b></p>
+		</div>
+		<div class="col-xs-4">
+			{{ form.names_show }}
+		</div>
+	</div>
+	{{ form.names_show.errors }}
+	<div class="well well-white" style="padding-bottom:40px;">
+		<div class="col-xs-8">
+			<p><b>Email public:</b></p>
+		</div>
+		<div class="col-xs-4">
+			{{ form.email_show }}
+		</div>
+	</div>
+	{{ form.email_show.errors }}
+	<button class="btn btn-custom btn-lg btn-block">Save</button>
+	<a class="btn btn-custom btn-lg btn-block" href="/myprofile/">Cancel</a>
+	
+</form>
+
+
+</div>
+
+{% endblock %}

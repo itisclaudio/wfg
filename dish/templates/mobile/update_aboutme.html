@@ -1,0 +1,27 @@
+{% extends '_base.html' %}
+{% block title %}Update About Me{% endblock %}
+{% block content %}
+<h1>Update About Me</h1>
+
+<div class="well-mobile">
+	<form enctype='multipart/form-data' action="." method="POST">
+		{% csrf_token %}
+		{{ form.non_field_errors }}
+		<div class="fieldWrapper">
+			{{ form.about.errors }}
+			<label for="id_about">About me:</label>
+			{{ form.about }}
+		</div>
+		<br/>
+		<button class="btn btn-custom btn-block btn-lg">Save</button>
+		<a class="btn btn-custom btn-block btn-lg" href="{% url 'view_myprofile' %}">Cancel</a>
+	</form>
+</div>
+
+{% block focus %}
+	<script type="text/javascript">
+		document.getElementById('id_about').focus();
+	</script>
+{% endblock %}
+	
+{% endblock %}
