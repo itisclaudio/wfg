@@ -27,8 +27,10 @@ urlpatterns = [
 # This line is for django-ajax-selects:
 # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
-#For debug_toolbar:
-if settings.DEBUG:
+#For debug_toolbar (Only Development):
+#if settings.DEBUG:
+if settings.LOCAL_DEV:
+	#print "settings.DEBUG = True, Load debug_toolbar"
 	import debug_toolbar
 	urlpatterns = [
 		url(r'^__debug__/', include(debug_toolbar.urls)),
