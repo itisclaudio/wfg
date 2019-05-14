@@ -41,7 +41,7 @@ DATABASES['default'].update(db_from_env)
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'dish/static'),
 )
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 #So whitenoise can handle storage in heroku
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
