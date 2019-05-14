@@ -13,6 +13,7 @@ INSTALLED_APPS += (
 SECRET_KEY = os.environ.get('SECRET_KEY','afl549q&v2eppw3reii)7wozdeyiol47n)hr7^fis*g#5a!-e04=')
 
 MIDDLEWARE_CLASSES = (
+	'whitenoise.middleware.WhiteNoiseMiddleware',
 	'django.contrib.sessions.middleware.SessionMiddleware',
 	'django.middleware.common.BrokenLinkEmailsMiddleware', #To send 404 'page not found' error to ADMINS
 	'django.middleware.common.CommonMiddleware',
