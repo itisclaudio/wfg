@@ -62,7 +62,7 @@
 		{{ p.photo }}
 		{% if p.photo %}
 			<a href="/foodie/{{p.user.username}}">
-				<img src="{{p.photofilename}}-med{{p.extension}}" class="img-rounded" width="100%">
+				<img src="{{p.photo.url}}" class="img-rounded" width="100%">
 			</a>
         {% else %}
 			<img src="/media/images/user.png"  class="img-rounded" width="100%"/>
