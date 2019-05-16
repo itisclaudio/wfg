@@ -70,16 +70,16 @@ class userProfile(models.Model):
 		
 	def _get_photofilename(self):
 		#"Returns file name with out extension"
-		name, extension = os.path.splitext(self.photo.name)
+		name, extension = os.path.splitext(self.photo.url)
 		return name
 	photofilename = property(_get_photofilename)
 
 	def photofilename(self):
-		name, extension = os.path.splitext(self.photo.name)
+		name, extension = os.path.splitext(self.photo.url)
 		return name
 
 	def extension(self):
-		name, extension = os.path.splitext(self.photo.name)
+		name, extension = os.path.splitext(self.photo.url)
 		return extension
 
 	#django-allauth: method for email-verification status django-allauth
