@@ -61,7 +61,7 @@
 		<div class="col-sm-3 col-xs-12" style="padding-left:2px;">	
 		{% if p.photo %}
 			<a href="/foodie/{{p.user.username}}">
-				<img src="{{p.photofilename}}-med{{p.extension|escape}}" class="img-rounded" width="100%">
+				<img src="{{p.photofilename}}-med{{p.extension|safe}}" class="img-rounded" width="100%">
 			</a>
 			<p class="smallfont">{{ p.photo.url }}</p>
 			<p class="smallfont">{{p.photofilename}}</p>
