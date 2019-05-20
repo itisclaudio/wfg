@@ -63,11 +63,9 @@
 			<a href="/foodie/{{p.user.username}}">
 				<img src="{{p.photofilename}}-med{{p.extension}}" class="img-rounded" width="100%">
 			</a>
-			{{ p.photo.url }}
-			<br>
-			{{p.photofilename}}
-			<br>
-			{{p.extension}}
+			<p class="smallfont">{{ p.photo.url }}</p>
+			<p class="smallfont">{{p.photofilename}}</p>
+			<p class="smallfont">{{p.extension}}</p>
         {% else %}
 			<img src="/media/images/user.png"  class="img-rounded" width="100%"/>
         {% endif %}
