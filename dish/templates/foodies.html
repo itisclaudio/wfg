@@ -65,7 +65,7 @@
 			</a>
 			<p class="smallfont">{{ p.photo.url }}</p>
 			<p class="smallfont">{{p.photofilename}}</p>
-			<p class="smallfont">{{p.extension}}</p>
+			<p class="smallfont">{{p.extension|safe}}</p>
         {% else %}
 			<img src="/media/images/user.png"  class="img-rounded" width="100%"/>
         {% endif %}
