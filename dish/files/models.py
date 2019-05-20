@@ -80,7 +80,7 @@ class userProfile(models.Model):
 
 	def extension(self):
 		name, extension = os.path.splitext(self.photo.url)
-		return extension
+		return extension.replace("&amp;",'&')
 
 	#django-allauth: method for email-verification status django-allauth
 	def account_verified(self):
