@@ -55,5 +55,8 @@ $("#esc").click(function(){
 {% else %}
 <h3>No Picture</h3>
 
+<a class="btn btn-lg btn-warning" style="position:absolute;right:0.5%;top:0.5%;"
+ href="{% url 'view_main' %}" id="esc" />Exit Fullscreen (Esc)</a>
+
 {% endif %}
 
