@@ -109,7 +109,7 @@
 	   {% endif %}
 		<div class="col-xs-3" style="padding-left:0px; padding-right:0px;">
 			{% if p.photo %}
-				<img id="foodie_photo" name="/media/{{p.photofilename}}{{p.extension}}" src="/media/{{p.photofilename}}-med{{p.extension}}" class="img-rounded" width="100%"/>
+				<img id="foodie_photo" name="{{p.photofilename}}{{p.extension}}" src="{{p.photofilename}}-med{{p.extension}}" class="img-rounded" width="100%"/>
 			{% else %}
 				<img src="/media/images/user.png"  class="img-rounded"  width="100%"/>
 			{% endif %}
