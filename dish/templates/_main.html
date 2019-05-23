@@ -289,9 +289,9 @@
 		</div>
 	{% endif %}
 	{% if top_lists|length  == 0 %}
-		<div class="well well-tight well-white">
+		<div class="well well-tight well-white" style="text-align:center;">
 			<p style="margin:10px;text-align:center;">There are no lists</p>
-			<a class="btn btn-custom btn-lg" href="{% url 'view_listnew' %}" style="margin-bottom:4px;text-align:center;">Create new list</a>
+			<a class="btn btn-custom btn-lg" href="{% url 'view_listnew' %}" style="margin-bottom:4px;">Create new list</a>
 		</div>
 	{% endif %}
 </div>
@@ -401,9 +401,9 @@
 		</div>
 	{% endif %}
 	{% if cuisine_top|length  == 0 %}
-		<div class="well well-tight well-white">
-			<p style="margin:10px;text-align:center;">There are no Cuisines</p>
-			<a class="btn btn-custom btn-lg" href="/listnew/" style="margin-bottom:4px;text-align:center;">Create new list</a>
+		<div class="well well-tight well-white" style="text-align:center;">
+			<p style="margin:10px;">There are no Cuisines</p>
+			<a class="btn btn-custom btn-lg" href="{% url 'view_cuisinenew' %}" style="margin-bottom:4px;">Create new Cuisine</a>
 		</div>
 	{% endif %}
 </div>
