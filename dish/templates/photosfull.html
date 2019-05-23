@@ -73,7 +73,7 @@ $("#prev").click(function(){
 </head>
 <body style="background-color:black;">
 
-{% if list %}
+{% if list1 %}
 <div style="position:absolute;top:0px; background-color:black; opacity: 0.4; filter:alpha(opacity=40); height: 50px; width: 100%;">
 </div>
 
@@ -126,6 +126,6 @@ $("#prev").click(function(){
 
 {% else %}
 <h3>No Pictures</h3>
-
+<a class="btn btn-lg btn-warning" style="position:absolute;right:0.5%;top:0.5%;" href="{% url 'view_main' %}" id="esc" />Exit Fullscreen (Esc)</a>
 {% endif %}
 
