@@ -419,13 +419,13 @@ class Picture(models.Model):
 
 	def _get_file_name(self):
 		"Returns file name with out extension"
-		name, extension = os.path.splitext(self.location.name)
+		name, extension = os.path.splitext(self.location.url)
 		return name
 	file_name = property(_get_file_name)
 	
 	def _get_extension(self):
 		"Returns file name with out extension"
-		name, extension = os.path.splitext(self.location.name)
+		name, extension = os.path.splitext(self.location.url)
 		return extension
 	extension_name = property(_get_extension)
 
@@ -434,11 +434,11 @@ class Picture(models.Model):
 		return reverse('view_photourl', kwargs={'urlname':self.urlname})
 
 	def filename(self):
-		name, extension = os.path.splitext(self.location.name)
+		name, extension = os.path.splitext(self.location.url)
 		return name
 
 	def extension(self):
-		name, extension = os.path.splitext(self.location.name)
+		name, extension = os.path.splitext(self.location.url)
 		return extension
 
 	def save(self):
