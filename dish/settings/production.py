@@ -62,6 +62,7 @@ AWS_DEFAULT_ACL = None
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_QUERYSTRING_AUTH = False#Doesn't add signature after media files
 
+MEDIA_ROOT = "https://s3-us-west-2.amazonaws.com/wfgs/"
 #To send emails
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
