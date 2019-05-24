@@ -464,7 +464,7 @@ def cuisine_search(string_sent):
 #################################
 ######   D I S H          #######
 #################################
-#000
+
 def dishes_view(request,page=None):
 	from django.db.models.functions import Substr
 	list = Dish.objects.filter(active=True).select_related('userprofile__user').prefetch_related('cuisines').annotate(Count('picture'))
