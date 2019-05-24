@@ -478,7 +478,7 @@ def dishes_view(request,page=None):
 		paginatorlist = paginator.page(page)
 	except (EmptyPage, InvalidPage):
 		paginatorlist = paginator.page(paginator.num_pages)
-	cxt = {'paginatorlist':paginatorlist}
+	cxt = {'paginatorlist':paginatorlist, 'media_root':settings.MEDIA_ROOT}
 	return render_to_response('dishes.html',cxt,context_instance=RequestContext(request))
 
 def disheslatest_view(request,page=None):

@@ -323,7 +323,7 @@ $(document).ready(function(){
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><!--5-->
 			{% if photos|length > 0 %}
 				<a href="/photo/{{photos.0.urlname}}">
-					<img src="/media/{{photos.0.filename}}-reg{{photos.0.extension}}" style="margin-bottom:5px;" class="img-rounded" width="100%" alt="{{dish.name}}">
+					<img src="{{photos.0.filename}}-reg{{photos.0.extension}}" style="margin-bottom:5px;" class="img-rounded" width="100%" alt="{{dish.name}}">
 				</a>
 				<p class="smallfont pull-right">Photo credit:
 					{% if photos.0.ownit|lower == 'true' %}

@@ -67,6 +67,10 @@
         {% endif %}
 		</div>
 		<div class="col-sm-9 col-xs-12" style="padding-left:2px;">
+		{% if p.photo_main %}
+			<p>p.filename: {{p.filename}}<br>
+			p.extension: {{p.extension}}</p>
+		{% endif %}
 			<a href="/dish/{{p.urlname}}">
 				<h3 class="list-group-item-heading" style="color:#845505;margin-bottom:2px;display:inline;"><b>{{p.name|truncatechars:66}}</b></h3>
 			</a>
