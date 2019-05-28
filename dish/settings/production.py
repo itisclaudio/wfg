@@ -29,8 +29,7 @@ MIDDLEWARE_CLASSES = (
 	'django_mobile.middleware.SetFlavourMiddleware',
 )
 
-#BASE_URL = 'https://wfgs.herokuapp.com/' # By me: for global_constants
-BASE_URL = 'https://wfgs.herokuapp.com/test/' # By me: for global_constants
+BASE_URL = 'https://wfgs.herokuapp.com/' # By me: for global_constants
 
 import dj_database_url
 #db_from_env = dj_database_url.config()
@@ -71,6 +70,7 @@ S3DIRECT_REGION = 'us-west-2'
 #S3_URL = '//%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 S3_URL = 'https://s3-%s.s3.amazonaws.com/%s/' % (S3DIRECT_REGION,AWS_STORAGE_BUCKET_NAME)
 MEDIA_URL = '//%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 #MEDIA_URL = '//s3-%s.s3.amazonaws.com/%s/' % (S3DIRECT_REGION,AWS_STORAGE_BUCKET_NAME)
 #MEDIA_URL = S3_URL
 MEDIA_ROOT = MEDIA_URL
