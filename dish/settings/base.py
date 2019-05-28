@@ -116,9 +116,6 @@ UPLOAD_USER = 'dish/media/users'
 
 #STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-MEDIA_ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.dirname(__file__)),'media/'))
-MEDIA_URL = '/media/'
-
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 FLAVOURS = ('full', 'mobile')#mobile middleware
