@@ -64,7 +64,7 @@ AWS_QUERYSTRING_AUTH = False#Doesn't add signature after media files
 #New for Amazon:
 #MEDIA_URL = "https://s3-us-west-2.amazonaws.com/wfgs/"
 #MEDIA_URL = "https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/"
-AWS_MEDIAFILES_LOCATION = 'media'
+MEDIAFILES_LOCATION = 'media'
 DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
 S3DIRECT_REGION = 'us-west-2'
 #S3_URL = '//%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
