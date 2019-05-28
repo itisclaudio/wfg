@@ -533,7 +533,7 @@ def dish_view(request,urlname):
 	list_total = lists.count()
 	similars = DishSimilar.objects.filter(dish1=dish).select_related('dish2').prefetch_related('dish2__cuisines')
 	similar_total = similars.count()
-	ctx = {'dish':dish,'photos':photos,'similars':similars, 'desc_small':desc_small,'desc_mobile':desc_mobile, 'liked':liked, 'lists':lists, 'list_total':list_total,'similar_total':similar_total}
+	ctx = {'dish':dish,'photos':photos,'similars':similars, 'desc_small':desc_small,'desc_mobile':desc_mobile, 'liked':liked, 'lists':lists, 'list_total':list_total,'similar_total':similar_total, 'MEDIA_ROOT':settings.MEDIA_ROOT, 'MEDIA_URL':settings.MEDIA_URL}
 	if req_user.is_authenticated():
 		req_profile = userProfile.objects.get(user=req_user)
 		lists = lists.exclude(~Q(owner = req_profile), type = '3')
