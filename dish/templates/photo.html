@@ -51,14 +51,11 @@
 				</button>
 		{% if reload = '1' %}
 		<a href="/photofullscreen/{{object.id}}/">
-		<img id="photo" src="/media/{{object.location.url}}?cachebuster=blah23" alt="{{object.dish}}" class="img-rounded" width="100%"></a>
+		<img id="photo" src="{{object.location.url}}?cachebuster=blah23" alt="{{object.dish}}" class="img-rounded" width="100%"></a>
 		{% else %}
 		<a href="/photofullscreen/{{object.id}}/">
-		<img id="photo" src="/media/{{object.location.url}}" alt="{{object.dish}}" class="img-rounded" width="100%"></a>
+		<img id="photo" src="{{object.location.url}}" alt="{{object.dish}}" class="img-rounded" width="100%"></a>
 		{% endif %}
-		<p>object.location.url: {{object.location.url}}</p>
-		<p>object.location.name: {{object.location.name}}</p>
-		<p>object.location: {{object.location}}</p>
 		<br>
 	<div style="margin-top:5px; margin-bottom: 5px;">
 		{# Sharethis buttons #}
@@ -88,7 +85,6 @@
 	<a class="btn btn-custom" id="id_obj" style="margin-left:0px;" name="{{object.id}}" href="/dish/{{object.dish.urlname}}"><b>{{object.dish|truncatechars:20}}</b></a>
 	<a href="/photo/{{object.dish.favphoto.urlname}}" class="hidden-xs">
 		<img src="{{object.dish.favphoto.filename}}-med{{object.dish.favphoto.extension}}" class="img-rounded" width="80%">
-		<img src="{{MEDIA_URL}}{{object.dish.filename}}-med{{object.dish.extension}}" class="img-rounded" width="80%">
 	</a>
 	<p>
 	{% for cuisine in object.dish.cuisines.all %}
