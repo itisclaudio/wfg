@@ -321,10 +321,7 @@ $(document).ready(function(){
 	<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12"><!--3-->
 		<div class="row" style="padding:0px;"><!--4-->
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><!--5-->
-			<p><b>MEDIA_URL:</b> {{MEDIA_URL}}<br>
-			MEDIA_ROOT: {{MEDIA_ROOT}}</p> 
 			{% if photos|length > 0 %}
-				<p>photos.0.filename: {{photos.0.filename}}</p>
 				<a href="/photo/{{photos.0.urlname}}">
 					<img src="{{photos.0.filename}}-reg{{photos.0.extension}}" style="margin-bottom:5px;" class="img-rounded" width="100%" alt="{{dish.name}}">
 				</a>
