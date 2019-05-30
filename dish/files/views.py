@@ -644,7 +644,7 @@ def dishedit_view(request,id):
 			return render_to_response('dishedit.html',ctx,context_instance=RequestContext(request))
 	### 13 - Populate form ###:
 	form=dishForm(initial={'name':f.name,'othernames':f.othernames,'ingredients':f.ingredients,'description':f.description, 'features':f.features.all})
-	ctx = {'form':form,'dish':f,'cuisines':cui_query, 'cuisines_h':cui_query, 'features':query_features, 'features_selected':current_query_features, 'feature_current_id_list':feature_current_id_list}
+	ctx = {'form':form,'dish':f,'cuisines':cui_query, 'cuisines_h':cui_query, 'features':query_features, 'features_selected':current_query_features, 'feature_current_id_list':feature_current_id_list,'MEDIA_URL':settings.MEDIA_URL}
 	return render_to_response('dishedit.html',ctx,context_instance=RequestContext(request))
 
 @login_required(login_url=singin_url)

@@ -34,7 +34,7 @@
 				<td>
 				{% if p.favphoto %}
 					<a href="/dish/{{p.urlname}}">
-					<img src="/media/{{p.favphoto.filename}}-thum{{p.favphoto.extension}}" class="img-rounded">
+					<img src="{{MEDIA_URL}}{{p.filename}}-thum{{p.extension}}" class="img-rounded">
 					</a>
 				{% else %}
 					<a href="/photonew/{{p.id}}/"><img src="/media/images/upload-med.png" class="img-rounded" width="60%"></a>
@@ -85,7 +85,7 @@
             <div style="padding-top:10px;">
 				{% if dish.favphoto %}
 					<a href="/photo/{{dish.favphoto.urlname}}" style="vertical-align:bottom;" align="bottom">
-						<img src="/media/{{dish.favphoto.filename}}-med{{dish.favphoto.extension}}" width="90%" class="img-rounded" style="margin-top:0px;" align="right"></a>
+						<img src="{{MEDIA_URL}}{{dish.filename}}-med{{dish.extension}}" width="90%" class="img-rounded" style="margin-top:0px;" align="right"></a>
 				{% else %}
 					<a href="/photonew/{{dish.id}}/" style="vertical-align:bottom;" align="baseline"><img src="/media/images/upload.jpg" width="100%" class="img-rounded" style="margin-top:10px;" align="right"></a>
 				{% endif %}
