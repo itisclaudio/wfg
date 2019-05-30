@@ -64,9 +64,9 @@
 			<a href="/dish/{{p.urlname}}">
 				<img src="/media/{{p.filename}}-med{{p.extension}}" class="img-rounded" width="100%">
 			</a>
-			<a href="/dish/{{p.urlname}}">
-				<img src="{{MEDIA_ROOT}}/media/{{p.filename}}-med{{p.extension}}" class="img-rounded" width="100%">
-			</a>
+			<img src="{{MEDIA_URL}}/media/{{p.filename}}-med{{p.extension}}" class="img-rounded" width="100%">
+			<img src="{{MEDIA_URL}}/{{p.filename}}-med{{p.extension}}" class="img-rounded" width="100%">
+
         {% endif %}
 		</div>
 		<div class="col-sm-9 col-xs-12" style="padding-left:2px;">
@@ -74,7 +74,7 @@
 			<p>p.filename: {{p.filename}}<br>
 			p.extension: {{p.extension}}</p>
 			<p><b>MEDIA_URL:</b> {{MEDIA_URL}}<br>
-			MEDIA_ROOT: {{MEDIA_ROOT}}/media/{{p.filename}}{{p.extension}}</p>
+			MEDIA_ROOT: {{MEDIA_URL}}/media/{{p.filename}}{{p.extension}}</p>
 		{% endif %}
 			<a href="/dish/{{p.urlname}}">
 				<h3 class="list-group-item-heading" style="color:#845505;margin-bottom:2px;display:inline;"><b>{{p.name|truncatechars:66}}</b></h3>
