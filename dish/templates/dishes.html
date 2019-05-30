@@ -71,8 +71,7 @@
 		</div>
 		<div class="col-sm-9 col-xs-12" style="padding-left:2px;">
 		{% if p.photo_main %}
-			<p>p.filename: {{p.filename}}<br>
-			p.extension: {{p.extension}}</p>
+			<p>MEDIA_ROOT: {{MEDIA_ROOT}}<br>
 			<p><b>MEDIA_URL:</b> {{MEDIA_URL}}<br>
 			URL: {{MEDIA_URL}}{{p.filename}}{{p.extension}}</p>
 		{% endif %}
