@@ -51,11 +51,14 @@
 				</button>
 		{% if reload = '1' %}
 		<a href="/photofullscreen/{{object.id}}/">
-		<img id="photo" src="/media/{{object.location}}?cachebuster=blah23" alt="{{object.dish}}" class="img-rounded" width="100%"></a>
+		<img id="photo" src="/media/{{object.location.url}}?cachebuster=blah23" alt="{{object.dish}}" class="img-rounded" width="100%"></a>
 		{% else %}
 		<a href="/photofullscreen/{{object.id}}/">
-		<img id="photo" src="/media/{{object.location}}" alt="{{object.dish}}" class="img-rounded" width="100%"></a>
+		<img id="photo" src="/media/{{object.location.url}}" alt="{{object.dish}}" class="img-rounded" width="100%"></a>
 		{% endif %}
+		<p>object.location.url: {{object.location.url}}</p>
+		<p>object.location.name: {{object.location.name}}</p>
+		<p>object.location: {{object.location}}</p>
 		<br>
 	<div style="margin-top:5px; margin-bottom: 5px;">
 		{# Sharethis buttons #}
