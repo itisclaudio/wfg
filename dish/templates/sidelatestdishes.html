@@ -51,10 +51,10 @@
 			</div>
 			{% endif %}
 			<div class="col-xs-5" style="padding-left:0px; text-align:-webkit-right;">
-				{% if p.photo_main %}
-					<img src="/media/{{p.filename}}-med{{p.extension}}" style="max-height:100px;" class="img-rounded img-responsive"/>
-				{% else %}
+				{% if not p.photo_main %}
 					<img src="/media/images/upload-med.jpg" class="img-rounded" height="70px">
+				{% else %}
+					<img src="{{MEDIA_URL}}{{p.filename}}-med{{p.extension}}" style="max-height:100px;" class="img-rounded img-responsive"/>
 				{% endif %}
 			</div>
 		  </div>
