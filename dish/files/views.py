@@ -17,7 +17,7 @@ import json #for ajax in photonewnodish
 from django.contrib.auth.decorators import login_required #For decorator: @login_required
 from datetime import date, datetime #To calculate todays date
 from django.contrib.auth.models import User
-from dish import settings #To call media locations
+from dish import settings #To call media locations, MEDIA_URL
 #For login
 from django.contrib.auth import login,logout,authenticate
 import os #To delete photo
@@ -478,7 +478,7 @@ def dishes_view(request,page=None):
 		paginatorlist = paginator.page(page)
 	except (EmptyPage, InvalidPage):
 		paginatorlist = paginator.page(paginator.num_pages)
-	cxt = {'paginatorlist':paginatorlist, 'MEDIA_URL':settings.MEDIA_URL, 'MEDIA_ROOT':settings.MEDIA_ROOT}
+	cxt = {'paginatorlist':paginatorlist, 'MEDIA_URL':settings.MEDIA_URL}
 	return render_to_response('dishes.html',cxt,context_instance=RequestContext(request))
 
 def disheslatest_view(request,page=None):
@@ -533,7 +533,7 @@ def dish_view(request,urlname):
 	list_total = lists.count()
 	similars = DishSimilar.objects.filter(dish1=dish).select_related('dish2').prefetch_related('dish2__cuisines')
 	similar_total = similars.count()
-	ctx = {'dish':dish,'photos':photos,'similars':similars, 'desc_small':desc_small,'desc_mobile':desc_mobile, 'liked':liked, 'lists':lists, 'list_total':list_total,'similar_total':similar_total, 'MEDIA_ROOT':settings.MEDIA_ROOT, 'MEDIA_URL':settings.MEDIA_URL}
+	ctx = {'dish':dish,'photos':photos,'similars':similars, 'desc_small':desc_small,'desc_mobile':desc_mobile, 'liked':liked, 'lists':lists, 'list_total':list_total,'similar_total':similar_total, 'MEDIA_URL':settings.MEDIA_URL}
 	if req_user.is_authenticated():
 		req_profile = userProfile.objects.get(user=req_user)
 		lists = lists.exclude(~Q(owner = req_profile), type = '3')
@@ -1451,7 +1451,7 @@ def photourl_view(request, urlname, reload=None):
 				liked = 1
 		except:
 			liked = 0
-	cxt = {'object':pho, 'liked':liked, 'reload':reload, 'next':next, 'prev':prev,'photos':len(indexes),'index':ind_pho+1,}
+	cxt = {'object':pho, 'liked':liked, 'reload':reload, 'next':next, 'prev':prev,'photos':len(indexes),'index':ind_pho+1,'MEDIA_URL':settings.MEDIA_URL}
 	return render_to_response('photo.html',cxt,context_instance=RequestContext(request))
 
 def latestphotos_view(request, page=None):
