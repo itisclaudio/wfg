@@ -6,12 +6,14 @@ DEBUG = True
 ALLOWED_HOSTS = ['wfgs.herokuapp.com','wfg.herokuapp.com/']
 INSTALLED_APPS += (
 	'storages',#App needed for Amazon AWS S3
+	'whitenoise.runserver_nostatic',
 )
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY','afl549q&v2eppw3reii)7wozdeyiol47n)hr7^fis*g#5a!-e04=')
 
 MIDDLEWARE_CLASSES = (
+	'whitenoise.middleware.WhiteNoiseMiddleware',
 	'django.contrib.sessions.middleware.SessionMiddleware',
 	'django.middleware.common.BrokenLinkEmailsMiddleware', #To send 404 'page not found' error to ADMINS
 	'django.middleware.common.CommonMiddleware',
@@ -62,16 +64,16 @@ AWS_QUERYSTRING_AUTH = False#Doesn't add signature after media files
 #New for Amazon:
 #MEDIA_URL = "https://s3-us-west-2.amazonaws.com/wfgs/"
 #MEDIA_URL = "https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/"
+#MEDIA_URL = "https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/"
 MEDIAFILES_LOCATION = 'media'
 DEFAULT_FILE_STORAGE = 'custom_storages.MediaRootS3BotoStorage'
-STATICFILES_STORAGE = 'custom_storages.StaticRootS3BotoStorage'
+#STATICFILES_STORAGE = 'custom_storages.StaticRootS3BotoStorage'
 S3DIRECT_REGION = 'us-west-2'
-S3_URL = '//%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
-#S3_URL = 'https://s3-%s.s3.amazonaws.com/%s/' % (S3DIRECT_REGION,AWS_STORAGE_BUCKET_NAME)
-#MEDIA_URL = 'https://%s.s3.amazonaws.com/%s/' % (AWS_STORAGE_BUCKET_NAME,MEDIAFILES_LOCATION)
-MEDIA_URL = '//%s.s3.amazonaws.com/media/' % AWS_STORAGE_BUCKET_NAME
+#S3_URL = '//%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
+S3_URL = 'https://s3-%s.s3.amazonaws.com/%s/' % (S3DIRECT_REGION,AWS_STORAGE_BUCKET_NAME)
+MEDIA_URL = 'https://%s.s3.amazonaws.com/%s/' % (AWS_STORAGE_BUCKET_NAME,MEDIAFILES_LOCATION)
 #STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
-STATIC_URL = 'https://%s.s3.amazonaws.com/static/' % AWS_STORAGE_BUCKET_NAME
+#STATIC_URL = 'https://%s.s3.amazonaws.com/static/' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 #MEDIA_URL = '//s3-%s.s3.amazonaws.com/%s/' % (S3DIRECT_REGION,AWS_STORAGE_BUCKET_NAME)
 #MEDIA_URL = S3_URL
