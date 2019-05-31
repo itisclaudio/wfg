@@ -19,7 +19,8 @@ urlpatterns = [
 	url(r'^',include('dish.files.urls')),
 	url(r'^accounts/', include('allauth.urls')),#For:django-allauth
 
-	url(r'^media/(?P<path>.*)$','django.views.static.serve',{'document_root':settings.MEDIA_ROOT}),
+	#url(r'^media/(?P<path>.*)$','django.views.static.serve',{'document_root':settings.MEDIA_ROOT}),
+	url(r'^media/(?P<path>.*)$','django.views.static.serve',{'document_root':'https://wfgs.s3-us-west-2.amazonaws.com/media/'}),
 
 	#url(r'^ajax_select/', include(ajax_select_urls)),#django-ajax-selects
 ] + static(settings.STATIC_URL, document_root=settings.MEDIA_ROOT)
