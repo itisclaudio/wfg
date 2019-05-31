@@ -22,7 +22,7 @@ urlpatterns = [
 	url(r'^media/(?P<path>.*)$','django.views.static.serve',{'document_root':settings.MEDIA_URL}),
 
 	#url(r'^ajax_select/', include(ajax_select_urls)),#django-ajax-selects
-] + static(settings.STATIC_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.STATIC_URL, document_root=settings.MEDIA_URL)
 
 # This line is for django-ajax-selects:
 # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
