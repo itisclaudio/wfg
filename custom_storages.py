@@ -6,4 +6,4 @@ StaticRootS3BotoStorage = lambda: S3Boto3Storage(location='static') #'static' is
 #MediaRootS3BotoStorage = lambda: S3Boto3Storage(location='media')
 
 class MediaRootS3BotoStorage(S3Boto3Storage):
-	location = settings.MEDIAFILES_LOCATION
+	location = 'media'
