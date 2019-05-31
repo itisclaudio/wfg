@@ -6,14 +6,14 @@ DEBUG = True
 ALLOWED_HOSTS = ['wfgs.herokuapp.com','wfg.herokuapp.com/']
 INSTALLED_APPS += (
 	'storages',#App needed for Amazon AWS S3
-	'whitenoise.runserver_nostatic',
+	#'whitenoise.runserver_nostatic',
 )
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY','afl549q&v2eppw3reii)7wozdeyiol47n)hr7^fis*g#5a!-e04=')
 
 MIDDLEWARE_CLASSES = (
-	'whitenoise.middleware.WhiteNoiseMiddleware',
+	#'whitenoise.middleware.WhiteNoiseMiddleware',
 	'django.contrib.sessions.middleware.SessionMiddleware',
 	'django.middleware.common.BrokenLinkEmailsMiddleware', #To send 404 'page not found' error to ADMINS
 	'django.middleware.common.CommonMiddleware',
