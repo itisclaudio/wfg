@@ -57,7 +57,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+#AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 AWS_QUERYSTRING_AUTH = False#Doesn't add signature after media files
@@ -72,7 +72,7 @@ STATICFILES_STORAGE = 'custom_storages.StaticRootS3BotoStorage'
 S3DIRECT_REGION = 'us-west-2'
 S3_URL = '//%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 MEDIA_URL = '//%s.s3.amazonaws.com/media/' % AWS_STORAGE_BUCKET_NAME
-#MEDIA_ROOT = MEDIA_URL
+MEDIA_ROOT = MEDIA_URL
 #MEDIA_ROOT = '//%s.s3.amazonaws.com/media/' % AWS_STORAGE_BUCKET_NAME
 STATIC_URL = S3_URL + 'static/'
 ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
@@ -82,7 +82,7 @@ ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 #MEDIA_URL = '//s3-%s.s3.amazonaws.com/%s/' % (S3DIRECT_REGION,AWS_STORAGE_BUCKET_NAME)
 #MEDIA_URL = S3_URL
 
-MEDIA_ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.dirname(__file__)),'media/'))
+#MEDIA_ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.dirname(__file__)),'media/'))
 
 #To send emails
 EMAIL_USE_TLS = True
