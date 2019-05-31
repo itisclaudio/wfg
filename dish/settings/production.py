@@ -82,7 +82,7 @@ ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 #MEDIA_URL = '//s3-%s.s3.amazonaws.com/%s/' % (S3DIRECT_REGION,AWS_STORAGE_BUCKET_NAME)
 #MEDIA_URL = S3_URL
 
-MEDIA_ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__)),'media/')
+MEDIA_ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.dirname(__file__)),'media/'))
 
 #To send emails
 EMAIL_USE_TLS = True
