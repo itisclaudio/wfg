@@ -66,12 +66,20 @@ AWS_QUERYSTRING_AUTH = False#Doesn't add signature after media files
 #MEDIA_URL = "https://s3-us-west-2.amazonaws.com/wfgs/"
 #MEDIA_URL = "https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/"
 #MEDIA_URL = "https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/"
-#MEDIAFILES_LOCATION = 'media'
+MEDIAFILES_LOCATION = 'media'
 DEFAULT_FILE_STORAGE = 'custom_storages.MediaRootS3BotoStorage'
 STATICFILES_STORAGE = 'custom_storages.StaticRootS3BotoStorage'
 S3DIRECT_REGION = 'us-west-2'
 S3_URL = '//%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
-MEDIA_URL = '//%s.s3.amazonaws.com/media/' % AWS_STORAGE_BUCKET_NAME
+
+# If we're not using our S3 backend storage we need to serve the media files via path
+if DEFAULT_FILE_STORAGE == "custom_storages.MediaRootS3BotoStorage":
+	MEDIA_URL = 'https://%s.s3-us-west-2.amazonaws.com/%s/' % (AWS_STORAGE_BUCKET_NAME, MEDIAFILES_LOCATION)
+else:
+	MEDIA_URL = '/media/'
+
+#MEDIA_URL = '//%s.s3.amazonaws.com/media/' % AWS_STORAGE_BUCKET_NAME
+#MEDIA_URL = 'media'
 #MEDIA_ROOT = MEDIA_URL
 MEDIA_ROOT = '//%s.s3.amazonaws.com/media/' % AWS_STORAGE_BUCKET_NAME
 STATIC_URL = S3_URL + 'static/'
