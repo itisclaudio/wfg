@@ -8,6 +8,6 @@ StaticRootS3BotoStorage = lambda: S3Boto3Storage(location='static') #'static' is
 
 @deconstructible
 class MediaRootS3BotoStorage(S3Boto3Storage):
-	bucket_name = settings.MEDIAFILES_BUCKET
+	bucket_name = settings.AWS_STORAGE_BUCKET_NAME
 	location = settings.MEDIAFILES_LOCATION
 	#location = 'media'
