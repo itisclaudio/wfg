@@ -2,7 +2,7 @@ from .base import *
 # Override base.py settings here
 #print "in production.py"
 
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ['wfgs.herokuapp.com','wfg.herokuapp.com/']
 INSTALLED_APPS += (
 	'storages',#App needed for Amazon AWS S3
@@ -29,7 +29,8 @@ MIDDLEWARE_CLASSES = (
 	'django_mobile.middleware.SetFlavourMiddleware',
 )
 
-BASE_URL = 'https://wfgs.herokuapp.com/' # By me: for global_constants
+#BASE_URL = 'https://wfgs.herokuapp.com/' # By me: for global_constants
+BASE_URL = 'https://wfgs.s3.amazonaws.com/'
 
 import dj_database_url
 #db_from_env = dj_database_url.config()
