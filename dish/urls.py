@@ -19,7 +19,7 @@ urlpatterns = [
 	url(r'^',include('dish.files.urls')),
 	url(r'^accounts/', include('allauth.urls')),#For:django-allauth
 
-	url(r'^media/(?P<path>.*)$','django.views.static.serve',{'document_root':settings.MEDIA_ROOT}),
+	#url(r'^media/(?P<path>.*)$','django.views.static.serve',{'document_root':settings.MEDIA_ROOT}),
 
 	#url(r'^ajax_select/', include(ajax_select_urls)),#django-ajax-selects
 ] + static(settings.STATIC_URL, document_root=settings.MEDIA_ROOT)
@@ -34,8 +34,13 @@ if settings.LOCAL_DEV:
 	import debug_toolbar
 	urlpatterns = [
 		url(r'^__debug__/', include(debug_toolbar.urls)),
+		url(r'^media/(?P<path>.*)$','django.views.static.serve',{'document_root':settings.MEDIA_ROOT}),
 	] + urlpatterns
-
+else:
+	import os
+	urlpatterns = [
+	url(r'^media/(?P<path>.*)$','django.views.static.serve',{'document_root':os.environ.get('MEDIA_URL_AWS')}),
+] + urlpatterns
 
 #To handle Errors
 handler500 = myerror500
