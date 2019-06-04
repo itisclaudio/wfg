@@ -182,14 +182,17 @@
   <!-- Wrapper for slides -->
   <div class="carousel-inner">
     <div class="item active">
-      <img src="/media/images/carousel/carousel1.jpg" alt="Welcome to WorldFood.Guide">
+      {#<img src="/media/images/carousel/carousel1.jpg" alt="Welcome to WorldFood.Guide">#}
+	  <img src="{% static '/media/images/carousel/carousel1.jpg'%}" alt="Welcome to WorldFood.Guide">
     </div>
     <div class="item">
-      <img src="/media/images/carousel/banner2.png" alt="Featured Foodie">
+      {#<img src="/media/images/carousel/banner2.png" alt="Featured Foodie">#}
+      <img src="{% static '/media/images/carousel/banner2.png'%}" alt="Featured Foodie">
     </div>
     <div class="item">
 		<a href="{% url 'view_listnew' %}">
-			<img src="/media/images/carousel/list.jpg" alt="Create list">
+			{#<img src="/media/images/carousel/list.jpg" alt="Create list">#}
+			<img src="{% static '/media/images/carousel/list.jpg'%}" alt="Create list">
 		</a>
     </div>
   </div>

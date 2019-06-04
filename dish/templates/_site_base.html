@@ -9,7 +9,9 @@
 
 <link href="{% static 'css/_main.css' %}" rel="stylesheet" >
 <!--<link href="{{ MEDIA_URL }}/media/images/icons/favicon.ico" rel="shortcut icon" type="image/x-icon"  >-->
-<link href="{{ MEDIA_URL }}/media/images/icons/favicon-16x16.png" rel="icon" type="image/x-icon">
+{#<link href="{{ MEDIA_URL }}/media/images/icons/favicon-16x16.png" rel="icon" type="image/x-icon">#}
+<link href="{% static '/media/images/icons/favicon-16x16.png'%}" rel="icon" type="image/x-icon">
+
 {# For home screen icons in android/apple: #}
 <link rel="apple-touch-icon" sizes="128x128" href="{{ MEDIA_URL }}/media/images/icons/apple-icon.png">
 <!--<link href="{{ MEDIA_URL }}/media/images/icons/favicon.ico" rel="icon" >-->

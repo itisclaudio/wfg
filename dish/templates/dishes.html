@@ -50,7 +50,9 @@
 </tr>
 </table>
 	<p>MEDIA_ROOT:{{MEDIA_ROOT}}<br>
-	MEDIA_URL:{{MEDIA_URL}} </p>
+	MEDIA_URL:{{MEDIA_URL}}<br>
+	STATIC_URL: {{STATIC_URL}}
+	</p>
 <div class="list-group" style="margin-bottom:0px;">
 {% if paginatorlist.paginator.count > 0 %}
 {## LIST ##}
@@ -63,7 +65,7 @@
 			</a>
         {% else %}
 			<a href="/dish/{{p.urlname}}">
-				<img src="{{MEDIA_URL}}{{p.filename}}-med{{p.extension}}" class="img-rounded" width="100%">
+				<img src="{{STATIC_URL}}{{p.filename}}-med{{p.extension}}" class="img-rounded" width="100%">
 				<img src="/media/{{p.filename}}-med{{p.extension}}" class="img-rounded" width="100%">
 			</a>
         {% endif %}
