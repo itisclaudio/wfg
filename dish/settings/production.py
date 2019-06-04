@@ -81,12 +81,15 @@ S3_URL = 'https://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 #MEDIA_URL = '//%s.s3.amazonaws.com/media/' % AWS_STORAGE_BUCKET_NAME
 #MEDIA_ROOT = MEDIA_URL
 #MEDIA_ROOT = '//%s.s3.amazonaws.com/media/' % AWS_STORAGE_BUCKET_NAME
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
-#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'site_media', 'media')
+MEDIA_URL = '/site_madia/media/'
+
+SITE_MEDIA_URL = '/site_media/'
+ADMIN_TOOLS_MEDIA_URL = '/site_media/'
 #MEDIA_ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.dirname(__file__)),'media/'))
 #MEDIA_ROOT = 'https://worldfood.guide/media/'
-STATIC_URL = S3_URL + 'static/'
+#STATIC_URL = S3_URL + 'static/'
+STATIC_URL = '/static_media/'
 #MEDIA_URL = S3_URL + 'media/'
 ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 
