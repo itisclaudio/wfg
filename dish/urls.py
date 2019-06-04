@@ -39,7 +39,8 @@ if settings.LOCAL_DEV:
 else:
 	import os
 	urlpatterns = [
-	url(r'^media/(?P<path>.*)$','django.views.static.serve',{'document_root':os.environ.get('MEDIA_URL_AWS')}),
+	#url(r'^media/(?P<path>.*)$','django.views.static.serve',{'document_root':os.environ.get('MEDIA_URL_AWS')}),
+	url(r'^media/(?P<path>.*)$','django.views.static.serve',{'document_root':settings.MEDIA_ROOT}),
 ] + urlpatterns
 
 #To handle Errors
