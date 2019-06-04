@@ -20,7 +20,7 @@
 	{% if photos|length > 0 %}
 		<meta property="og:image" content="{{photos.0.filename}}-reg{{photos.0.extension}}" />
 	{% else %}
-		<meta property="og:image" content="{{MEDIA_URL}}images/upload.jpg" />
+		<meta property="og:image" content="{{MEDIA_URL}}/media/images/upload.jpg" />
 	{% endif %}
 <link href="{% static 'dist/jquery/autocomplete/jquery-ui.min.css' %}" rel="stylesheet" >
 <script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
@@ -191,7 +191,7 @@ $(document).ready(function(){
 		</p>
 		<div style="margin-bottom:6px;">
 			{% for p in dish.features.all %}
-				<img src="{{MEDIA_URL}}images/features/{{p.icon}}" title="{{p.name}}" width="25px">
+				<img src="{{MEDIA_URL}}/media/images/features/{{p.icon}}" title="{{p.name}}" width="25px">
 			{% endfor %}
 		</div>
 		<p><i>
@@ -346,7 +346,7 @@ $(document).ready(function(){
 				</p>
 			{% else %}
 				<a href="/photonew/{{dish.id}}/">
-					<img src="{{MEDIA_URL}}images/upload.jpg" style="margin-bottom:5px;" width="100%" class="img-rounded">
+					<img src="{{MEDIA_URL}}/media/images/upload.jpg" style="margin-bottom:5px;" width="100%" class="img-rounded">
 				</a>
 			{% endif %}
 			</div><!--5!-->
@@ -357,7 +357,7 @@ $(document).ready(function(){
 					<a href="/photo/{{photos.1.urlname}}">
 						<img src="{{photos.1.filename}}-med{{photos.1.extension}}" alt="{{dish.name}}" class="img-rounded" width="100%"></a>
 				{% else %}
-					<a href="/photonew/{{dish.id}}/"><img src="{{MEDIA_URL}}images/upload-med.jpg" class="img-rounded" width="100%"></a>
+					<a href="/photonew/{{dish.id}}/"><img src="{{MEDIA_URL}}/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
 				{% endif %}
 				</div>
 				<div class="col-lg-3 col-md-3 col-sm-3 hidden-xs" style="padding-left:2px;padding-right:2px;">
@@ -366,7 +366,7 @@ $(document).ready(function(){
 						<img src="{{photos.2.filename}}-med{{photos.2.extension}}" class="img-rounded" alt="{{dish.name}}" width="100%"></a>
 					
 				{% else %}
-					<a href="/photonew/{{dish.id}}/"><img src="{{MEDIA_URL}}images/upload-med.jpg" class="img-rounded" width="100%"></a>
+					<a href="/photonew/{{dish.id}}/"><img src="{{MEDIA_URL}}/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
 				{% endif %}
 				</div>
 				<div class="col-lg-3 col-md-3 col-sm-3 hidden-xs" style="padding-left:2px;padding-right:2px;">
@@ -375,7 +375,7 @@ $(document).ready(function(){
 						<img src="{{photos.3.filename}}-med{{photos.3.extension}}" class="img-rounded" width="100%"></a>
 				{% else %}
 					<a href="/photonew/{{dish.id}}/">
-						<img src="{{MEDIA_URL}}images/upload-med.jpg" class="img-rounded" width="100%"></a>
+						<img src="{{MEDIA_URL}}/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
 				{% endif %}
 				</div>
 				<div class="col-lg-3 col-md-3 col-sm-3 hidden-xs" style="padding-left:2px;padding-right:0px;">
@@ -383,7 +383,7 @@ $(document).ready(function(){
 					<a href="/photo/{{photos.4.urlname}}">
 						<img src="{{photos.4.filename}}-med{{photos.4.extension}}" class="img-rounded" width="100%"></a>
 				{% else %}
-					<a href="/photonew/{{dish.id}}/"><img src="{{MEDIA_URL}}images/upload-med.jpg" class="img-rounded" width="100%"></a>
+					<a href="/photonew/{{dish.id}}/"><img src="{{MEDIA_URL}}/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
 				{% endif %}
 				</div>
 			</div><!--6!-->
@@ -419,7 +419,7 @@ $(document).ready(function(){
 										{% if p.photo_main %}
 											<img src="/media/{{p.filename}}-med{{p.extension}}" class="img-rounded" width="100%">
 										{% else %}
-											<img src="{{MEDIA_URL}}images/upload-med.jpg" class="img-rounded" width="100%">
+											<img src="{{MEDIA_URL}}/media/images/upload-med.jpg" class="img-rounded" width="100%">
 										{% endif %}
 										<b style="display:inline;" >{{p.name|truncatechars:22}}</b>
 										<b class="smallfont" style="margin-bottom:4px; display:inline;">
@@ -440,7 +440,7 @@ $(document).ready(function(){
 						{% else %}
 							<div class="row" style="margin:0px;">
 								<div class="thumbnail col-md-2 col-xs-3" title="Go to dish page: {{p.name}}" style="margin-bottom:0px;line-height:16px;">
-								<img src="{{MEDIA_URL}}images/upload-med.jpg" class="img-rounded" width="100%">
+								<img src="{{MEDIA_URL}}/media/images/upload-med.jpg" class="img-rounded" width="100%">
 								<b style="display:inline;font-size:14px;" >There are no dishes</b>
 								</div>
 							</div>
