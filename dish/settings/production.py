@@ -76,10 +76,9 @@ S3_URL = 'https://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 #if DEFAULT_FILE_STORAGE == "custom_storages.MediaRootS3BotoStorage":
 #	MEDIA_URL = 'https://%s.s3-us-west-2.amazonaws.com/%s/' % (AWS_STORAGE_BUCKET_NAME, MEDIAFILES_LOCATION)
 #else:
-#MEDIA_URL = '/media/'
+MEDIA_URL = '/media/'
 
 #MEDIA_URL = '//%s.s3.amazonaws.com/media/' % AWS_STORAGE_BUCKET_NAME
-MEDIA_URL = 'media'
 #MEDIA_ROOT = MEDIA_URL
 #MEDIA_ROOT = '//%s.s3.amazonaws.com/media/' % AWS_STORAGE_BUCKET_NAME
 MEDIA_ROOT = os.path.join(S3_URL, "static")
