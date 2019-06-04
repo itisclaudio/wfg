@@ -329,7 +329,8 @@
 		{% if foodie.photo %}
 			<img src="{{foodie.photofilename}}-med{{foodie.extension}}" class="img-rounded" width="100%">
 		{% else %}
-			<img src="{{STATIC_URL}}/media/images/user.png"  class="img-rounded" width="100%"/>
+			{#<img src="{{STATIC_URL}}/media/images/user.png"  class="img-rounded" width="100%"/>#}
+			<img src="{% static '/media/images/user.png' %}"  class="img-rounded" width="100%"/>
 		{% endif %}
 		</div>
 	  </div>
