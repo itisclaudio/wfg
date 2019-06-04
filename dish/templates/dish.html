@@ -18,7 +18,7 @@
 <meta property="og:title"  content="{{dish.name}} " />
 <meta property="og:description" content="{{ dish.description|truncatechars:170 }}" />
 	{% if photos|length > 0 %}
-		<meta property="og:image" content="{{MEDIA_URL}}{{photos.0.filename}}-reg{{photos.0.extension}}" />
+		<meta property="og:image" content="{{photos.0.filename}}-reg{{photos.0.extension}}" />
 	{% else %}
 		<meta property="og:image" content="{{MEDIA_URL}}images/upload.jpg" />
 	{% endif %}
