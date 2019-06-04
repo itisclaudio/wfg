@@ -84,7 +84,8 @@
 			<span class="icon-bar"></span>
 		</button>
 		<a class="navbar-brand" style="padding-top:4px;padding-right:4px;" href="{% url 'view_main' %}">
-			<img class="icon-brand" alt="WorldFood.Guide" src="/media/images/worldfoodguide.png" height="60px">
+			{#<img class="icon-brand" alt="WorldFood.Guide" src="/media/images/worldfoodguide.png" height="60px">#}
+			<img class="icon-brand" alt="WorldFood.Guide" src="{% static '/media/images/worldfoodguide.png'%}" height="60px">
 			<!--<img class="icon-brand" alt="WorldFood.Guide" src="/media/images/worldfoodguide-worldcup.png" height="60px">-->
 		</a>
     </div>
@@ -329,7 +330,6 @@
 		{% if foodie.photo %}
 			<img src="{{foodie.photofilename}}-med{{foodie.extension}}" class="img-rounded" width="100%">
 		{% else %}
-			{#<img src="{{STATIC_URL}}/media/images/user.png"  class="img-rounded" width="100%"/>#}
 			<img src="{% static '/media/images/user.png' %}"  class="img-rounded" width="100%"/>
 		{% endif %}
 		</div>
