@@ -81,8 +81,8 @@ MEDIA_URL = '/media/'
 #MEDIA_URL = '//%s.s3.amazonaws.com/media/' % AWS_STORAGE_BUCKET_NAME
 #MEDIA_URL = 'media'
 #MEDIA_ROOT = MEDIA_URL
-#MEDIA_ROOT = '//%s.s3.amazonaws.com/media/' % AWS_STORAGE_BUCKET_NAME
-MEDIA_ROOT = 'https://worldfood.guide/media/'
+MEDIA_ROOT = '//%s.s3.amazonaws.com/media/' % AWS_STORAGE_BUCKET_NAME
+#MEDIA_ROOT = 'https://worldfood.guide/media/'
 STATIC_URL = S3_URL + 'static/'
 ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 
