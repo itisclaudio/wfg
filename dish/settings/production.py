@@ -76,12 +76,14 @@ S3_URL = 'https://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 #if DEFAULT_FILE_STORAGE == "custom_storages.MediaRootS3BotoStorage":
 #	MEDIA_URL = 'https://%s.s3-us-west-2.amazonaws.com/%s/' % (AWS_STORAGE_BUCKET_NAME, MEDIAFILES_LOCATION)
 #else:
-MEDIA_URL = '/media/'
+
 
 #MEDIA_URL = '//%s.s3.amazonaws.com/media/' % AWS_STORAGE_BUCKET_NAME
 #MEDIA_ROOT = MEDIA_URL
 #MEDIA_ROOT = '//%s.s3.amazonaws.com/media/' % AWS_STORAGE_BUCKET_NAME
-MEDIA_ROOT = os.path.join(S3_URL, "static")
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 #MEDIA_ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.dirname(__file__)),'media/'))
 #MEDIA_ROOT = 'https://worldfood.guide/media/'
 STATIC_URL = S3_URL + 'static/'
