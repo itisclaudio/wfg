@@ -333,7 +333,7 @@
 		{% if foodie.photo %}
 			<img src="{{foodie.photofilename}}-med{{foodie.extension}}" class="img-rounded" width="100%">
 		{% else %}
-			<img src="{% static '/media/images/user.png' %}"  class="img-rounded" width="100%"/>
+			<img src="{{MEDIA_URL}}media/images/user.png"  class="img-rounded" width="100%"/>
 		{% endif %}
 		</div>
 	  </div>
@@ -382,9 +382,9 @@
 			<div class="col-xs-5" style="padding-left:0px; text-align:right;">
 				{% if p.favphoto %}
 					{% if p.favphoto.location.width > p.favphoto.location.height %}
-						<img src="/media/{{p.favphoto.filename}}-med{{p.favphoto.extension}}" class="img-rounded" width="100%">
+						<img src="{{p.favphoto.filename}}-med{{p.favphoto.extension}}" class="img-rounded" width="100%">
 					{% else %}
-						<img src="/media/{{p.favphoto.filename}}-med{{p.favphoto.extension}}" class="img-rounded" height="80px">
+						<img src="{{p.favphoto.filename}}-med{{p.favphoto.extension}}" class="img-rounded" height="80px">
 					{% endif %}
 				{% else %}
 					<img src="/media/images/upload-med.jpg" class="img-rounded" height="70px">
