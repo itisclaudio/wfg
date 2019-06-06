@@ -1,42 +1,46 @@
 /* My Custome Stylesheet */
 
-/* First, pell un Bootstrap;s stylesheet */
-/*@import url(../dist/bootstrap/css/bootstrap.css);*/
-/*@import url(../bootstrap/css/bootstrap-responsive-mine.css);*/
+/* Update 7 */
 
 /* My custome bootstrap style */
 
 body{
 	margin:0px; 
-	font-size:16px;
-	line-height: 18px;
+	font-size:14px;
+	line-height: 16px;
 	background-color:#FFFFE8;
 }
-h1 { font-size:24px;
-	line-height: 20px;
+h1 { font-size:20px;
+	line-height: 22px;
 	font-weight: bold;
-	color:#993300;
+	color: #633f03;
 	text-align:center;
 	margin-top:8px;
 	margin-bottom: 0px;
 	/*margin: 2px 0px 0px 0px;*/
 	}
 h2 { 
-	font-size:20px;
+	font-size:18px;
 	line-height: 20px;
+	font-weight: bold;
 	text-align:center;
-	color:#FF6600;
+	color: #754b04;
 	margin-top:6px;
 	margin-bottom: 0px;
 	}
-h3 { font-size:18px; line-height: 20px; }
+h3 { 
+	font-size:16px; 
+	line-height: 18px;
+	font-weight: bold;
+	color: #925d04;
+}
 /*p {margin:0px;}*/
 a { color:#FF6600;  }
 a:hover { 	color:#900; }
 
 .form-control {
-	font-size:18px; 
-	line-height: 20px;
+	font-size:16px; 
+	line-height: 18px;
 	/*height: 40px;*/
 	/*padding-top:0px;*/
 	}
@@ -87,7 +91,7 @@ input[type="checkbox"] { margin-top:-8px;}
 
 .breadcrumb{font-size:18px;}
 
-label  { font-size:18px; line-height: 20px; margin-top:8px; margin-bottom:2px;}
+label  { font-size:16px; line-height: 18px; margin-top:8px; margin-bottom:2px;}
 
 .table-title{
 	margin: 0px;
@@ -104,31 +108,40 @@ label  { font-size:18px; line-height: 20px; margin-top:8px; margin-bottom:2px;}
 .text-med {
 	margin-top:-20px;
 	margin-bottom:0px;
-	font-size:15px;
-	line-height:17px;
+	font-size:14px;
+	line-height:16px;
 }
 
 /*userphotos.html*/
 .text-reg {
 	margin-top:0px;
 	margin-bottom:0px;
-	font-size:13px;
-	line-height:13px;
+	font-size:12px;
+	line-height:12px;
 }
 
 .text-small {
 	margin-top:0px;
 	margin-bottom:0px;
-	font-size:12px;
-	line-height:12px;
+	font-size:10px;
+	line-height:10px;
 }
+
+.small {
+	margin-top:0px;
+	margin-bottom:0px;
+	font-size:10px;
+	line-height:10px;
+}
+
+
 .btn-marg {
 	margin-left:8px;
 	/*margin-right:28px;*/
 	width:96%;}
 .btn-lg {
 padding: 6px 8px 6px 8px;
-font-size: 16px;
+font-size: 14px;
 font-weight: bold;
 }
 
@@ -149,7 +162,7 @@ font-size:22px;
 .input-rest{
 /*	font-size:30px;*/
 /*	height:40px;*/
-font-size:22px;
+font-size:20px;
 }
 
 .main-form{
@@ -212,7 +225,7 @@ p.main{margin-top: 30px;
 .page-header{
 	padding-top: 0px;
 	padding-bottom: 0px;
-	padding-left: 20px;
+	padding-left: 18px;
 	padding-right:0px;
 	margin: 0px;
 	background-color:#FFF;
@@ -293,7 +306,7 @@ color: #000;  /*Sets the text hover color on navbar*/
 	text-decoration: none;
 	background-color: #C1C100; /*Change rollover cell color here*/
 	font-weight: bold;
-	font-size: 18px;
+	font-size: 16px;
 	color: #000;
   }
 
@@ -302,7 +315,7 @@ color: #000;  /*Sets the text hover color on navbar*/
  .navbar-inverse .navbar-nav > li > a {
 	color: #C1C100; /*Change active text color here*/
 	text-decoration: none;
-	font-size: 18px;
+	font-size: 16px;
 	font-weight: bold;
     }
 
@@ -311,7 +324,7 @@ color: #000;  /*Sets the text hover color on navbar*/
   .dropdown-menu > li > a {
 	color: #FF6600; /*Change active text color here*/
 	text-decoration: none;
-	font-size: 16px;
+	font-size: 14px;
 	font-weight: bold;
 	background-color: #333333;
     }
@@ -324,7 +337,7 @@ color: #000;  /*Sets the text hover color on navbar*/
 	text-decoration: none;
 	font-weight: bold;
 	background-color:#FF6600;  /*change color of links in drop down here*/
-	font-size: 16px;
+	font-size: 14px;
    }
 
 /*when dowmdows are in big screen*/	

@@ -1,4 +1,4 @@
-
+/* Update 1 */
 html {
   /*So navbar stays in the bottom*/
   position: relative;
@@ -44,6 +44,10 @@ padding:1px;
 .padding2 td, th {
 padding:2px;
 /*vertical-align: top;*/
+}
+
+.clear {
+	color:#919191;
 }
 
   /*
