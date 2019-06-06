@@ -209,7 +209,7 @@
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 <h2 style="padding:0px; margin-top:10px; margin-bottom:0px;">Latest Dishes:</h2>
 <div class="row" style="margin:0px;">
-{% if top_lists|length > 0 %}
+{% if dishes_latest|length > 0 %}
 	{% for p in dishes_latest %}
 		<div class="col-md-2 col-xs-3 {% if forloop.counter > 4 %} hidden-sm hidden-xs {% endif %}" style="padding:2px;">
 			<div class="thumbnail" style="margin-bottom:0px; line-height: 20px;">
@@ -219,7 +219,7 @@
 					</a>
 				{% else %}
 					<a href="/photonew/{{p.id}}/" title="Upload photo for {{p.name|truncatechars:24}}">
-					<img src="/media/images/upload-med.jpg" class="img-rounded" style="max-height:140px;"></a>
+					<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" style="max-height:140px;"></a>
 				{% endif %}
 				<a href="/dish/{{p.urlname}}/">
 					<h4 style="margin-bottom:2px; margin-top:2px; line-height: 16px; color: #754b04;" title="Go to dish page: {{p.name}}">
@@ -330,7 +330,7 @@
 		{% if foodie.photo %}
 			<img src="{{foodie.photofilename}}-med{{foodie.extension}}" class="img-rounded" width="100%">
 		{% else %}
-			<img src="/media/images/user.png"  class="img-rounded" width="100%"/>
+			<img src="{% static 'images/user.png' %}"  class="img-rounded" width="100%"/>
 		{% endif %}
 		</div>
 	  </div>
