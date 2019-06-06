@@ -20,7 +20,7 @@
 	{% if photos|length > 0 %}
 		<meta property="og:image" content="{{photos.0.filename}}-reg{{photos.0.extension}}" />
 	{% else %}
-		<meta property="og:image" content="{{MEDIA_URL}}/media/images/upload.jpg" />
+		<meta property="og:image" content="{% static 'images/upload.jpg' %}" />
 	{% endif %}
 <link href="{% static 'dist/jquery/autocomplete/jquery-ui.min.css' %}" rel="stylesheet" >
 <script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
@@ -379,7 +379,8 @@ $(document).ready(function(){
 						<img src="{{photos.3.filename}}-med{{photos.3.extension}}" class="img-rounded" width="100%"></a>
 				{% else %}
 					<a href="/photonew/{{dish.id}}/">
-						<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
+						{#<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%"></a>#}
+						<img src="/static/images/upload-med.jpg"  class="img-rounded" width="100%"></a>
 				{% endif %}
 				</div>
 				<div class="col-lg-3 col-md-3 col-sm-3 hidden-xs" style="padding-left:2px;padding-right:0px;">
@@ -388,7 +389,7 @@ $(document).ready(function(){
 					<a href="/photo/{{photos.4.urlname}}">
 						<img src="{{photos.4.filename}}-med{{photos.4.extension}}" class="img-rounded" width="100%"></a>
 				{% else %}
-					<a href="/photonew/{{dish.id}}/"><img src="{{MEDIA_URL}}/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
+					<a href="/photonew/{{dish.id}}/"><img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%"></a>
 				{% endif %}
 				</div>
 			</div><!--6!-->
@@ -422,9 +423,9 @@ $(document).ready(function(){
 								  <div class="col-md-3 col-xs-3" style="padding:2px;">
 									<a class="thumbnail" href="/dish/{{p.urlname}}/" title="Go to dish page: {{p.name}}" style="font-size:14px; margin-bottom:0px;line-height:14px;">
 										{% if p.photo_main %}
-											<img src="/media/{{p.filename}}-med{{p.extension}}" class="img-rounded" width="100%">
+											<img src="{{p.filename}}-med{{p.extension}}" class="img-rounded" width="100%">
 										{% else %}
-											<img src="{{MEDIA_URL}}/media/images/upload-med.jpg" class="img-rounded" width="100%">
+											<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%">
 										{% endif %}
 										<b style="display:inline;" >{{p.name|truncatechars:22}}</b>
 										<b class="smallfont" style="margin-bottom:4px; display:inline;">
@@ -445,7 +446,7 @@ $(document).ready(function(){
 						{% else %}
 							<div class="row" style="margin:0px;">
 								<div class="thumbnail col-md-2 col-xs-3" title="Go to dish page: {{p.name}}" style="margin-bottom:0px;line-height:16px;">
-								<img src="{{MEDIA_URL}}/media/images/upload-med.jpg" class="img-rounded" width="100%">
+								<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%">
 								<b style="display:inline;font-size:14px;" >There are no dishes</b>
 								</div>
 							</div>
