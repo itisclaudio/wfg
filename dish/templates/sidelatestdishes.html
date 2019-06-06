@@ -1,0 +1,70 @@
+{% load static %}
+<div class="list-group" style="margin-bottom: 5px;">
+  <div class="list-group-item" style="background-color:#f5f5f5; padding:5px;">
+	<h3 style="vertical-align:middle; display:inline;">Latest dishes</h3>
+	<a class="btn btn-custom" href="{% url 'view_disheslatest' %}" title="See all latest dishes uploaded" style="display:inline; padding-top:3px; padding-bottom:3px;">See all</a>
+  </div>
+	{% if latest_dishes|length > 0 %}
+		{% for p in latest_dishes %}
+		  <a class="list-group-item" href="/dish/{{p.urlname}}/" title="{{p.name}}" style="padding:4px;">
+		  <div class="row">
+			{% if p.name|length > 17 %}
+				<div class="col-xs-12" style="padding-right:2px;">
+					<p class="list-group-item-heading" style="color:#845505;margin-bottom:2px;"><b>{{p.name|truncatechars:52}}</b></p>
+				</div>
+			<div class="col-xs-7" style="padding-right:2px;">
+				<p class="smallfont" style="margin-bottom:2px;">
+				{% if p.othernames %}
+					<i>{{p.othernames|truncatechars:24}}</i>
+				{% endif %}
+				{% if p.cuisines.all %}
+					<b>
+					{% for cuisine in p.cuisines.all|slice:":2" %} 
+						({{cuisine|truncatechars:26}})
+					{% endfor %}
+					</b>
+				{% endif %}
+				</p>
+				<p class="smallfont" style="margin-bottom:4px;">by {{p.userprofile|truncatechars:16}}</p>
+				{% if p.description %}
+					<p style="font-size:11px;line-height:11px; margin-bottom:2px; margin-top:2px"><i>{{p.description|truncatewords:22}}</i></p>
+				{% endif %}
+			</div>
+			{% else %}
+			<div class="col-xs-7" style="padding-right:2px;">
+				<p class="list-group-item-heading" style="color:#845505;margin-bottom:2px;"><b>{{p.name}}</b></p>
+				<p class="smallfont" style="margin-bottom: 2px;">
+				{% if p.othernames %}
+					<i>{{p.othernames|truncatechars:24}}</i>
+				{% endif %}
+				{% if p.cuisines.all %}
+					<b>
+					{% for cuisine in p.cuisines.all|slice:":2" %} 
+						({{cuisine|truncatechars:26}})
+					{% endfor %}
+					</b>
+				{% endif %}
+				</p>
+				<p class="smallfont" style="margin-bottom:4px;">by {{p.userprofile|truncatechars:16}}</p>
+				{% if p.description %}
+					<p style="font-size:11px;line-height:11px; margin-bottom:2px; margin-top:2px"><i>{{p.description|truncatewords:16}}</i></p>
+				{% endif %}
+			</div>
+			{% endif %}
+			<div class="col-xs-5" style="padding-left:0px; text-align:-webkit-right;">
+				{% if not p.photo_main %}
+					<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" height="70px">
+				{% else %}
+					<img src="/media/{{p.filename}}-med{{p.extension}}" style="max-height:100px;" class="img-rounded img-responsive"/>
+				{% endif %}
+			</div>
+		  </div>
+		  </a>
+		{% endfor %}
+	{% else %}
+		<div class="well well-tight well-white" style="text-align:center;">
+			<p style="margin:10px;">There are no dishes</p>
+			<a class="btn btn-custom btn-lg" href="{% url 'view_dishphotonew' %}" style="margin-bottom:4px;">Create new dish</a>
+		</div>
+	{% endif %}
+</div>
