@@ -347,7 +347,7 @@ $(document).ready(function(){
 				</p>
 			{% else %}
 				<a href="/photonew/{{dish.id}}/">
-					<img src="{% static 'images/upload.jpg' %}" style="margin-bottom:5px;" width="100%" class="img-rounded">
+					<img src="{% static 'images/upload.png' %}" style="margin-bottom:5px;" width="100%" class="img-rounded">
 				</a>
 			{% endif %}
 			</div><!--5!-->
@@ -379,8 +379,7 @@ $(document).ready(function(){
 						<img src="{{photos.3.filename}}-med{{photos.3.extension}}" class="img-rounded" width="100%"></a>
 				{% else %}
 					<a href="/photonew/{{dish.id}}/">
-						{#<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%"></a>#}
-						<img src="/static/images/upload-med.jpg"  class="img-rounded" width="100%"></a>
+						<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%"></a>
 				{% endif %}
 				</div>
 				<div class="col-lg-3 col-md-3 col-sm-3 hidden-xs" style="padding-left:2px;padding-right:0px;">
