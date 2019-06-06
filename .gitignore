@@ -55,7 +55,7 @@ coverage.xml
 
 # Django stuff:
 *.log
-static/
+/static/
 development.py
 db.sqlite3
 
