@@ -321,8 +321,8 @@ $(document).ready(function(){
 	<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12"><!--3-->
 		<div class="row" style="padding:0px;"><!--4-->
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><!--5-->
+			{#### PHOTO 1 (MAIN) ####}
 			{% if photos|length > 0 %}
-			{#### MAIN PHOTO ####}
 				<a href="/photo/{{photos.0.urlname}}">
 					<img src="{{photos.0.filename}}-reg{{photos.0.extension}}" style="margin-bottom:5px;" class="img-rounded" width="100%" alt="{{dish.name}}">
 				</a>
@@ -354,23 +354,26 @@ $(document).ready(function(){
 			<div class="col-lg-12 col-md-12 col-sm-12 hidden-xs"><!--6-->
 			<!--<div class="col-md-12 hidden-phone hidden-sm hidden-xs">-->
 				<div class="col-lg-3 col-md-3 col-sm-3 hidden-xs" style="padding-left:0px;padding-right:2px;">
+				{#### PHOTO 2 ####}
 				{% if photos|length > 1 %}
 					<a href="/photo/{{photos.1.urlname}}">
 						<img src="{{photos.1.filename}}-med{{photos.1.extension}}" alt="{{dish.name}}" class="img-rounded" width="100%"></a>
 				{% else %}
-					<a href="/photonew/{{dish.id}}/"><img src="{{STATIC_URL}}/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
+					<a href="/photonew/{{dish.id}}/"><img src="{% static 'images/upload.jpg' %}" class="img-rounded" width="100%"></a>
 				{% endif %}
 				</div>
 				<div class="col-lg-3 col-md-3 col-sm-3 hidden-xs" style="padding-left:2px;padding-right:2px;">
+				{#### PHOTO 3 ####}
 				{% if photos|length > 2 %}
 					<a href="/photo/{{photos.2.urlname}}">
 						<img src="{{photos.2.filename}}-med{{photos.2.extension}}" class="img-rounded" alt="{{dish.name}}" width="100%"></a>
 					
 				{% else %}
-					<a href="/photonew/{{dish.id}}/"><img src="{{MEDIA_URL}}/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
+					<a href="/photonew/{{dish.id}}/"><img src="{% static 'images/upload.jpg' %}" class="img-rounded" width="100%"></a>
 				{% endif %}
 				</div>
 				<div class="col-lg-3 col-md-3 col-sm-3 hidden-xs" style="padding-left:2px;padding-right:2px;">
+				{#### PHOTO 4 ####}
 				{% if photos|length > 3 %}
 					<a href="/photo/{{photos.3.urlname}}">
 						<img src="{{photos.3.filename}}-med{{photos.3.extension}}" class="img-rounded" width="100%"></a>
@@ -380,6 +383,7 @@ $(document).ready(function(){
 				{% endif %}
 				</div>
 				<div class="col-lg-3 col-md-3 col-sm-3 hidden-xs" style="padding-left:2px;padding-right:0px;">
+				{#### PHOTO 5 ####}
 				{% if photos|length > 4 %}
 					<a href="/photo/{{photos.4.urlname}}">
 						<img src="{{photos.4.filename}}-med{{photos.4.extension}}" class="img-rounded" width="100%"></a>
