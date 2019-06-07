@@ -52,16 +52,16 @@
 
 <div class="list-group" style="margin-bottom:0px;">
 {% if list.paginator.count > 0 %}
-{## LIST ##}
+{## DISHES ##}
   {% for p in list.object_list %}
 	  <div class="list-group-item row" style="margin-left:0px; margin-right:0px; padding:4px;">
 		<div class="col-sm-3 col-xs-12" style="padding-left:2px;">
         {% if p.location %}
 			<a href="/photo/{{p.urlname}}">
-				<img src="/media/{{p.filename}}-med{{p.extension}}" class="img-rounded" title="Go to picture page" width="100%">
+				<img src="{{p.filename}}-med{{p.extension}}" class="img-rounded" title="Go to picture page" width="100%">
 			</a>
         {% else %}
-			<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+			<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%">
         {% endif %}
 		</div>
 		<div class="col-sm-9 col-xs-12" style="padding-left:2px;">
@@ -85,7 +85,7 @@
 	  </div>
   {% endfor %}
 
-{## END LIST ##}
+{## DISHES-END ##}
     {% if list.paginator.count > list.paginator.per_page %}
         <ul class="pagination pull-right" style="margin-top:0px">
 		{% if list.has_previous %}

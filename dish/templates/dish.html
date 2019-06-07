@@ -191,7 +191,7 @@ $(document).ready(function(){
 		</p>
 		<div style="margin-bottom:6px;">
 			{% for p in dish.features.all %}
-				<img src="{{MEDIA_URL}}/media/images/features/{{p.icon}}" title="{{p.name}}" width="25px">
+				<img src="{% static 'images' %}{{p.icon}}" title="{{p.name}}" width="25px">
 			{% endfor %}
 		</div>
 		<p><i>
@@ -275,9 +275,10 @@ $(document).ready(function(){
 			{% if p.dish2.photo_main %}
 				<a href="/dish/{{p.dish2.urlname}}">
 					<img src="/media/{{p.dish2.filename}}-med{{p.dish2.extension}}" class="img-rounded img-responsive" style="max-height:100px;">
+					{{p.favphotomed}}
 				</a>
 			{% else %}
-				<a href="/photonew/{{p.dish2.id}}/"><img src="/media/images/upload-med.jpg" class="img-rounded" height="70px"></a>
+				<a href="/photonew/{{p.dish2.id}}/"><img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" height="70px"></a>
 			{% endif %}
 		</div>
 	</div>
