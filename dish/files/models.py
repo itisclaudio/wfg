@@ -233,9 +233,7 @@ class Dish(models.Model):
 
 	def favphotomed(self):
 		name, extension = os.path.splitext(self.photo_main)
-		my_url = "%s%s-med%s"%(settings.MEDIA_URL,name,extension)
-		print my_url
-		return my_url
+		return "%s%s-med%s"%(settings.MEDIA_URL,name,extension)
 	
 	def filename(self):
 		name, extension = os.path.splitext(self.photo_main)
