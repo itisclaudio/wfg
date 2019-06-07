@@ -377,11 +377,11 @@
 			</div>
 			{% endif %}
 			<div class="col-xs-5" style="padding-left:0px; text-align:right;">
-				{% if p.favphoto %}
+				{% if p.favphotomed %}
 					{% if p.favphoto.location.width > p.favphoto.location.height %}
-						<img src="{{p.favphoto.filename}}-med{{p.favphoto.extension}}" class="img-rounded" width="100%">
+						<img src="{{p.favphotomed}}" class="img-rounded" width="100%">
 					{% else %}
-						<img src="{{p.favphoto.filename}}-med{{p.favphoto.extension}}" class="img-rounded" height="80px">
+						<img src="{{p.favphotomed}}" class="img-rounded" height="80px">
 					{% endif %}
 				{% else %}
 					<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" height="70px">

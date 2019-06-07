@@ -55,7 +55,7 @@
 				{% if not p.photo_main %}
 					<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" height="70px">
 				{% else %}
-					<img src="/media/{{p.filename}}-med{{p.extension}}" style="max-height:100px;" class="img-rounded img-responsive"/>
+					<img src="{{p.favphotomed}}" style="max-height:100px;" class="img-rounded img-responsive"/>
 				{% endif %}
 			</div>
 		  </div>
