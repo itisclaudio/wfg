@@ -1,5 +1,5 @@
 {% extends '_base.html' %}
-
+{% load static %}
 {% block title %} Foodies 
 	{% if paginatorlist.paginator.count > 15 %}
 		| Page {{paginatorlist.number}}
@@ -9,7 +9,6 @@
 {% block content %}
 
 {% if paginatorlist.paginator.count > 0 %}
-
 <div class="row" style="margin:2px;">
 	<div class="col-xs-3" style="padding:1px;">
 		{% if paginatorlist.has_previous %}
@@ -47,6 +46,7 @@
 
 
 {## FOODIES ##}
+
 <div class="list-group" style="margin-bottom:0px;">
   <div class="list-group-item" style="background-color:#dddddd; padding-bottom:6px; padding-top:6px;">
 	<p style="margin-top:5px;margin-bottom:2px; text-align:center;">
@@ -111,7 +111,7 @@
 			{% if p.photo %}
 				<img id="foodie_photo" name="{{p.photofilename}}{{p.extension}}" src="{{p.photofilename}}-med{{p.extension}}" class="img-rounded" width="100%"/>
 			{% else %}
-				<img src="{% static 'images/user.png' %}"  class="img-rounded"  width="100%"/>
+				<img src="{% static 'images/user.png' %}" class="img-rounded" width="100%"/>
 			{% endif %}
 		</div>
 	  </a>
