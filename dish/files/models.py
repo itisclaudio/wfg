@@ -126,7 +126,7 @@ class userProfile(models.Model):
 		
 	class Meta:
 		ordering = ('user__username',)
-#000
+
 class SearchLog(models.Model):
 	##Stores search workds made by users 
 	datetime	= models.DateTimeField(default=timezone.now)
@@ -213,7 +213,7 @@ def pluralize(ingredient):
 		return plural
 	else:
 		return ingredient
-
+#000
 class Dish(models.Model):
 	cuisines	= models.ManyToManyField(Cuisine, blank=True)
 	features	= models.ManyToManyField(Feature, blank=True)
@@ -231,6 +231,12 @@ class Dish(models.Model):
 	active		= models.BooleanField(default=True)
 	photo_main	= models.CharField(max_length=80, null=True ,blank=True)
 
+	def favphotomed(self):
+		name, extension = os.path.splitext(self.photo_main)
+		my_url = "%s%s-med%s"%(settings.MEDIA_URL,name,extension)
+		print my_url
+		return my_url
+	
 	def filename(self):
 		name, extension = os.path.splitext(self.photo_main)
 		return name

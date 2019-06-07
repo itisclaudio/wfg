@@ -51,7 +51,7 @@
 </table>
 <div class="list-group" style="margin-bottom:0px;">
 {% if paginatorlist.paginator.count > 0 %}
-{## LIST ##}
+{## DISHES ##}
   {% for p in paginatorlist.object_list %}
 	  <div class="list-group-item row" style="margin-left:0px; margin-right:0px; padding:4px;">
 		<div class="col-sm-3 col-xs-12" style="padding-left:2px;">
@@ -62,6 +62,7 @@
         {% else %}
 			<a href="/dish/{{p.urlname}}">
 				<img src="/media/{{p.filename}}-med{{p.extension}}" class="img-rounded" width="100%">
+				<img src="{{p.favphotomed}}" class="img-rounded" width="100%">
 			</a>
         {% endif %}
 		</div>
