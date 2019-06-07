@@ -215,7 +215,7 @@
 			<div class="thumbnail" style="margin-bottom:0px; line-height: 20px;">
 				{% if p.photo_main %}
 					<a href="/dish/{{p.urlname}}" title="Go to photo page">
-						<img src="/media/{{p.filename}}-med{{p.extension}}" class="img-rounded img-responsive" style="max-height:140px;">
+						<img src="{{p.favphotomed}}" class="img-rounded img-responsive" style="max-height:140px;">
 					</a>
 				{% else %}
 					<a href="/photonew/{{p.id}}/" title="Upload photo for {{p.name|truncatechars:24}}">
@@ -377,11 +377,11 @@
 			</div>
 			{% endif %}
 			<div class="col-xs-5" style="padding-left:0px; text-align:right;">
-				{% if p.favphotomed %}
+				{% if p.favphoto %}
 					{% if p.favphoto.location.width > p.favphoto.location.height %}
-						<img src="{{p.favphotomed}}" class="img-rounded" width="100%">
+						<img src="{{p.favphoto.filename}}-med{{p.favphoto.extension}}" class="img-rounded" width="100%">
 					{% else %}
-						<img src="{{p.favphotomed}}" class="img-rounded" height="80px">
+						<img src="{{p.favphoto.filename}}-med{{p.favphoto.extension}}" class="img-rounded" height="80px">
 					{% endif %}
 				{% else %}
 					<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" height="70px">
