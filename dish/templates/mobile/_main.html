@@ -19,16 +19,17 @@
   <div class="carousel-inner">
     <div class="item active">
 		<a href="{% url 'view_listnew' %}">
-			<img src="/media/images/carousel/list_mobile.jpg" alt="Create Lists">
+			<img src="{% static 'images/carousel/list_mobile.jpg' %}" alt="Create Lists">
 		</a>
     </div>
     <div class="item">
 		<a href="{% url 'view_profile' username='itisclaudio'  %}">
-			<img src="/media/images/carousel/foofie_mobil.jpg" alt="Featured Foodie">
+			<img src="{% static 'images/carousel/foofie_mobil.jpg' %}" alt="Featured Foodie">
+			
 		</a>
     </div>
     <div class="item">
-		<img src="/media/images/carousel/contribute_mobil.jpg" alt="Contribute">
+		<img src="{% static 'images/carousel/contribute_mobil.jpg' %}" alt="Contribute">
     </div>
   </div>
  
@@ -127,9 +128,9 @@
 	   {% endif %}
 		<div class="col-xs-5" style="padding-left:0px; padding-right:0px;">
 			{% if p.photo_main %}
-				<img src="/media/{{p.filename}}-med{{p.extension}}" style="max-height:130px; max-width:130px;" class="img-rounded img-responsive pull-right"/>
+				<img src="{{p.favphotomed}}" style="max-height:130px; max-width:130px;" class="img-rounded img-responsive pull-right"/>
 			{% else %}
-				<img src="/media/images/upload-med.jpg" class="img-rounded  pull-right" width="130px">
+				<img src="{% static 'images/upload-med.jpg' %}g" class="img-rounded  pull-right" width="130px">
 			{% endif %}
 		</div>
 	  </a>
@@ -164,9 +165,9 @@
 					<div class="col-xs-4" style="padding:1px;">
 					<div class="thumbnail" title="Go to dish page: {{p.name}}" style="padding:1px; font-size:10px; margin-bottom:0px;line-height:10px;">
 						{% if p.photo_main %}
-							<img src="/media/{{p.filename}}-med{{p.extension}}" class="img-rounded" width="100%" style="margin-bottom:4px;">
+							<img src="{{p.favphotomed}}" class="img-rounded" width="100%" style="margin-bottom:4px;">
 						{% else %}
-							<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%" style="margin-bottom:4px;">
+							<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%" style="margin-bottom:4px;">
 						{% endif %}
 						<p class="small" style="display:inline;line-height:10px;">
 						<b>{{p.name|truncatechars:22}}</b>
@@ -218,9 +219,9 @@
 				</div>
 				<div class="col-xs-5" style="text-align:right;">
 					{% if p.favphoto %}
-						<img src="/media/{{p.favphoto.filename}}-med{{p.favphoto.extension}}" style="max-height:130px; max-width:130px;" class="img-rounded img-responsive pull-right"/>
+						<img src="{{p.favphoto.filename}}-med{{p.favphoto.extension}}" style="max-height:130px; max-width:130px;" class="img-rounded img-responsive pull-right"/>
 					{% else %}
-						<img src="/media/images/upload-med.jpg" class="img-rounded" height="70px">
+						<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" height="70px">
 					{% endif %}
 				</div>
 			{% else %}
@@ -237,9 +238,9 @@
 				</div>
 				<div class="col-xs-5" style="text-align:right;">
 					{% if p.favphoto %}
-						<img src="/media/{{p.favphoto.filename}}-med{{p.favphoto.extension}}" style="max-height:130px; max-width:130px;" class="img-rounded img-responsive pull-right"/>
+						<img src="{{p.favphoto.filename}}-med{{p.favphoto.extension}}" style="max-height:130px; max-width:130px;" class="img-rounded img-responsive pull-right"/>
 					{% else %}
-						<img src="/media/images/upload-med.jpg" class="img-rounded" height="70px">
+						<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" height="70px">
 					{% endif %}
 				</div>
 			{% endif %}

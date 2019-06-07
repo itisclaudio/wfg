@@ -235,6 +235,10 @@ class Dish(models.Model):
 		name, extension = os.path.splitext(self.photo_main)
 		return "%s%s-med%s"%(settings.MEDIA_URL,name,extension)
 	
+	def favphotothum(self):
+		name, extension = os.path.splitext(self.photo_main)
+		return "%s%s-thum%s"%(settings.MEDIA_URL,name,extension)
+	
 	def filename(self):
 		name, extension = os.path.splitext(self.photo_main)
 		return name

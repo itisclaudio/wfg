@@ -111,7 +111,7 @@
 			{% if p.photo %}
 				<img id="foodie_photo" name="{{p.photofilename}}{{p.extension}}" src="{{p.photofilename}}-med{{p.extension}}" class="img-rounded" width="100%"/>
 			{% else %}
-				<img src="/media/images/user.png"  class="img-rounded"  width="100%"/>
+				<img src="{% static 'images/user.png' %}"  class="img-rounded"  width="100%"/>
 			{% endif %}
 		</div>
 	  </a>
