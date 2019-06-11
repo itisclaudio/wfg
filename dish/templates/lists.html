@@ -82,9 +82,9 @@
 					  <div class="col-md-2 col-xs-3 {% if forloop.counter > 4 %} hidden-sm hidden-xs {% endif %}" style="padding:2px;">
 						<a class="thumbnail" href="/dish/{{p.urlname}}/" title="Go to dish page: {{p.name}}" style="font-size:14px; margin-bottom:0px;line-height:14px;">
 							{% if p.photo_main %}
-								<img src="/media/{{p.filename}}-med{{p.extension}}" class="img-rounded" width="100%">
+								<img src="{{p.favphotomed}}" class="img-rounded" width="100%">
 							{% else %}
-								<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+								<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%">
 							{% endif %}
 							<b style="display:inline;" >{{p.name|truncatechars:22}}</b>
 							<b class="smallfont" style="margin-bottom:4px; display:inline;">
@@ -105,7 +105,7 @@
 			{% else %}
 				<div class="row" style="margin:0px;">
 					<div class="thumbnail col-md-2 col-xs-3" title="Go to dish page: {{p.name}}" style="margin-bottom:0px;line-height:16px;">
-					<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+					<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%">
 					<b style="display:inline;font-size:14px;" >There are no dishes</b>
 					</div>
 				</div>
