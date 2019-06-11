@@ -268,13 +268,15 @@
 				{% for dish in p.dishes.all|slice:":6"  %}
 					<div class="col-xs-2" style="padding:1px;">
 						{% if dish.photo_main %}
-							<img src="{{p.favphotothum}}" class="img-rounded" width="100%">
+							<img src="{{dish.favphotothum}}" class="img-rounded" width="100%">
 						{% else %}
 							<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%" title="Upload new {{dish.name|truncatechars:20}} photo">
 						{% endif %}
 					</div>
 				{% endfor %}
 			</div>
+			{% else %}
+				<p class="smallfont"><i>There are no dishes in this list!</i></p>
 			{% endif %}
 		  </a>
 		{% endfor %}
