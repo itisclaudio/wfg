@@ -1,4 +1,5 @@
 {% extends '_base.html' %}
+{% load static %}
 {% block title %} My Profile {% endblock %}
 
 {% block super-extra-head %}
@@ -108,7 +109,7 @@ $(document).ready(function(){
         <h2 class="modal-title" id="modalDeleteLabel">Delete this photo?</h2>
       </div>
       <div class="modal-body">
-		<img src="/media/{{profile.photofilename}}-med{{profile.extension}}" class="img-rounded" width="200px" style="margin-bottom: 6px;"/>
+		<img src="{{profile.photofilename}}-med{{profile.extension}}" class="img-rounded" width="200px" style="margin-bottom: 6px;"/>
 		<p>Your profile will not have a picture. But you can upload another one at any time. </p>
       </div>
         <div class="modal-footer">
@@ -134,9 +135,9 @@ $(document).ready(function(){
 {% endif %}
 <div align="center">
 	{% if profile.photo %}
-		<img src="/media/{{profile.photofilename}}-med{{profile.extension}}" class="img-rounded" width="200px" style="margin-bottom: 6px;"/>
+		<img src="{{profile.photofilename}}-med{{profile.extension}}" class="img-rounded" width="200px" style="margin-bottom: 6px;"/>
 	{% else %}
-		<img src="/media/images/user.png" style="margin-bottom: 6px;" class="img-rounded"  width="200px"/>
+		<img src="{% static 'images/user.png' %}" style="margin-bottom: 6px;" class="img-rounded"  width="200px"/>
 	{% endif %}
 </div>
 <a class="btn btn-custom btn-lg btn-block" href="{% url 'view_updatePicture' %}">Upload new photo</a>

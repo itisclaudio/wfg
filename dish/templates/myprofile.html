@@ -108,7 +108,7 @@ $(document).ready(function(){
         <h2 class="modal-title" id="modalDeleteLabel">Delete current profile picture?</h2>
       </div>
       <div class="modal-body">
-		<img src="/media/{{profile.photofilename}}-med{{profile.extension}}" class="img-rounded" width="200px" style="margin-bottom: 6px;"/>
+		<img src="{{profile.photofilename}}-med{{profile.extension}}" class="img-rounded" width="200px" style="margin-bottom: 6px;"/>
 		<p>Your profile will not have a picture. But you can upload another one at any time. </p>
       </div>
         <div class="modal-footer">
@@ -125,9 +125,9 @@ $(document).ready(function(){
 <div class="row">
 	<div class="col-md-5 col-sm-5 col-xs-12">
 		{% if profile.photo %}
-			<img src="/media/{{ profile.photofilename}}{{ profile.extension}}" class="img-rounded" width="100%"/>
+			<img src="{{ profile.photofilename}}{{ profile.extension}}" class="img-rounded" width="100%"/>
 		{% else %}
-			<img src="/media/images/user.png"  class="img-polaroid" width="100%"/>
+			<img src="{% static 'images/user.png' %}"  class="img-polaroid" width="100%"/>
 		{% endif %}
 		<br/><br/>
 		<a class="btn btn-custom btn-block btn-lg" href="{% url 'view_updatePicture' %}">Upload new photo</a>
