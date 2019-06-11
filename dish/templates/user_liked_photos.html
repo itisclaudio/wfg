@@ -1,3 +1,4 @@
+{% load static %}
 {## DISHES ##}
 <div class="list-group" style="margin-bottom:0px;">
   <div class="list-group-item" style="background-color:#f5f5f5; padding-bottom:6px; padding-top:6px;">
@@ -54,15 +55,9 @@
 			</div>
 		   {% endif %}
 			<div class="col-xs-5" style="padding-left:0px; padding-right:0px;">
-				{% if photo.filename %}
-					<a href="/photo/{{photo.urlname}}" title="Click to see the photo" >
-						<img src="/media/{{photo.filename}}-med{{photo.extension}}" class="img-rounded" width="100%">
-					</a>
-				{% else %}
-					<a href="/photonew/{{photo.dish.id}}/">
-						<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%" title="Upload new {{p.name|truncatechars:20}} photo" >
-					</a>
-				{% endif %}
+				<a href="/photo/{{photo.urlname}}" title="Click to see the photo" >
+					<img src="{{photo.filename}}-med{{photo.extension}}" class="img-rounded" width="100%">
+				</a>
 			</div>
 		  </div>
 	  {% endfor %}
@@ -70,7 +65,7 @@
 		<div class="list-group-item" style="text-align:center;">
 			<p style="margin-top:10px;">No photos yet.</p>
 			<p>Upload you first dish and/or photo:</p>
-			<img src="/media/images/upload-med.jpg" width="60%" class="img-rounded">
+			<img src="{% static 'images/upload-med.jpg' %}" width="60%" class="img-rounded">
 		</div>
 	 {% endif %}
 </div>

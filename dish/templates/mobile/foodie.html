@@ -1,4 +1,5 @@
 {% extends '_base.html' %}
+{% load static %}
 {% block title %} {{profile.user.username}} {% endblock %}
 
 {% block super-extra-head %}
@@ -96,10 +97,10 @@ $(window).bind('resize',positionPopup);
 <div align="center">
 	{% if profile.photo %}
 		<a href="#" id="pop">
-		<img id="foodie_photo" name="/media/{{profile.photofilename}}{{profile.extension}}" src="/media/{{profile.photofilename}}-med{{profile.extension}}" class="img-rounded" width="200px"/>
+		<img id="foodie_photo" name="{{profile.photofilename}}{{profile.extension}}" src="{{profile.photofilename}}-med{{profile.extension}}" class="img-rounded" width="200px"/>
 		</a>
 	{% else %}
-		<img src="/media/images/user.png"  class="img-rounded"  width="200px"/>
+		<img src="{% static 'images/user.png' %}"  class="img-rounded"  width="200px"/>
 	{% endif %}
 </div>
 <br/>

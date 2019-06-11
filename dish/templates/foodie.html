@@ -57,9 +57,9 @@
 		<div class="col-md-6 col-sm-6">
 			<div align="center">
 			{% if profile.photo %}
-				<img src="/media/{{profile.photofilename}}{{profile.extension}}" class="img-rounded" width="80%"/>
+				<img src="{{profile.photofilename}}{{profile.extension}}" class="img-rounded" width="80%"/>
 			{% else %}
-				<img src="/media/images/user.png"  class="img-rounded" width="50%"/>
+				<img src="{% static 'images/user.png' %}"  class="img-rounded" width="50%"/>
 			{% endif %}
 			</div>
 			
