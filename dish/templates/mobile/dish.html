@@ -241,6 +241,7 @@ $(document).ready(function(){
 		<span class="label label-default" style="vertical-align:top;display:inline;" title="Lists">{{similar_total}}</span>
 	</h2>
   </div>
+{#### RELATED - Start  ####}
 {% if similar_total > 0 %}
 	{% for p in similars|slice:":5" %}
 	  <a class="list-group-item" href="/dish/{{p.dish2.urlname}}/" style="padding:4px;">
@@ -323,6 +324,7 @@ $(document).ready(function(){
 		<span class="label label-default" style="vertical-align:top;display:inline;" title="Lists">{{list_total}}</span>
 	</h2>
   </div>
+{#### LISTS - Start  ####}
 {% if list_count > 0 %}
 	{% for p in lists|slice:":5" %}
 	  <a href="/list/{{p.urlname}}/" class="list-group-item">

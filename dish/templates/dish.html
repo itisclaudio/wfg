@@ -403,6 +403,7 @@ $(document).ready(function(){
 					<span class="label label-default" style="vertical-align:top;display:inline;" title="Lists">{{list_total}}</span>
 				</h2>
 				</div>
+				{#### LISTS - Start  ####}
 				{% if list_count  > 0 %}
 					{% for p in lists|slice:":5" %}
 					<div class="list-group-item">
@@ -423,7 +424,7 @@ $(document).ready(function(){
 								  <div class="col-md-3 col-xs-3" style="padding:2px;">
 									<a class="thumbnail" href="/dish/{{p.urlname}}/" title="Go to dish page: {{p.name}}" style="font-size:14px; margin-bottom:0px;line-height:14px;">
 										{% if p.photo_main %}
-											<img src="{{p.filename}}-med{{p.extension}}" class="img-rounded" width="100%">
+											<img src="{{p.favphotomed}}" class="img-rounded" width="100%">
 										{% else %}
 											<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%">
 										{% endif %}
