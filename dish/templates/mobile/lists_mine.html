@@ -1,4 +1,5 @@
 {% extends '_base.html' %}
+{% load static %}
 {% block title %} Lists by {{user.username}}{% endblock %}
 {% block content %}
 
@@ -74,9 +75,9 @@
 					  <div class="col-md-4 col-xs-4" style="padding:2px;">
 						<div class="thumbnail" title="Go to dish page: {{p.name}}" style="font-size:14px; margin-bottom:0px;line-height:16px;">
 							{% if p.favphoto %}
-								<img src="/media/{{p.favphoto.filename}}-med{{p.favphoto.extension}}" class="img-rounded" width="100%">
+								<img src="{{p.favphotomed}}" class="img-rounded" width="100%">
 							{% else %}
-								<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+								<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%">
 							{% endif %}
 							<b style="display:inline;" >{{p.name|truncatechars:22}}</b>
 							<b class="text-small" style="margin-bottom:4px; display:inline;">
@@ -95,7 +96,7 @@
 				{% endfor %}
 			{% else %}
 				<div class="thumbnail col-md-4 col-xs-4" title="Go to dish page: {{p.name}}" style="margin-bottom:0px;line-height:16px;">
-				<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+				<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%">
 				<b style="display:inline;font-size:14px;" >There are no dishes</b>
 				</div>
 			{% endif %}

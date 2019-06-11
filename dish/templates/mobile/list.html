@@ -197,7 +197,7 @@ $(document).ready(function(){
 					<a href="/dish/{{p.dish.urlname}}">
 					<img src="{{p.dish.favphotomed}}" class="img-rounded" width="100%" style="margin-bottom:20px;"></a>
 				{% else %}
-					<a href="/photonew/{{p.dish.id}}/"><img src="{% static 'images/upload-med.jpg' %} class="img-rounded" width="100%" style="margin-bottom:20px;"></a>
+					<a href="/photonew/{{p.dish.id}}/"><img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%" style="margin-bottom:20px;"></a>
 				{% endif %}
 			</div>
 		 {% endfor %}
