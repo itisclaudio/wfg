@@ -251,10 +251,10 @@ $(document).ready(function(){
 		<div class="col-sm-7">
 			{% if p.dish.photo_main %}
 				<a href="/dish/{{p.dish.urlname}}" title="Go to photo page">
-					<img src="/media/{{p.dish.filename}}-med{{p.dish.extension}}" class="img-rounded"  alt="{{p.dish.name}}" width="100%">
+					<img src="{{p.dish.favphotomed}}" class="img-rounded"  alt="{{p.dish.name}}" width="100%">
 				</a>
 			{% else %}
-				<a href="/photonew/{{p.dish.id}}/" title="Upload photo for {{p.dish.name|truncatechars:24}}"><img src="/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
+				<a href="/photonew/{{p.dish.id}}/" title="Upload photo for {{p.dish.name|truncatechars:24}}"><img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%"></a>
 			{% endif %}
 		</div>
 	<br clear="all">

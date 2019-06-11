@@ -1,4 +1,5 @@
 {% extends '_base.html' %}
+{% load static %}
 {% block title %} {{ list.name }} {% endblock %}
 
 {% block super-extra-head %}
@@ -194,9 +195,9 @@ $(document).ready(function(){
 			<div class="col-sm-6">
 				{% if p.dish.photo_main %}
 					<a href="/dish/{{p.dish.urlname}}">
-					<img src="/media/{{ p.dish.filename }}-med{{p.dish.extension}}" class="img-rounded" width="100%" style="margin-bottom:20px;"></a>
+					<img src="{{p.dish.favphotomed}}" class="img-rounded" width="100%" style="margin-bottom:20px;"></a>
 				{% else %}
-					<a href="/photonew/{{p.dish.id}}/"><img src="/media/images/upload-med.jpg" class="img-rounded" width="100%" style="margin-bottom:20px;"></a>
+					<a href="/photonew/{{p.dish.id}}/"><img src="{% static 'images/upload-med.jpg' %} class="img-rounded" width="100%" style="margin-bottom:20px;"></a>
 				{% endif %}
 			</div>
 		 {% endfor %}
