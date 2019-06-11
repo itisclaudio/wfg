@@ -201,7 +201,7 @@ $(document).ready(function(){
 					{% endif %}
 				</p>
 		{% else %}
-			<a href="/photonew/{{dish.id}}/"><img src="/media/images/upload-med.png" class="img-rounded" width="100%" style="margin-bottom: 10px;"></a>
+			<a href="/photonew/{{dish.id}}/"><img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%" style="margin-bottom: 10px;"></a>
 		{% endif %}
 	</div>
 	{#### PHOTO 2 ####}
@@ -284,9 +284,9 @@ $(document).ready(function(){
 	   {% endif %}
 		<div class="col-xs-5" style="padding-left:0px;">
 			{% if p.dish2.photo_main %}
-				<img src="/media/{{p.dish2.filename}}-med{{p.dish2.extension}}" class="img-rounded" width="100%">
+				<img src="{{p.dish2.favphotomed}}" class="img-rounded" width="100%">
 			{% else %}
-				<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+				<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%">
 			{% endif %}
 		</div>
 	  </div>
