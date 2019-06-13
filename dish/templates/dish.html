@@ -190,8 +190,9 @@ $(document).ready(function(){
 			{% endfor %}
 		</p>
 		<div style="margin-bottom:6px;">
+		{% static "" as baseUrl %}
 			{% for p in dish.features.all %}
-				<img src="{% static 'images' %}{{p.icon}}" title="{{p.name}}" width="25px">
+				<img src="{{ baseUrl }}images/features/{{p.icon}}" title="{{p.name}}" width="25px">
 			{% endfor %}
 		</div>
 		<p><i>
