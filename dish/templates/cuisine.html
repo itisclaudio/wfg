@@ -1,4 +1,5 @@
 {% extends '_base.html' %}
+{% load static %}
 {% block title %} {{ cuisine.name }} Cuisine {% endblock %}
 
 {% block super-extra-head %}
@@ -31,13 +32,13 @@
 		<h3 style="display:inline;">({{ cuisine.territory|truncatechars:20 }})</h3>
 	</li>
 {% endif %}
-<span class="label label-default" title="Number of dishes">{{cuisine.dishes_count}} <img src="/media/images/icons/food-16-white.png"/></span>
+<span class="label label-default" title="Number of dishes">{{cuisine.dishes_count}} <img src="{% static 'images/icons/food-16-white.png' %}"/></span>
 <span class="label label-default" title="Number of photos">{{cuisine.pictures_count}} <i class="glyphicon glyphicon-camera icon-white"></i></span>
 </ul>
 <div class="well row well-white" style="padding-right:0px;">
 		<div class="col-md-6 col-sm-6">
 			{% if cuisine.favphoto %}
-				<img src="/media/{{cuisine.favphoto.filename}}-reg{{cuisine.favphoto.extension}}" class="img-rounded" width="100%">
+				<img src="{{cuisine.favphoto.filename}}-reg{{cuisine.favphoto.extension}}" class="img-rounded" width="100%">
 			{% endif %}
 			<div style="margin-top:5px; margin-bottom: 5px;">
 				{# Sharethis buttons #}
@@ -119,13 +120,13 @@
 						</div>
 					   {% endif %}
 						<div class="col-xs-5" style="padding-left:0px; padding-right:0px;">
-							{% if p.favphoto %}
+							{% if p.photo_main %}
 								<a href="/photo/{{p.favphoto.urlname}}" title="Click to see the photo" >
-									<img src="/media/{{p.favphoto.filename}}-med{{p.favphoto.extension}}" class="img-rounded" width="100%">
+									<img src="{{p.favphotomed}}" class="img-rounded" width="100%">
 								</a>
 							{% else %}
 								<a href="/photonew/{{p.id}}/">
-									<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%" title="Upload new {{p.name|truncatechars:20}} photo" >
+									<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%" title="Upload new {{p.name|truncatechars:20}} photo" >
 								</a>
 							{% endif %}
 						</div>

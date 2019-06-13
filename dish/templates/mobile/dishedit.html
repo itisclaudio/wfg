@@ -62,7 +62,7 @@
 							<img src="/media/{{p.favphoto.filename}}-thum{{p.favphoto.extension}}" class="img-rounded" width="100%">
 							</a>
 						{% else %}
-							<a href="/photonew/{{p.id}}/"><img src="/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
+							<a href="/photonew/{{p.id}}/"><img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%"></a>
 						{% endif %}
 						</td>
 						{% if user.is_authenticated %}

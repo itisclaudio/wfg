@@ -1,4 +1,5 @@
 {% extends '_base.html' %}
+{% load static %}
 {% block title %} {{ cuisine.name }} Cuisine {% endblock %}
 
 {% block super-extra-head %}
@@ -30,7 +31,7 @@
 		<h3 style=" text-align:center; margin-top:-4px;">({{ cuisine.territory|truncatechars:20 }})</h3>
 	{% endif %}
 	{% if cuisine.favphoto %}
-		<img src="/media/{{cuisine.favphoto.filename}}-med{{cuisine.favphoto.extension}}" class="img-rounded" width="100%">
+		<img src="{{cuisine.favphoto.filename}}-med{{cuisine.favphoto.extension}}" class="img-rounded" width="100%">
 	{% endif %}
 	<div style="margin:4px;">
 	<span class="label label-default">{{cuisine.dishes_count}} <img src="/media/images/icons/food-16-white.png"/></span>
@@ -107,10 +108,10 @@
 				</div>
 			   {% endif %}
 				<div class="col-xs-5" style="padding-left:0px; padding-right:0px;">
-					{% if p.favphoto %}
-						<img src="/media/{{p.favphoto.filename}}-med{{p.favphoto.extension}}" class="img-rounded" width="100%">
+					{% if p.photo_main %}
+						<img src="{{p.favphotomed}}" class="img-rounded" width="100%">
 					{% else %}
-						<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+						<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%">
 					{% endif %}
 				</div>
 			  </a>
