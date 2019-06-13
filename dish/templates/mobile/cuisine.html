@@ -34,7 +34,7 @@
 		<img src="{{cuisine.favphoto.filename}}-med{{cuisine.favphoto.extension}}" class="img-rounded" width="100%">
 	{% endif %}
 	<div style="margin:4px;">
-	<span class="label label-default">{{cuisine.dishes_count}} <img src="/media/images/icons/food-16-white.png"/></span>
+	<span class="label label-default">{{cuisine.dishes_count}} <img src="{% static 'images/icons/food-16-white.png' %}"/></span>
 	<span class="label label-default">{{cuisine.pictures_count}} <i class="glyphicon glyphicon-camera icon-white"></i></span>
 	</div>
 	{% if cuisine.description %}
