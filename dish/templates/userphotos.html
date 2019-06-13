@@ -26,7 +26,7 @@
 <tr>
 <td style="vertical-align:baseline;">
 	{% if profile.userprofile.photo %}
-		<img src="/media/{{profile.userprofile.photofilename}}-thum{{profile.userprofile.extension}}" class="img-rounded hidden-phone hidden-sm hidden-xs" width="35px" />
+		<img src="{{profile.userprofile.photofilename}}-thum{{profile.userprofile.extension}}" class="img-rounded hidden-phone hidden-sm hidden-xs" width="35px" />
 	{% endif %}
 	<h1 style="display:inline;">Photos by: {{profile.username|truncatechars:25}}</h1>
 	<span class="label label-default" style="vertical-align:top;display:inline;" title="Number dishes">{{ list.paginator.count }}</span>
@@ -60,13 +60,13 @@
 
 <div class="list-group" style="margin-bottom:0px;">
 {% if list.paginator.count > 0 %}
-{## DISHES ##}
+{## PHOTOS ##}
   {% for p in list.object_list %}
 	  <div class="list-group-item row" style="margin-left:0px; margin-right:0px; padding:4px;">
 		<div class="col-sm-3 col-xs-12" style="padding-left:2px;">
         {% if p.location %}
-			<a href="/photo/{{p.favphoto.urlname}}">
-				<img src="/media/{{p.filename}}-med{{p.extension}}" class="img-rounded" width="100%">
+			<a href="/photo/{{p.urlname}}">
+				<img src="{{p.filename}}-med{{p.extension}}" class="img-rounded" width="100%">
 			</a>
         {% endif %}
 		</div>
@@ -93,7 +93,7 @@
 		</div>
 	  </div>
   {% endfor %}
-{## END DISHES ##}
+{## END PHOTOS ##}
 
     {% if list.paginator.count > list.paginator.per_page %}
 		<ul class="pagination pull-right" style="margin-top:0px">
