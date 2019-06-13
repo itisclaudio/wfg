@@ -1,4 +1,5 @@
 {% extends '_base.html' %}
+{% load static %}
 {% block title %} {{ object.dish }} Photo 
   {% if object.dish.cuisines.all %}
 	  {% for cuisine in object.dish.cuisines.all %}
@@ -21,9 +22,10 @@
 {% block content %}
 <div class="well-1" style="margin:4px;">
 	<div class="row" style="margin:0px;">
+	{## MAIN DISH ##}
 	<a class="list-group-item row" id="id_obj" name="{{object.id}}" href="/dish/{{object.dish.urlname}}" style="margin-left:0px; margin-right:0px; padding:4px;">
 		<div class="col-xs-4" style="padding:1px;">
-			<img src="/media/{{object.dish.favphoto.filename}}-med{{object.dish.favphoto.extension}}" class="img-rounded" width="100%">
+			<img src="{{object.dish.favphotomed}}" class="img-rounded" width="100%">
 		</div>
 		<div class="col-xs-8" style="padding:1px;">
 			<h3 class="list-group-item-heading" style="color:#845505;margin-bottom:2px;"><b>{{object.dish|truncatechars:28 }}</b></h3>
@@ -90,12 +92,12 @@
 				</button>
 		</div>
 	</div>
-
+	{## PHOTO ##}
 	<a href="/photofullscreen/{{object.id}}/">
 	{% if reload = '1' %}
-		<img id="photo" src="/media/{{object.filename}}-reg{{object.extension}}?cachebuster={%now 'H:i:s'%}" alt="{{ object.dish }}" class="img-rounded" width="100%" style="margin-top:6px;margin-bottom:10px;"/>
+		<img id="photo" src="{{object.filename}}-reg{{object.extension}}?cachebuster={%now 'H:i:s'%}" alt="{{ object.dish }}" class="img-rounded" width="100%" style="margin-top:6px;margin-bottom:10px;"/>
 	{% else %}
-		<img id="photo" src="/media/{{object.filename}}-reg{{object.extension}}" alt="{{ object.dish }}" class="img-rounded" width="100%" style="margin-top:6px;margin-bottom:10px;"/>
+		<img id="photo" src="{{object.filename}}-reg{{object.extension}}" alt="{{ object.dish }}" class="img-rounded" width="100%" style="margin-top:6px;margin-bottom:10px;"/>
 	{% endif %}
 	</a>
 	<div style="margin-top:5px; margin-bottom: 5px;">
