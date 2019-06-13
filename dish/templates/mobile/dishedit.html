@@ -1,4 +1,5 @@
 {% extends '_base.html' %}
+{% load static %}
 {% block title %}{{dish.name}} Editing...{% endblock %}
 {% block content %}
 
@@ -130,7 +131,8 @@
 			{{choice.1|truncatechars:28}} 
 			{% for ft3 in features %}
 				{% if ft3.name == choice.1 %}
-					<img src="/media/images/features/{{ft3.icon}}" width="25px">
+				{% static "" as baseUrl %}
+					<img src="{{ baseUrl }}images/features/{{ft3.icon}}" width="25px">
 				{% endif %}
 			{% endfor %}
 			</label>

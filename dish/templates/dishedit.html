@@ -1,4 +1,5 @@
 {% extends '_base.html' %}
+{% load static %}
 {% block title %}{{dish.name}} Editing...{% endblock %}
 {% block content %}
 
@@ -34,10 +35,10 @@
 				<td>
 				{% if p.favphoto %}
 					<a href="/dish/{{p.urlname}}">
-					<img src="{{MEDIA_URL}}{{p.filename}}-thum{{p.extension}}" class="img-rounded">
+					<img src="{{p.favphotothum}}" class="img-rounded">
 					</a>
 				{% else %}
-					<a href="/photonew/{{p.id}}/"><img src="/media/images/upload-med.png" class="img-rounded" width="60%"></a>
+					<a href="/photonew/{{p.id}}/"><img src="{% static 'images/upload-med.png' %}" class="img-rounded" width="60%"></a>
 				{% endif %}
 				</td>
 				<td><a class="btn btn-default btn-lg" href="/dishedit/{{p.id}}/"><Li class="glyphicon glyphicon-edit"></Li> Edit </a></td>
@@ -85,9 +86,9 @@
             <div style="padding-top:10px;">
 				{% if dish.favphoto %}
 					<a href="/photo/{{dish.favphoto.urlname}}" style="vertical-align:bottom;" align="bottom">
-						<img src="{{MEDIA_URL}}{{dish.filename}}-med{{dish.extension}}" width="90%" class="img-rounded" style="margin-top:0px;" align="right"></a>
+						<img src="{{dish.favphotomed}}" width="90%" class="img-rounded" style="margin-top:0px;" align="right"></a>
 				{% else %}
-					<a href="/photonew/{{dish.id}}/" style="vertical-align:bottom;" align="baseline"><img src="/media/images/upload.jpg" width="100%" class="img-rounded" style="margin-top:10px;" align="right"></a>
+					<a href="/photonew/{{dish.id}}/" style="vertical-align:bottom;" align="baseline"><img src="{% static 'images/uploa.jpg' %}" width="100%" class="img-rounded" style="margin-top:10px;" align="right"></a>
 				{% endif %}
                 </div>
 			</div>
@@ -105,7 +106,8 @@
 			{% endif %}
 			{% for ft3 in features %}
 				{% if ft3.name == choice.1 %}
-					<img src="/media/images/features/{{ft3.icon}}" width="25px">
+				{% static "" as baseUrl %}
+					<img src="{{ baseUrl }}images/features/{{ft3.icon}}" width="25px">
 				{% endif %}
 			{% endfor %}
 			</label>
