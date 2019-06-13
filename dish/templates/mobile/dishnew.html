@@ -1,4 +1,5 @@
 {% extends '_base.html' %}
+{% load static %}
 {% block title %}New Dish-Photo{% endblock %}
 
 {% block super-extra-head %}
@@ -9,7 +10,7 @@
 
 {% block content %}
 
-<!--Modal 0 -->
+{## Modal 1: start Showing loading bar ##}
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -25,8 +26,9 @@
     </div>
   </div>
 </div>
-<!--Modal 1 -->
+{## Modal 1: END Showing loading bar ##}
 
+{## CONTENT ##}
 <table width="96%" border="0" cellspacing="0" cellpadding="0" align="center"><tr><td colspan="3">
 <h1 align="center">Add New Dish</h1>
 {% if list %}
@@ -62,12 +64,12 @@
 					{% endif %}
 					</td>
 					<td>
-					{% if p.favphoto %}
+					{% if p.photo_main %}
 						<a href="/dish/{{p.urlname}}" title="Go to photo page">
-						<img src="/media/{{p.favphoto.filename}}-thum{{p.favphoto.extension}}" class="img-rounded" width="100%">
+						<img src="{{p.favphotothum}}" class="img-rounded" width="100%">
 						</a>
 					{% else %}
-						<a href="/photonew/{{p.id}}/"><img src="/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
+						<a href="/photonew/{{p.id}}/"><img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%"></a>
 					{% endif %}
 					</td>
 					{% if user.is_authenticated %}
@@ -136,10 +138,11 @@
 				<label class="btn btn-default col-xs-6" style="margin-top:0px; border-radius:6px;" title="{{choice.1}}" id="feat_label">
 				<input type="checkbox" name="feature" id="{{choice.0}}" value="{{choice.1}}">
 			{% endif %}
-			{{choice.1|truncatechars:28}} 
+			{{choice.1|truncatechars:28}}
+			{% static "" as baseUrl %}
 			{% for ft3 in features %}
 				{% if ft3.name == choice.1 %}
-					<img src="/media/images/features/{{ft3.icon}}" width="25px">
+					<img src="{{ baseUrl }}images/features/{{ft3.icon}}" title="{{ft3.name}}" width="25px">
 				{% endif %}
 			{% endfor %}
 			</label>
@@ -252,7 +255,7 @@ $( function() {
 		$('select#id_cuisines option').removeAttr("selected");
 		$('#id_dish').val(0);
 		$('#id_name').focus();
-		$('#img').attr('src', "/media/images/upload.jpg");
+		$('#img').attr('src', "{% static 'images/upload.jpg' %}");
 	});
 	// bind change event to photo input, if photo selected enabled save button
 	$('#photo input').bind('change', function () {
@@ -359,8 +362,8 @@ function searchSuccess(json)
 		$('#id_ingredients').val(json.ingredients);
 		$('#id_description').val(json.description);
 		$('#id_dish').val(json.id);
-		if (json.favphoto != "0"){
-			$('#img').attr('src', "/media/"+json.favphoto);
+		if (json.photo_main != "0"){
+			$('#img').attr('src', json.favphotomed);
 		}
 		//Changes properties to non editable
 		$("#id_name").prop('readonly', true);
