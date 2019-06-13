@@ -42,9 +42,8 @@
 		{% endfor %}
 	</p>
 
-
-{% if dish.favphoto %}
-	<img src="/media/{{dish.favphoto.filename}}-med{{dish.favphoto.extension}}" class="img-rounded" width="100%">
+{% if dish.photo_main %}
+	<img src="{{dish.favphotomed}}" class="img-rounded" width="100%">
 {% endif %}
 {% if alert = 1 %}
 	<div class="alert alert-danger alert-dismissible" role="alert" style="margin:10px 10px;">
@@ -135,12 +134,12 @@
 				</div>
 			   {% endif %}
 				<div class="col-xs-5" style="padding-left:0px; padding-right:0px;">
-					{% if p.dish2.favphoto %}
+					{% if p.dish2.photo_main %}
 						<a href="/dish/{{p.dish2.urlname}}">
-							<img src="/media/{{p.dish2.favphoto.filename}}-med{{p.dish2.favphoto.extension}}" class="img-rounded" width="100%">
+							<img src="{{p.dish2.favphotomed}}" class="img-rounded" width="100%">
 						</a>
 					{% else %}
-						<a href="/photonew/{{p.dish2.id}}/"><img src="/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
+						<a href="/photonew/{{p.dish2.id}}/"><img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%"></a>
 					{% endif %}
 				</div>
 			  </div>
