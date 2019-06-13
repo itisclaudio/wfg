@@ -30,6 +30,7 @@
 {## CONTENT ##}
 <h1 style="padding:0px;margin:0px;">Add New Dish</h1>	
 	{% if list %}
+	{## ALERT! possible duplicated ##}
 		<div class="alert alert-danger alert-dismissible" role="alert">
 			<h2 style="margin-top: 0px;">The dish(es) already exists!</h2>
 			<p>Change the name or cuisines to save, otherwise cancel</p>
@@ -75,6 +76,7 @@
 			</div>
 		</div>
 	{% endif %}
+	{## ALERT! END possible duplicated ##}
 <div class="well">
 	<form enctype='multipart/form-data' action="." method="POST" id="myform">
 		{% csrf_token %}
@@ -127,7 +129,7 @@
 			</div>
 			<div class="col-md-4 col-sm-4 col-xs-12" style="margin-left:0px;padding:0px;">
 				<div style="padding-top:10px;">
-					<img id="img" src="/media/images/upload.jpg" width="100%" class="img-rounded" style="margin-top:10px;" align="right">
+					<img id="img" src="{% static 'images/upload.jpg' %}" width="100%" class="img-rounded" style="margin-top:10px;" align="right">
                 </div>
 			</div>
 		</div>
@@ -256,7 +258,7 @@ $( function() {
 		$('select#id_cuisines option').removeAttr("selected");
 		$('#id_dish').val(0);
 		$('#id_name').focus();
-		$('#img').attr('src', "/media/images/upload.jpg");
+		$('#img').attr('src', "{% static 'images/upload.jpg' %}");
 	});
 	// bind change event to photo input, if photo selected enabled save button
 	$('#photo input').bind('change', function () {
@@ -351,7 +353,7 @@ function searchSuccess(json)
 		$('#id_description').val(json.description);
 		$('#id_dish').val(json.id);
 		if (json.favphoto != "0"){
-			$('#img').attr('src', "/media/"+json.favphoto);
+			$('#img').attr('src', json.favphoto);
 		}
 		//Changes properties to non editable
 		$("#id_name").prop('readonly', true);
