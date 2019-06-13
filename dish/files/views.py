@@ -1809,6 +1809,7 @@ def searchquickres_view(request,alert=None,search=None,page=None):
 		else:#results more than 1
 			if results_count > 1:
 				cxt = {'cuisines':cuisine_result,'cui_count':cui_count,'dishes':dishes_result, 'lists':lists_result,'list_count':lists_count,'results':results_count,'search':search}
+				#print "going to searchresults.html"
 				return render_to_response('searchresults.html',cxt,context_instance=RequestContext(request))
 				#return HttpResponseRedirect(reverse('searchquickres_view'))
 	else:
@@ -1820,6 +1821,7 @@ def searchquickres_view(request,alert=None,search=None,page=None):
 			results_count = results_count + len(dishes_result)
 			search= "*"
 	if results_count == 0:#0 results_count
+		#print "in results_count == 0"
 		alert = 1
 		#Clear seach variable if it is not alphanumeric
 		if not all(x.isalnum() or x.isspace() for x in search):
@@ -1839,6 +1841,7 @@ def searchquickres_view(request,alert=None,search=None,page=None):
 	except (EmptyPage, InvalidPage):
 		paginatorlist = paginator.page(paginator.num_pages)
 	cxt = {'paginatorlist':paginatorlist, 'search':search,'all_dishes':dishes_result,}
+	#print "going to searchquick.html"
 	return render_to_response('searchquick.html',cxt,context_instance=RequestContext(request))
 
 def searchadvance_view(request,alert=None,names=None,ingredients=None,cuisines=None,page=None):

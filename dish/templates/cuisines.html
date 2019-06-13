@@ -59,10 +59,10 @@
 		<div class="col-sm-3 col-xs-12" style="padding-left:2px;">
 		{% if p.favphoto %}
 			<a href="/photo/{{p.favphoto.urlname}}">
-				<img src="/media/{{p.favphoto.filename}}-med{{p.favphoto.extension}}" class="img-rounded" width="100%">
+				<img src="{{p.favphoto.filename}}-med{{p.favphoto.extension}}" class="img-rounded" width="100%">
 			</a>
 		{% else %}
-			<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+			<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%">
 		{% endif %}
 		</div>
 		<div class="col-sm-9 col-xs-12" style="padding-left:2px;">
