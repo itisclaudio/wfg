@@ -1,4 +1,5 @@
 {% extends '_base.html' %}
+{% load static %}
 {% block title %}Latest Dishes{% endblock %}
 {% block content %}
 
@@ -92,9 +93,9 @@
 	   {% endif %}
 		<div class="col-xs-5" style="padding-left:0px; padding-right:0px;">
 			{% if p.photo_main %}
-				<img src="/media/{{p.filename}}-med{{p.extension}}" class="img-rounded" width="100%">
+				<img src="{{p.favphotomed}}" class="img-rounded" width="100%">
 			{% else %}
-				<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+				<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%">
 			{% endif %}
 		</div>
 	  </a>

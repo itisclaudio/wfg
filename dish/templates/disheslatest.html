@@ -57,10 +57,10 @@
 		<div class="col-sm-3 col-xs-12" style="padding-left:2px;">
         {% if p.photo_main %}
 			<a href="/dish/{{p.urlname}}">
-				<img src="/media/{{p.filename}}-med{{p.extension}}" class="img-rounded" width="100%">
+				<img src="{{p.favphotomed}}" class="img-rounded" width="100%">
 			</a>
         {% else %}
-			<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+			<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%">
         {% endif %}
 		</div>
 		<div class="col-sm-9 col-xs-12" style="padding-left:2px;">
