@@ -450,78 +450,78 @@ class Picture(models.Model):
 		return extension
 
 	def save(self):
-		##** Done with lambda in AWS S3, Done manually localy
-		if settings.LOCAL_DEV:
-			file = self.location.path.encode('utf-8')
+		#**************Te rezise main image
+		file = self.location.path.encode('utf-8')
+		if os.path.exists(file):
+			## No new file, renaming current file and thumbs
+			filenamewhole = str(self.location)
+			print filenamewhole
+			filenamewhole = filenamewhole.replace("dishes/", "")
+			filename, ext = os.path.splitext(filenamewhole)
+			cad = settings.UPLOAD_DISH + '/'
+			fileThum = cad+filename+'-thum'+ext
+			fileMed = cad+filename+'-med'+ext
+			fileReg = cad+filename+'-reg'+ext
+			urlname = self.dish.urlname
+			newname1 = cad+urlname+'_'+str(self.id)+ext
+			newThum =  cad+urlname+'_'+str(self.id)+'-thum'+ext
+			newMed =  cad+urlname+'_'+str(self.id)+'-med'+ext
+			newReg =  cad+urlname+'_'+str(self.id)+'-reg'+ext
 			if os.path.exists(file):
-				## No new file, renaming current file and thumbs
-				filenamewhole = str(self.location)
-				print filenamewhole
-				filenamewhole = filenamewhole.replace("dishes/", "")
-				filename, ext = os.path.splitext(filenamewhole)
-				cad = settings.UPLOAD_DISH + '/'
-				fileThum = cad+filename+'-thum'+ext
-				fileMed = cad+filename+'-med'+ext
-				fileReg = cad+filename+'-reg'+ext
-				urlname = self.dish.urlname
-				newname1 = cad+urlname+'_'+str(self.id)+ext
-				newThum =  cad+urlname+'_'+str(self.id)+'-thum'+ext
-				newMed =  cad+urlname+'_'+str(self.id)+'-med'+ext
-				newReg =  cad+urlname+'_'+str(self.id)+'-reg'+ext
-				if os.path.exists(file):
-					os.rename(file, newname1)
-				if os.path.exists(fileThum):
-					os.rename(fileThum, newThum)
-				if os.path.exists(fileMed):
-					os.rename(fileMed, newMed)
-				if os.path.exists(fileReg):
-					os.rename(fileReg, newReg)
-				self.urlname = urlname+'_'+str(self.id)
-				self.location = 'dishes/'+urlname+'_'+str(self.id)+ext
-				#pic.save()
-				super(Picture, self).save()
-				return
-			print "New file, create thumbs"
-			## Uploading new file, creating thumbs
+				os.rename(file, newname1)
+			if os.path.exists(fileThum):
+				os.rename(fileThum, newThum)
+			if os.path.exists(fileMed):
+				os.rename(fileMed, newMed)
+			if os.path.exists(fileReg):
+				os.rename(fileReg, newReg)
+			self.urlname = urlname+'_'+str(self.id)
+			self.location = 'dishes/'+urlname+'_'+str(self.id)+ext
+			#pic.save()
 			super(Picture, self).save()
-			
-			p_w = self.location.width
-			p_h = self.location.height
-			
-			filename = str(self.location.path)
-			image = Image.open(filename)
-			ext = filename.split('.')[-1]
-
-			sizes={'thum':{'h':100,'w':100},'med':{'h':400,'w':400},'reg':{'h':800,'w':800},'max':{'h':1200,'w':1200},}
-			
-			# create "max-size" image
-			if any ((p_w < sizes['max']['w'], p_h < sizes['max']['h'])):#User resize and not thumdnail to make it bigger
-				if p_h > p_w:
-					max_wsize = int(sizes['max']['h']*p_w/p_h)
-					#print "Max resize, W: "+str(max_wsize)+" H:"+str(sizes['max']['h'])
-					image_new = image.resize((max_wsize,int(sizes['max']['h'])), Image.ANTIALIAS)
-					image_new.save(filename)
-				else:
-					max_hsize = int(p_h*sizes['max']['w']/p_w)
-					image_new = image.resize((int(sizes['max']['w']),max_hsize), Image.ANTIALIAS)
-					image_new.save(filename)
-			else:
-				image.thumbnail((sizes['max']['w'], sizes['max']['h']), Image.ANTIALIAS)
-				image.save(filename)
-			
-			# create "Reg-size" image
-			image.thumbnail((sizes['reg']['w'], sizes['reg']['h']), Image.ANTIALIAS)
-			image.save(settings.UPLOAD_DISH + '/' +self.urlname+"-reg."+ext.lower())
-
-			# create medium image
-			image.thumbnail((sizes['med']['w'], sizes['med']['h']), Image.ANTIALIAS)
-			image.save(settings.UPLOAD_DISH + '/' + self.urlname+"-med."+ext.lower())
-
-			# create thumbnail
-			image.thumbnail((sizes['thum']['w'], sizes['thum']['h']), Image.ANTIALIAS)
-			image.save(settings.UPLOAD_DISH + '/' + self.urlname+"-thum."+ext.lower())
+			return
+		print "New file, create thumbs"
+		## Uploading new file, creating thumbs
+		super(Picture, self).save()
 		
-		UpdateMainPhoto(self.dish.pk)#Updates
+		p_w = self.location.width
+		p_h = self.location.height
+		
+		filename = str(self.location.path)
+		image = Image.open(filename)
+		ext = filename.split('.')[-1]
+
+		sizes={'thum':{'h':100,'w':100},'med':{'h':400,'w':400},'reg':{'h':800,'w':800},'max':{'h':1200,'w':1200},}
+		
+		# create "max-size" image
+		if any ((p_w < sizes['max']['w'], p_h < sizes['max']['h'])):#User resize and not thumdnail to make it bigger
+			if p_h > p_w:
+				max_wsize = int(sizes['max']['h']*p_w/p_h)
+				#print "Max resize, W: "+str(max_wsize)+" H:"+str(sizes['max']['h'])
+				image_new = image.resize((max_wsize,int(sizes['max']['h'])), Image.ANTIALIAS)
+				image_new.save(filename)
+			else:
+				max_hsize = int(p_h*sizes['max']['w']/p_w)
+				image_new = image.resize((int(sizes['max']['w']),max_hsize), Image.ANTIALIAS)
+				image_new.save(filename)
+		else:
+			image.thumbnail((sizes['max']['w'], sizes['max']['h']), Image.ANTIALIAS)
+			image.save(filename)
+		
+		# create "Reg-size" image
+		image.thumbnail((sizes['reg']['w'], sizes['reg']['h']), Image.ANTIALIAS)
+		image.save(settings.UPLOAD_DISH + '/' +self.urlname+"-reg."+ext.lower())
+
+		# create medium image
+		image.thumbnail((sizes['med']['w'], sizes['med']['h']), Image.ANTIALIAS)
+		image.save(settings.UPLOAD_DISH + '/' + self.urlname+"-med."+ext.lower())
+
+		# create thumbnail
+		image.thumbnail((sizes['thum']['w'], sizes['thum']['h']), Image.ANTIALIAS)
+		image.save(settings.UPLOAD_DISH + '/' + self.urlname+"-thum."+ext.lower())
+		
+		print "In: UpdateMainPhoto 1"
+		UpdateMainPhoto(self.dish.pk)#Updates 
 
 	def __unicode__(self):
 		return "%s"%(self.urlname)
