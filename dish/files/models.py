@@ -450,7 +450,7 @@ class Picture(models.Model):
 		return extension
 
 	def save(self):
-		#**************Te rezise main image
+		#** The rezise main image
 		file = self.location.path.encode('utf-8')
 		if os.path.exists(file):
 			## No new file, renaming current file and thumbs
