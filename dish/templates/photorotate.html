@@ -13,16 +13,18 @@
   <tr>
     <td style="vertical-align:middle;border-top:none;" width="50px">
     	<a id="rotate-left" href="#"/>
-		<img id="icon-left" src="/media/images/rotate_left.png" title="Rotate Left" width="50px" style="vertical-align:middle;">
+		<img id="icon-left" src="{% static 'images/rotate_left.png' %}" title="Rotate Left" width="50px" style="vertical-align:middle;">
+		
 		</a>
     </td>
     <td id="photo_holder" style="vertical-align:middle;border-top:none;" width="300px">
-	    <img id="photo" src="/media/{{ photo.filename }}-med{{photo.extension}}?cachebuster={%now 'H:i:s'%}" title="{{ photo.dish.name }}" width="300px" class="img-rounded" >
+	    <img id="photo" src="{{ photo.filename }}-med{{photo.extension}}?cachebuster={%now 'H:i:s'%}" title="{{ photo.dish.name }}" width="300px" class="img-rounded" >
 		<!--<img id="photo" src="{{ MEDIA_URL }}images/test.jpg" alt="{{ photo.food }}" width="300px"  class="img-rounded" >-->
     </td>
     <td style="vertical-align:middle;border-top:none;" width="50px">
     	<a id="rotate-right"  title="Rotate Right" href="#"/>
-		<img id="icon-right" src="/media/images/rotate_right.png" width="50px">
+		<img id="icon-right" src="{% static 'images/rotate_right.png' %}" width="50px">
+		
 		</a>
     </td>
 </table>

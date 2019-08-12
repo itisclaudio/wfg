@@ -12,19 +12,19 @@
 	<tr>
     <td style="vertical-align:middle;border-top:none;padding-right:15px;" width="50%">
     	<a id="rotate-left" href="#"/>
-		<img src="/media/images/rotate_left.png" width="50px" id="icon-left" style="vertical-align:right;" align="right">
+		<img src="{% static 'images/rotate_left.png' %}" width="50px" id="icon-left" style="vertical-align:right;" align="right">
 		</a>
     </td>
     <td style="vertical-align:left;border-top:none;padding-left:15px;" width="50%">
     	<a id="rotate-right" href="#"/>
-		<img src="/media/images/rotate_right.png" width="50px" id="icon-right" align="left">
+		<img src="{% static 'images/rotate_right.png' %}" width="50px" id="icon-right" align="left">
 		</a>
     </td>
 	</tr>
 	<tr>
 	   <td style="vertical-align:middle;border-top:none;" colspan="2">
 			<div id="holder" align="center" >
-				<img id="photo" src="/media/{{ photo.filename }}-med{{photo.extension}}?cachebuster={%now 'H:i:s'%}" alt="{{ photo.food }}" width="300px" class="img-rounded"/>
+				<img id="photo" src="{{ photo.filename }}-med{{photo.extension}}?cachebuster={%now 'H:i:s'%}" alt="{{ photo.food }}" width="300px" class="img-rounded"/>
 			</div>
 		</td>
 </table>
