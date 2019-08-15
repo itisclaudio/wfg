@@ -448,7 +448,7 @@ class Picture(models.Model):
 	def extension(self):
 		name, extension = os.path.splitext(self.location.url)
 		return extension
-
+"""
 	def save(self):
 		##** Done with lambda in AWS S3, Done manually localy
 		if settings.LOCAL_DEV:
@@ -523,7 +523,7 @@ class Picture(models.Model):
 			image.save(settings.UPLOAD_DISH + '/' + self.urlname+"-thum."+ext.lower())
 		
 		UpdateMainPhoto(self.dish.pk)#Updates
-
+"""
 	def __unicode__(self):
 		return "%s"%(self.urlname)
 		
