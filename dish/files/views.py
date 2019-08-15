@@ -1410,7 +1410,7 @@ def photonew_view(request, id):
 			profile = userProfile.objects.get(user=req_user)
 			p.owner = profile
 			p.save() # Guardar la informacion
-			loc = p.location
+			loc = str(p.location)
 			#dishes_original/bud_light_beer_35.jpg 
 			p.location = loc.replace("dishes_original/", "dishes/")
 			p.save()
