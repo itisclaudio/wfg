@@ -1410,6 +1410,10 @@ def photonew_view(request, id):
 			profile = userProfile.objects.get(user=req_user)
 			p.owner = profile
 			p.save() # Guardar la informacion
+			loc = p.location
+			#dishes_original/bud_light_beer_35.jpg 
+			p.location = loc.replace("dishes_original/", "dishes/")
+			p.save()
 			email_url=request.build_absolute_uri('/')+'photo/%s/'%(p.urlname)
 			SaveEmailQueue(req_user.username,'Dish photo','Added',email_url)
 			info = 2

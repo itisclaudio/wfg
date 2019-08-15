@@ -452,13 +452,6 @@ class Picture(models.Model):
 	def __unicode__(self):
 		return "%s"%(self.urlname)
 		
-	def post_save(self):
-		if not settings.LOCAL_DEV:
-			loc = str(self.location)
-			#dishes_original/bud_light_beer_35.jpg 
-			self.location = loc.replace("dishes_original/", "dishes/")
-			self.save()
-		
 	class Meta:
 		ordering = ('dish__name',)
 
