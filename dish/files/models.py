@@ -315,7 +315,7 @@ def picture_url(instance,filename):
 	else:
 		getKey = 1
 	ext = filename.split('.')[-1]
-	ruta = "dishes/%s_%s.%s" %(instance.dish.urlname,str(getKey),ext.lower())
+	ruta = "dishes_original/%s_%s.%s" %(instance.dish.urlname,str(getKey),ext.lower())
 	return ruta
 
 class List(models.Model):
