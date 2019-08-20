@@ -60,6 +60,10 @@ p, li, td, .btn {
 	/*font-family:"eras_med", serif;*/
 	}
 
+img {
+  background: url('images/loading512.gif') no-repeat;
+}
+	
 .form-control {
 	font-size:18px; 
 	line-height: 24px;
