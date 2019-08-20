@@ -24,7 +24,7 @@ import os #To delete photo
 import unicodedata #For search. Converts: naïve café -> naive cafe
 from django.contrib.sitemaps import Sitemap #For sitemaps
 #from django.contrib.sitemaps.views import Sitemap
-from django.core.urlresolvers import resolve, reverse#resolve(photonew),reverse(for Sitemap of static views)
+from django.core.urlresolvers import resolve, reverse, Resolver404#resolve(photonew),reverse(for Sitemap of static views)
 from django.db.models import Q #dishlist_view, more
 from django.utils import timezone
 from allauth.socialaccount.models import SocialAccount#For: 1)django-allauth in Myprofile, 2)Login
@@ -1418,12 +1418,13 @@ def photonew_view(request, id):
 			SaveEmailQueue(req_user.username,'Dish photo','Added',email_url)
 			info = 2
 			if not settings.LOCAL_DEV:
-				photopath = "https://wfgs.s3.amazonaws.com/{}".format(p.location)
+				photopath = "https://wfgs.s3.amazonaws.com/media/{}".format(p.location)
 				import time
 				for x in range(7):
-					if resolve(photopath):
+					try:
+						resolve(photopath)
 						return HttpResponseRedirect('/photo/%s'%(p.urlname))
-					else:
+					except Resolver404:
 						x=+1
 						time.sleep(1)
 			else:
