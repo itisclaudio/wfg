@@ -1424,7 +1424,7 @@ def photonew_view(request, id):
 					if resolve(photopath):
 						return HttpResponseRedirect('/photo/%s'%(p.urlname))
 					else:
-						print x=+1
+						x=+1
 						time.sleep(1)
 			else:
 				return HttpResponseRedirect('/photo/%s'%(p.urlname))
