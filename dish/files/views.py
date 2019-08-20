@@ -1421,16 +1421,18 @@ def photonew_view(request, id):
 				photopath = "https://wfgs.s3.amazonaws.com/media/{}".format(p.location)
 				print photopath
 				import time
-				for x in range(7):
+				for x in range(20):
 					try:
-						print "Second: "+str(x)
+						print "Second in try: "+str(x)
 						resolve(photopath)
 						print "resoleved, redirecting to /photo/"
 						return HttpResponseRedirect('/photo/%s'%(p.urlname))
 					except Resolver404:
-						print "Second: "+str(x)
+						print "Second in except: "+str(x)
 						x=+1
 						time.sleep(1)
+				#If after 20 seconds this doesn't response, send anyways
+				return HttpResponseRedirect('/photo/%s'%(p.urlname))
 			else:
 				return HttpResponseRedirect('/photo/%s'%(p.urlname))
 		else:
