@@ -24,7 +24,7 @@ import os #To delete photo
 import unicodedata #For search. Converts: naïve café -> naive cafe
 from django.contrib.sitemaps import Sitemap #For sitemaps
 #from django.contrib.sitemaps.views import Sitemap
-from django.core.urlresolvers import reverse#for Sitemap of static views
+from django.core.urlresolvers import resolve, reverse#resolve(photonew),reverse(for Sitemap of static views)
 from django.db.models import Q #dishlist_view, more
 from django.utils import timezone
 from allauth.socialaccount.models import SocialAccount#For: 1)django-allauth in Myprofile, 2)Login
@@ -389,7 +389,6 @@ def cuisines_result_view(request,search=None,page=None):
 	cxt = {'paginatorlist':paginatorlist, 'search':search}
 	return render_to_response('cuisines_result.html',cxt,context_instance=RequestContext(request))
 
-#000
 def cuisine_search(string_sent):
 	#print "---------------------in search cuisine--------------"
 	string_stripped = ' '.join(string_sent.split())#Removes any multiple spaces
@@ -1377,6 +1376,7 @@ def photosfull_view(request):
 def photouploadmain_view(request):
 	return render_to_response('photouploadmain.html',context_instance=RequestContext(request))
 
+#000
 @login_required(login_url=singin_url)
 @verified_email_required
 def photonew_view(request, id):
@@ -1417,7 +1417,17 @@ def photonew_view(request, id):
 			email_url=request.build_absolute_uri('/')+'photo/%s/'%(p.urlname)
 			SaveEmailQueue(req_user.username,'Dish photo','Added',email_url)
 			info = 2
-			return HttpResponseRedirect('/photo/%s'%(p.urlname))
+			if not settings.LOCAL_DEV:
+				photopath = "https://wfgs.s3.amazonaws.com/{}".format(p.location)
+				import time
+				for x in range(7):
+					if resolve(photopath):
+						return HttpResponseRedirect('/photo/%s'%(p.urlname))
+					else:
+						print x=+1
+						time.sleep(1)
+			else:
+				return HttpResponseRedirect('/photo/%s'%(p.urlname))
 		else:
 			info = 3
 			#form = photoAdd_Form(initial={'comments':pic.comments,'ownit':pic.ownit,'creditsname':pic.creditsname,'creditsurl':pic.creditsurl})
