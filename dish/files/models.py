@@ -453,7 +453,7 @@ class Picture(models.Model):
 		return "%s"%(self.urlname)
 		
 	def save(self):
-		#super(Picture, self).save()
+		super(Picture, self).save()
 		UpdateMainPhoto(self.dish.pk)#Updates
 		
 	class Meta:
