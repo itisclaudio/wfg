@@ -1418,19 +1418,22 @@ def photonew_view(request, id):
 			SaveEmailQueue(req_user.username,'Dish photo','Added',email_url)
 			info = 2
 			if not settings.LOCAL_DEV:
-				photopath = "https://wfgs.s3.amazonaws.com/media/{}".format(p.location)
-				print photopath
+				import httplib
 				import time
-				for x in range(20):
-					try:
-						print "Second in try: "+str(x)
-						resolve(photopath)
+				site = "https://wfgs.s3.amazonaws.com"
+				path = "/media/{}".format(p.location)
+				print "Sitepath: {}{}".format(site,path)
+				for x in range(24):
+					print "in for: "+str(x)
+					conn = httplib.HTTPConnection(site)
+					conn.request('HEAD', path)
+					response = conn.getresponse()
+					conn.close()
+					if response.status == 200:
 						print "resoleved, redirecting to /photo/"
 						return HttpResponseRedirect('/photo/%s'%(p.urlname))
-					except Resolver404:
-						print "Second in except: "+str(x)
-						x=+1
-						time.sleep(1)
+					x=+1
+					time.sleep(1)
 				#If after 20 seconds this doesn't response, send anyways
 				return HttpResponseRedirect('/photo/%s'%(p.urlname))
 			else:
