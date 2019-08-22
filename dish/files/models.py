@@ -452,6 +452,10 @@ class Picture(models.Model):
 	def __unicode__(self):
 		return "%s"%(self.urlname)
 		
+	def save(self):
+		UpdateMainPhoto(self.dish.pk)#Updates
+		super(Picture, self).save()
+		
 	class Meta:
 		ordering = ('dish__name',)
 

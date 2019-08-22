@@ -1418,23 +1418,25 @@ def photonew_view(request, id):
 			SaveEmailQueue(req_user.username,'Dish photo','Added',email_url)
 			info = 2
 			if not settings.LOCAL_DEV:
+				## code that waits until S3 finished creating thumbnails with lambda (only production)
 				photopath = "https://wfgs.s3.amazonaws.com/media/{}".format(p.location)
-				print photopath
 				import requests
 				import time
 				for x in range(20):
+					## If the request of the photo is 200, it exist and redirects to photo
 					print "Second in try: "+str(x)
 					request = requests.get(photopath)
-					#resolve(photopath)
 					if request.status_code == 200:
 						print "resoleved, redirecting to /photo/"
 						return HttpResponseRedirect('/photo/%s'%(p.urlname))
 					else:
+						## If request is not 200, lambda is still working, waits 1 second and ask again
 						x=+1
 						time.sleep(1)
-				#If after 20 seconds this doesn't response, send anyways
+				#If after 20 seconds this doesn't response, send anyways:
 				return HttpResponseRedirect('/photo/%s'%(p.urlname))
 			else:
+				## If we are in development, it doesn't need to wait for lambda
 				return HttpResponseRedirect('/photo/%s'%(p.urlname))
 		else:
 			info = 3
