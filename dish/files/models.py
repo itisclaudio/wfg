@@ -315,8 +315,12 @@ def picture_url(instance,filename):
 	else:
 		getKey = 1
 	ext = filename.split('.')[-1]
-	ruta = "dishes_original/%s_%s.%s" %(instance.dish.urlname,str(getKey),ext.lower())
-	return ruta
+	if settings.LOCAL_DEV:
+		#return "dishes/%s_%s.%s" %(instance.dish.urlname,str(getKey),ext.lower())
+		return "dishes/{}_{}.{}".format(instance.dish.urlname, str(getKey), ext.lower())
+	else:
+		return "dishes_original/{}_{}.{}".format(instance.dish.urlname,str(getKey),ext.lower())
+		#return "dishes_original/%s_%s.%s" %(instance.dish.urlname,str(getKey),ext.lower())
 
 class List(models.Model):
 	TYPE_LIST = (('1', "Personal: Only owner can add dishes"),('2', "Public: Users can add dishes"),('3', "Private: Only owner can see it"),)
