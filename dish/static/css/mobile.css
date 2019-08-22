@@ -38,6 +38,10 @@ h3 {
 a { color:#FF6600;  }
 a:hover { 	color:#900; }
 
+img {
+  background: url('images/loading512.gif') no-repeat;
+}
+
 .form-control {
 	font-size:16px; 
 	line-height: 18px;
