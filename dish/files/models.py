@@ -530,7 +530,12 @@ class Picture(models.Model):
 			image.save(settings.UPLOAD_DISH + '/' + self.urlname+"-thum."+ext.lower())
 
 		else:
-			super(Picture, self).save()
+			file = self.location.path.encode('utf-8')
+			if os.path.exists(file):
+				print "File exists: {}".format(file)
+			else:
+				print "File doesn't exists: {}".format(file)
+			#super(Picture, self).save()
 		UpdateMainPhoto(self.dish.pk)#Updates
 		
 	class Meta:
