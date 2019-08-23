@@ -541,7 +541,8 @@ class Picture(models.Model):
 				print "loc: "+loc
 				key = loc.split('/')[-1]
 				#name, extension = os.path.splitext(self.location.url)
-				print "name: {}, extension: {}, bucket {} ".format(key, bucket)
+				basename = os.path.basename(self.location.url)
+				print "basename: {}, bucket {} ".format(basename, bucket)
 				#key = ''
 				#dirname = os.path.dirname(key)
 				#s3.download_file(Bucket=bucket, Key=key, Filename=path_tmp)
