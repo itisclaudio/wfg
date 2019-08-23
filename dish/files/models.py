@@ -543,7 +543,7 @@ class Picture(models.Model):
 				#name, extension = os.path.splitext(self.location.url)
 				basename = os.path.basename(self.location.url)
 				path_tmp = '/tmp/{}'.format(basename)
-				print "basename: {}, bucket {} ".format(basename, bucket)
+				print "basename: {}, path_tmp {} ".format(basename, path_tmp)
 				key = str(basename)
 				#dirname = os.path.dirname(key)
 				s3.download_file(Bucket=bucket, Key=key, Filename=path_tmp)
