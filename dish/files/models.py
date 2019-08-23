@@ -213,7 +213,7 @@ def pluralize(ingredient):
 		return plural
 	else:
 		return ingredient
-#000
+
 class Dish(models.Model):
 	cuisines	= models.ManyToManyField(Cuisine, blank=True)
 	features	= models.ManyToManyField(Feature, blank=True)
@@ -537,8 +537,9 @@ class Picture(models.Model):
 				import boto3
 				s3 = boto3.client('s3')
 				bucket = os.environ.get('AWS_STORAGE_BUCKET_NAME')
-				name, extension = os.path.splitext(self.location.url)
-				print "name: {}, extension: {}, bucket {} ".format(name, extension, bucket)
+				key = self.location.url.split('/')[-1]
+				#name, extension = os.path.splitext(self.location.url)
+				print "name: {}, extension: {}, bucket {} ".format(key, bucket)
 				#key = ''
 				#dirname = os.path.dirname(key)
 				#s3.download_file(Bucket=bucket, Key=key, Filename=path_tmp)
