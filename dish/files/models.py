@@ -530,7 +530,7 @@ class Picture(models.Model):
 			image.save(settings.UPLOAD_DISH + '/' + self.urlname+"-thum."+ext.lower())
 
 		else:
-			file = self.location.path.encode('utf-8')
+			file = self.location.url
 			if os.path.exists(file):
 				print "File exists: {}".format(file)
 			else:
