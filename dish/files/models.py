@@ -542,10 +542,11 @@ class Picture(models.Model):
 				key = loc.split('/')[-1]
 				#name, extension = os.path.splitext(self.location.url)
 				basename = os.path.basename(self.location.url)
+				path_tmp = '/tmp/{}'.format(basename)
 				print "basename: {}, bucket {} ".format(basename, bucket)
-				#key = ''
+				key = str(basename)
 				#dirname = os.path.dirname(key)
-				#s3.download_file(Bucket=bucket, Key=key, Filename=path_tmp)
+				s3.download_file(Bucket=bucket, Key=key, Filename=path_tmp)
 			else:
 				print "File doesn't exists: {}".format(self.location.url)
 			#super(Picture, self).save()
