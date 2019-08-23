@@ -530,11 +530,12 @@ class Picture(models.Model):
 			image.save(settings.UPLOAD_DISH + '/' + self.urlname+"-thum."+ext.lower())
 
 		else:
-			file = self.location.url
-			if os.path.exists(file):
-				print "File exists: {}".format(file)
+			#file = self.location.url
+			#if os.path.exists(file):
+			if self.location.url:
+				print "File exists: {}".format(self.location.url)
 			else:
-				print "File doesn't exists: {}".format(file)
+				print "File doesn't exists: {}".format(self.location.url)
 			#super(Picture, self).save()
 		UpdateMainPhoto(self.dish.pk)#Updates
 		
