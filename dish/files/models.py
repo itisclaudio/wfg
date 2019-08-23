@@ -537,7 +537,9 @@ class Picture(models.Model):
 				import boto3
 				s3 = boto3.client('s3')
 				bucket = os.environ.get('AWS_STORAGE_BUCKET_NAME')
-				key = self.location.url.split('/')[-1]
+				loc = str(self.location.url)
+				print "loc: "+loc
+				key = loc.split('/')[-1]
 				#name, extension = os.path.splitext(self.location.url)
 				print "name: {}, extension: {}, bucket {} ".format(key, bucket)
 				#key = ''
