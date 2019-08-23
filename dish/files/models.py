@@ -399,7 +399,7 @@ def UpdateMainPhoto(id_dish):
 		## There is no photo, clear photo_m
 		dish.photo_main = ""
 	dish.save()
-		
+#000		
 class Picture(models.Model):
 	#dish = models.ForeignKey(Dish, related_name='dishpicture')
 	dish = models.ForeignKey(Dish)
@@ -534,6 +534,14 @@ class Picture(models.Model):
 			#if os.path.exists(file):
 			if self.location.url:
 				print "File exists: {}".format(self.location.url)
+				import boto3
+				s3 = boto3.client('s3')
+				bucket = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+				name, extension = os.path.splitext(self.location.url)
+				print "name: {}, extension: {}, bucket {} ".format(name, extension, bucket)
+				#key = ''
+				#dirname = os.path.dirname(key)
+				#s3.download_file(Bucket=bucket, Key=key, Filename=path_tmp)
 			else:
 				print "File doesn't exists: {}".format(self.location.url)
 			#super(Picture, self).save()
