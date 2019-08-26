@@ -561,8 +561,7 @@ class Picture(models.Model):
 				newMed = "media/dishes/{}-med{}".format(self.urlname,extension)
 				newThum = "media/dishes/{}-thum{}".format(self.urlname,extension)
 				copy_source = {'Bucket': str(bucket), 'Key': key}
-				#s3.Object(bucket,newname1).copy_from(CopySource='wfgs/media/dishes/'+str())
-				s3.Object(bucket,newname1).copy_from(CopySource=str(self.location.url))
+				s3.Object(bucket,newname1).copy_from(CopySource='wfgs/'+key)
 				#s3.Object(bucket,newname1).copy_from(CopySource=copy_source)
 				#s3.Object('my_bucket','old_file_key').delete()
 				#s3.download_file(Bucket=bucket, Key=key, Filename=path_tmp)
