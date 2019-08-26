@@ -547,15 +547,16 @@ class Picture(models.Model):
 				loc = str(self.location.url)
 				print "loc: "+loc
 				#key = loc.split('/')[-1]
-				#name, extension = os.path.splitext(self.location.url)
+				filename, extension = os.path.splitext(self.location.url)
 				basename = os.path.basename(self.location.url)
 				path_tmp = 'tmp/{}'.format(basename)
 				#key = str(basename)
 				key = 'media/dishes/{}'.format(basename)
 				print "bucket: {}, key: {}, path_tmp: {} ".format(bucket, key, path_tmp)
 				#dirname = os.path.dirname(key)
+				newname1 = "media/dishes/{}_{}.{}".format(self.urlname,str(self.id),extension)
 				copy_source = {'Bucket': str(bucket), 'Key': key}
-				s3.Object(bucket,'media/a_test1.jpg').copy_from(CopySource=copy_source)
+				s3.Object(bucket,newname1).copy_from(CopySource=copy_source)
 				#s3.Object('my_bucket','old_file_key').delete()
 				#s3.download_file(Bucket=bucket, Key=key, Filename=path_tmp)
 			else:
