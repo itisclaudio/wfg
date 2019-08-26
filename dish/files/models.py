@@ -551,17 +551,18 @@ class Picture(models.Model):
 				basename = os.path.basename(self.location.url)
 				path_tmp = 'tmp/{}'.format(basename)
 				#key = str(basename)
-				key = 'media/dishes/{}'.format(basename)
 				#print "bucket: {}, key: {}, path_tmp: {} ".format(bucket, key, path_tmp)
 				print "self.urlname: {}, self.id: {}, extension: {} ".format(self.urlname, self.id, extension)
 				#dirname = os.path.dirname(key)
-				newname1 = "media/dishes/{}{}".format(self.urlname,extension)
-				newReg = "media/dishes/{}-reg{}".format(self.urlname,extension)
-				print "newReg: "+newReg
-				newMed = "media/dishes/{}-med{}".format(self.urlname,extension)
-				newThum = "media/dishes/{}-thum{}".format(self.urlname,extension)
-				copy_source = {'Bucket': str(bucket), 'Key': key}
-				s3.Object(bucket,newname1).copy_from(CopySource='wfgs/'+key)
+				oldkey = 'media/dishes/{}'.format(basename)
+				print "oldkey: "+oldkey
+				newkey = "media/dishes/{}{}".format(self.urlname,extension)
+				print "newkey: "+newkey
+				key_reg = "media/dishes/{}-reg{}".format(self.urlname,extension)
+				key_med = "media/dishes/{}-med{}".format(self.urlname,extension)
+				key_hum = "media/dishes/{}-thum{}".format(self.urlname,extension)
+				#copy_source = {'Bucket': str(bucket), 'Key': key}
+				s3.Object(bucket,newkey).copy_from(CopySource='wfgs/'+oldkey)
 				#s3.Object(bucket,newname1).copy_from(CopySource=copy_source)
 				#s3.Object('my_bucket','old_file_key').delete()
 				#s3.download_file(Bucket=bucket, Key=key, Filename=path_tmp)
