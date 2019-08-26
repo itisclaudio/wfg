@@ -555,7 +555,7 @@ class Picture(models.Model):
 				#print "bucket: {}, key: {}, path_tmp: {} ".format(bucket, key, path_tmp)
 				print "self.urlname: {}, self.id: {}, extension: {} ".format(self.urlname, self.id, extension)
 				#dirname = os.path.dirname(key)
-				newname1 = "media/dishes/{}_{}{}".format(self.urlname,str(self.id),extension)
+				newname1 = "media/dishes/{}{}".format(self.urlname,extension)
 				copy_source = {'Bucket': str(bucket), 'Key': key}
 				s3.Object(bucket,newname1).copy_from(CopySource=copy_source)
 				#s3.Object('my_bucket','old_file_key').delete()
