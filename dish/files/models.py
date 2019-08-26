@@ -532,7 +532,12 @@ class Picture(models.Model):
 		else:
 			#file = self.location.url
 			#if os.path.exists(file):
-			if self.location.url:
+			photopath = "https://wfgs.s3.amazonaws.com/media/{}".format(self.location.url)
+			print photopath
+			import requests
+			request = requests.get(photopath)
+			if request.status_code == 200:
+				## There is already a picture
 				print "File exists: {}".format(self.location.url)
 				import boto3
 				s3 = boto3.client('s3')
