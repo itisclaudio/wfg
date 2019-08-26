@@ -534,7 +534,7 @@ class Picture(models.Model):
 			#if os.path.exists(file):
 			#photopath = "https://wfgs.s3.amazonaws.com/media/{}".format(self.location.url)
 			#print photopath
-			print "self.location.url: "str(self.location.url)
+			print "self.location.url: "+str(self.location.url)
 			import requests
 			request = requests.get(self.location.url)
 			if request.status_code == 200:
