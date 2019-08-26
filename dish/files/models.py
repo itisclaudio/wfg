@@ -548,7 +548,7 @@ class Picture(models.Model):
 				#key = loc.split('/')[-1]
 				#name, extension = os.path.splitext(self.location.url)
 				basename = os.path.basename(self.location.url)
-				path_tmp = '/tmp/{}'.format(basename)
+				path_tmp = 'tmp/{}'.format(basename)
 				key = str(basename)
 				print "bucket: {}, key: {}, path_tmp: {} ".format(bucket, key, path_tmp)
 				#dirname = os.path.dirname(key)
