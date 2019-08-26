@@ -549,12 +549,15 @@ class Picture(models.Model):
 				#key = loc.split('/')[-1]
 				filename, extension = os.path.splitext(self.location.url)
 				basename = os.path.basename(self.location.url)
+				print "basename: {}".format(basename)
+				name1, ext1 = os.path.splitext(basename)
+				print "name1: {}, ext1: {}".format(name1, ext1)
 				#key = str(basename)
 				#print "bucket: {}, key: {}, path_tmp: {} ".format(bucket, key, path_tmp)
 				print "self.urlname: {}, filename: {}, extension: {} ".format(self.urlname, filename, extension)
 				#dirname = os.path.dirname(key)
-				#oldkey = 'media/dishes/{}'.format(basename)
-				oldkey = 'media/dishes/{}{}'.format(filename, extension)
+				oldkey = 'media/dishes/{}'.format(basename)
+				#oldkey = 'media/dishes/{}{}'.format(filename, extension)
 				print "oldkey: "+oldkey
 				newkey = "media/dishes/{}{}".format(self.urlname,extension)
 				print "newkey: "+newkey
