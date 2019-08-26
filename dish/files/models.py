@@ -556,8 +556,14 @@ class Picture(models.Model):
 				print "self.urlname: {}, self.id: {}, extension: {} ".format(self.urlname, self.id, extension)
 				#dirname = os.path.dirname(key)
 				newname1 = "media/dishes/{}{}".format(self.urlname,extension)
+				newReg = "media/dishes/{}-reg{}".format(self.urlname,extension)
+				print "newReg: "+newReg
+				newMed = "media/dishes/{}-med{}".format(self.urlname,extension)
+				newThum = "media/dishes/{}-thum{}".format(self.urlname,extension)
 				copy_source = {'Bucket': str(bucket), 'Key': key}
-				s3.Object(bucket,newname1).copy_from(CopySource=copy_source)
+				#s3.Object(bucket,newname1).copy_from(CopySource='wfgs/media/dishes/'+str())
+				s3.Object(bucket,newname1).copy_from(CopySource=str(self.location.url))
+				#s3.Object(bucket,newname1).copy_from(CopySource=copy_source)
 				#s3.Object('my_bucket','old_file_key').delete()
 				#s3.download_file(Bucket=bucket, Key=key, Filename=path_tmp)
 			else:
