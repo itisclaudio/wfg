@@ -541,7 +541,8 @@ class Picture(models.Model):
 				## There is already a picture
 				print "File exists: {}".format(self.location.url)
 				import boto3
-				s3 = boto3.client('s3')
+				#s3 = boto3.client('s3')
+				s3 = boto3.resource('s3')
 				bucket = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 				loc = str(self.location.url)
 				print "loc: "+loc
@@ -552,7 +553,10 @@ class Picture(models.Model):
 				key = str(basename)
 				print "bucket: {}, key: {}, path_tmp: {} ".format(bucket, key, path_tmp)
 				#dirname = os.path.dirname(key)
-				s3.download_file(Bucket=bucket, Key=key, Filename=path_tmp)
+				copy_source = {'Bucket': str(bucket), 'Key': key}
+				s3.Object(bucket,'media/a_test1.jpg').copy_from(CopySource=copy_source)
+				#s3.Object('my_bucket','old_file_key').delete()
+				#s3.download_file(Bucket=bucket, Key=key, Filename=path_tmp)
 			else:
 				print "File doesn't exists: {}".format(self.location.url)
 			#super(Picture, self).save()
