@@ -550,7 +550,8 @@ class Picture(models.Model):
 				#name, extension = os.path.splitext(self.location.url)
 				basename = os.path.basename(self.location.url)
 				path_tmp = 'tmp/{}'.format(basename)
-				key = str(basename)
+				#key = str(basename)
+				key = 'media/dishes/{}'.format(basename)
 				print "bucket: {}, key: {}, path_tmp: {} ".format(bucket, key, path_tmp)
 				#dirname = os.path.dirname(key)
 				copy_source = {'Bucket': str(bucket), 'Key': key}
