@@ -545,12 +545,12 @@ class Picture(models.Model):
 				bucket = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 				loc = str(self.location.url)
 				print "loc: "+loc
-				key = loc.split('/')[-1]
+				#key = loc.split('/')[-1]
 				#name, extension = os.path.splitext(self.location.url)
 				basename = os.path.basename(self.location.url)
 				path_tmp = '/tmp/{}'.format(basename)
-				print "basename: {}, path_tmp {} ".format(basename, path_tmp)
 				key = str(basename)
+				print "bucket: {}, key: {}, path_tmp: {} ".format(bucket, key, path_tmp)
 				#dirname = os.path.dirname(key)
 				s3.download_file(Bucket=bucket, Key=key, Filename=path_tmp)
 			else:
