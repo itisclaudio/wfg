@@ -556,8 +556,8 @@ class Picture(models.Model):
 				#print "bucket: {}, key: {}, path_tmp: {} ".format(bucket, key, path_tmp)
 				print "self.urlname: {}, filename: {}, extension: {} ".format(self.urlname, filename, extension)
 				#dirname = os.path.dirname(key)
-				oldkey = 'media/dishes/{}'.format(basename)
-				#oldkey = 'media/dishes/{}{}'.format(filename, extension)
+				#oldkey = 'media/dishes/{}'.format(basename)
+				oldkey = 'media/dishes/{}{}'.format(name1, ext1)
 				print "oldkey: "+oldkey
 				newkey = "media/dishes/{}{}".format(self.urlname,extension)
 				print "newkey: "+newkey
