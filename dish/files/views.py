@@ -1672,19 +1672,38 @@ def photodelete_view(request, id):
 	photo = Picture.objects.get(pk=id)
 	dish = photo.dish
 	if request.method == "POST":
-		ruta = str(photo.location.path)
-		urlname = str(photo.urlname)
-		ext = str(photo.extension())
-		if os.path.exists(ruta):
-			os.remove(ruta)
-		if os.path.exists(settings.UPLOAD_DISH+"/"+urlname+"-med"+ext):
-			os.remove(settings.UPLOAD_DISH+"/"+urlname+"-med"+ext)
-		if os.path.exists(settings.UPLOAD_DISH+"/"+urlname+"-reg"+ext):
-			os.remove(settings.UPLOAD_DISH+"/"+urlname+"-reg"+ext)
-		if os.path.exists(settings.UPLOAD_DISH+"/"+urlname+"-thum"+ext):
-			os.remove(settings.UPLOAD_DISH+"/"+urlname+"-thum"+ext)
-		SaveEmailQueue(request.user.username,'Photo','Deleted',photo.urlname)
-		photo.delete()
+		if settings.LOCAL_DEV:
+			## Remove files locally
+			ruta = str(photo.location.path)
+			urlname = str(photo.urlname)
+			ext = str(photo.extension())
+			if os.path.exists(ruta):
+				os.remove(ruta)
+			if os.path.exists(settings.UPLOAD_DISH+"/"+urlname+"-med"+ext):
+				os.remove(settings.UPLOAD_DISH+"/"+urlname+"-med"+ext)
+			if os.path.exists(settings.UPLOAD_DISH+"/"+urlname+"-reg"+ext):
+				os.remove(settings.UPLOAD_DISH+"/"+urlname+"-reg"+ext)
+			if os.path.exists(settings.UPLOAD_DISH+"/"+urlname+"-thum"+ext):
+				os.remove(settings.UPLOAD_DISH+"/"+urlname+"-thum"+ext)
+		else:
+			## Remove files in the  bucket
+			import boto3
+			s3 = boto3.resource('s3')
+			bucket = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+			basename = os.path.basename(self.location.url)
+			filename, extension = os.path.splitext(basename)
+			print "basename: {}, filename: {}, extension: {} ".format(basename, filename, extension)
+			key = 'media/dishes/{}{}'.format(filename, extension)
+			key_reg = 'media/dishes/{}-reg{}'.format(filename, extension)
+			key_med = 'media/dishes/{}-med{}'.format(filename, extension)
+			key_thum = 'media/dishes/{}-thum{}'.format(filename, extension)
+			print "key: {}, key_reg: {}, key_med: {} ".format(key, key_reg, key_med)
+			#s3.Object(bucket,key).delete()
+			#s3.Object(bucket,key_reg).delete()
+			#s3.Object(bucket,key_med).delete()
+			#s3.Object(bucket,key_thum).delete()
+		#SaveEmailQueue(request.user.username,'Photo','Deleted',photo.urlname)
+		#photo.delete()
 		return HttpResponseRedirect('/dish/%s'%(dish.urlname))
 	ctx = {'information':info, 'photo':photo}
 	return render_to_response('photodelete.html',ctx,context_instance=RequestContext(request))
