@@ -1690,7 +1690,7 @@ def photodelete_view(request, id):
 			import boto3
 			s3 = boto3.resource('s3')
 			bucket = os.environ.get('AWS_STORAGE_BUCKET_NAME')
-			basename = os.path.basename(self.location.url)
+			basename = os.path.basename(photo.location.url)
 			filename, extension = os.path.splitext(basename)
 			print "basename: {}, filename: {}, extension: {} ".format(basename, filename, extension)
 			key = 'media/dishes/{}{}'.format(filename, extension)
