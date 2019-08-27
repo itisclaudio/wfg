@@ -577,7 +577,7 @@ class Picture(models.Model):
 				#s3.download_file(Bucket=bucket, Key=key, Filename=path_tmp)
 			else:
 				print "File doesn't exists: {}".format(self.location.url)
-			#super(Picture, self).save()
+			super(Picture, self).save()
 		UpdateMainPhoto(self.dish.pk)#Updates
 		
 	class Meta:
