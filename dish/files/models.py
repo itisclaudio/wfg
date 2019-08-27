@@ -530,40 +530,28 @@ class Picture(models.Model):
 			image.save(settings.UPLOAD_DISH + '/' + self.urlname+"-thum."+ext.lower())
 
 		else:
-			#file = self.location.url
-			#if os.path.exists(file):
-			#photopath = "https://wfgs.s3.amazonaws.com/media/{}".format(self.location.url)
-			#print photopath
-			print "self.location.url: "+str(self.location.url)
+			#Check if picture aleady exists or is new
 			import requests
 			request = requests.get(self.location.url)
 			if request.status_code == 200:
 				## There is already a picture
-				print "File exists: {}".format(self.location.url)
+				#print "File exists: {}".format(self.location.url)
 				import boto3
 				#s3 = boto3.client('s3')
 				s3 = boto3.resource('s3')
 				bucket = os.environ.get('AWS_STORAGE_BUCKET_NAME')
-				loc = str(self.location.url)
-				print "loc: "+loc
-				#key = loc.split('/')[-1]
 				#filename, extension = os.path.splitext(self.location.url)
 				basename = os.path.basename(self.location.url)
-				print "basename: {}".format(basename)
+				#print "basename: {}".format(basename)
 				filename, extension = os.path.splitext(basename)
-				#print "name1: {}, ext1: {}".format(name1, ext1)
-				#key = str(basename)
-				#print "bucket: {}, key: {}, path_tmp: {} ".format(bucket, key, path_tmp)
-				print "self.urlname: {}, filename: {}, extension: {} ".format(self.urlname, filename, extension)
-				#dirname = os.path.dirname(key)
-				#oldkey = 'media/dishes/{}'.format(basename)
+				#print "self.urlname: {}, filename: {}, extension: {} ".format(self.urlname, filename, extension)
 				oldkey = 'media/dishes/{}{}'.format(filename, extension)
 				oldkey_reg = 'media/dishes/{}-reg{}'.format(filename, extension)
 				oldkey_med = 'media/dishes/{}-med{}'.format(filename, extension)
 				oldkey_thum = 'media/dishes/{}-thum{}'.format(filename, extension)
-				print "oldkey: "+oldkey
+				#print "oldkey: "+oldkey
 				newkey = "media/dishes/{}{}".format(self.urlname,extension)
-				print "newkey: "+newkey
+				#print "newkey: "+newkey
 				newkey_reg = "media/dishes/{}-reg{}".format(self.urlname,extension)
 				newkey_med = "media/dishes/{}-med{}".format(self.urlname,extension)
 				newkey_thum = "media/dishes/{}-thum{}".format(self.urlname,extension)
@@ -576,14 +564,8 @@ class Picture(models.Model):
 				s3.Object(bucket,oldkey_med).delete()
 				s3.Object(bucket,newkey_thum).copy_from(CopySource='wfgs/'+oldkey_thum)
 				s3.Object(bucket,oldkey_thum).delete()
-				#s3.Object(bucket,newname1).copy_from(CopySource=copy_source)
-				#s3.Object('my_bucket','old_file_key').delete()
-				#s3.download_file(Bucket=bucket, Key=key, Filename=path_tmp)
 				new_location = 'dishes/{}{}'.format(self.urlname, extension)
-				print 'new_location: '+new_location
 				self.location = new_location
-			else:
-				print "File doesn't exists: {}".format(self.location.url)
 			super(Picture, self).save()
 		UpdateMainPhoto(self.dish.pk)#Updates
 		
