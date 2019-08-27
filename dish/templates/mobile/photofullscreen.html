@@ -46,7 +46,7 @@ $("#esc").click(function(){
 <p style="position:absolute;top:7%;left:10; color:#FFF">Likes: <b id="likes">{{ likes }}</b></p>
 <p style="position:absolute;top:9%;left:10; color:#FFF">Date Uploaded: <b id="uploaded">{{ object.datetime|date:"N j, Y"}} </b></p>
 -->
-<img id="image_element" name="0" alt="{{ object.food.name }}" src="/media/{{object.filename}}-reg{{object.extension}}" width="100%">
+<img id="image_element" name="0" alt="{{ object.food.name }}" src="{{object.filename}}-reg{{object.extension}}" width="100%">
 
 {% else %}
 <h3>No Picture</h3>
