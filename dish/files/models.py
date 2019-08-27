@@ -569,6 +569,7 @@ class Picture(models.Model):
 				newkey_thum = "media/dishes/{}-thum{}".format(self.urlname,extension)
 				#copy_source = {'Bucket': str(bucket), 'Key': key}
 				s3.Object(bucket,newkey).copy_from(CopySource='wfgs/'+oldkey)
+				s3.Object(bucket,oldkey).delete()
 				s3.Object(bucket,newkey_reg).copy_from(CopySource='wfgs/'+oldkey_reg)
 				s3.Object(bucket,newkey_med).copy_from(CopySource='wfgs/'+oldkey_med)
 				s3.Object(bucket,newkey_thum).copy_from(CopySource='wfgs/'+oldkey_thum)
