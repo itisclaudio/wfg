@@ -575,7 +575,9 @@ class Picture(models.Model):
 				#s3.Object(bucket,newname1).copy_from(CopySource=copy_source)
 				#s3.Object('my_bucket','old_file_key').delete()
 				#s3.download_file(Bucket=bucket, Key=key, Filename=path_tmp)
-				self.location = 'dishes/{}{}'.format(filename, extension)
+				new_location = 'dishes/{}{}'.format(self.urlname, extension)
+				print 'new_location: '+new_location
+				self.location = new_location
 			else:
 				print "File doesn't exists: {}".format(self.location.url)
 			super(Picture, self).save()
