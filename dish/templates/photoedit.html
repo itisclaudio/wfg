@@ -28,7 +28,7 @@
 <div class="well">
 <h2><a href="/dish/{{object.dish.id}}">{{ object.dish }}</a></h2>
 <div align="center">
-	<img src="/media/{{object.filename}}-med{{object.extension}}" class="img-rounded">
+	<img src="{{object.filename}}-med{{object.extension}}" class="img-rounded">
 	<p>Uploaded by: {{ object.owner|truncatechars:30 }} {{ object.datetime }}
 		({{ likestotal }}<i style="display:inline;" title="Number of likes" class="glyphicon glyphicon-thumbs-up"></i>)
 	</p>

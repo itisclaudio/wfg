@@ -30,7 +30,7 @@
 <td colspan="3">
 	<h1 align="center"><a href="/dish/{{object.dish.id}}">{{ object.dish }}</a></h1>
 	<div align="center">
-		<img src="/media/{{object.filename}}-med{{object.extension}}" class="img-rounded" width="100%">
+		<img src="{{object.filename}}-med{{object.extension}}" class="img-rounded" width="100%">
 		<p>By: {{ object.owner|truncatechars:13 }}. {{ object.datetime|date:"N j, Y"}}
 			({{ likestotal }} <i style="display:inline;" title="Number of likes" class="glyphicon glyphicon-thumbs-up"></i>)
 		</p>
