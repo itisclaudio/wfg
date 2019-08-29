@@ -564,6 +564,16 @@ class Picture(models.Model):
 				s3.Object(bucket,oldkey_med).delete()
 				s3.Object(bucket,newkey_thum).copy_from(CopySource='wfgs/'+oldkey_thum)
 				s3.Object(bucket,oldkey_thum).delete()
+				
+				## Rename original photo
+				key_original = 'media/dishes_original/{}{}'.format(filename, extension)
+				print "key_original: "+key_original
+				key_original_new = "media/dishes_original/{}{}".format(self.urlname,extension)
+				print "key_original_new: "+key_original_new
+				s3.Object(bucket,key_original_new).copy_from(CopySource='wfgs/'+key_original)
+				s3.Object(bucket,key_original).delete()
+				
+				## Update photo with new location
 				new_location = 'dishes/{}{}'.format(self.urlname, extension)
 				self.location = new_location
 			super(Picture, self).save()
