@@ -1697,11 +1697,21 @@ def photodelete_view(request, id):
 			key_reg = 'media/dishes/{}-reg{}'.format(filename, extension)
 			key_med = 'media/dishes/{}-med{}'.format(filename, extension)
 			key_thum = 'media/dishes/{}-thum{}'.format(filename, extension)
+			key_original = 'media/dishes_original//{}{}'.format(filename, extension)
+			key_deleted = 'media/dishes_deleted//{}{}'.format(filename, extension)
 			print "key: {}, key_reg: {}, key_med: {} ".format(key, key_reg, key_med)
-			s3.Object(bucket,key).delete()
-			s3.Object(bucket,key_reg).delete()
-			s3.Object(bucket,key_med).delete()
-			s3.Object(bucket,key_thum).delete()
+			try:
+				s3.Object(bucket,key).delete()
+			try:
+				s3.Object(bucket,key_reg).delete()
+			try:
+				s3.Object(bucket,key_med).delete()
+			try:
+				s3.Object(bucket,key_thum).delete()
+			# Moving original file to dishes_delete folder
+			s3.Object(bucket,key_deleted).copy_from(CopySource='wfgs/'+key_original)
+			try:
+				s3.Object(bucket,key_original).delete()
 		SaveEmailQueue(request.user.username,'Photo','Deleted',photo.urlname)
 		photo.delete()
 		return HttpResponseRedirect('/dish/%s'%(dish.urlname))
