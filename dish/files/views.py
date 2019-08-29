@@ -1702,16 +1702,26 @@ def photodelete_view(request, id):
 			print "key: {}, key_reg: {}, key_med: {} ".format(key, key_reg, key_med)
 			try:
 				s3.Object(bucket,key).delete()
+			except:
+				pass
 			try:
 				s3.Object(bucket,key_reg).delete()
+			except:
+				pass
 			try:
 				s3.Object(bucket,key_med).delete()
+			except:
+				pass
 			try:
 				s3.Object(bucket,key_thum).delete()
+			except:
+				pass
 			# Moving original file to dishes_delete folder
 			s3.Object(bucket,key_deleted).copy_from(CopySource='wfgs/'+key_original)
 			try:
 				s3.Object(bucket,key_original).delete()
+			except:
+				pass
 		SaveEmailQueue(request.user.username,'Photo','Deleted',photo.urlname)
 		photo.delete()
 		return HttpResponseRedirect('/dish/%s'%(dish.urlname))
