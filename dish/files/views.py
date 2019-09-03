@@ -1618,7 +1618,7 @@ def photorotate_view(request, id):
 				payload = {"photoid":id}
 				print "photoid: "+str(payload['photoid'])
 				client = boto3.client('lambda',
-					region_name= 'us-east-2',
+					region_name= 'us-west-2',
 					aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
 					aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
 				result = client.invoke(FunctionName='rotateImage',
