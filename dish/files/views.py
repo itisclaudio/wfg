@@ -18,6 +18,9 @@ from django.contrib.auth.decorators import login_required #For decorator: @login
 from datetime import date, datetime #To calculate todays date
 from django.contrib.auth.models import User
 from dish import settings #To call media locations, MEDIA_URL
+
+import boto3 #photodelete, photorotate
+
 #For login
 from django.contrib.auth import login,logout,authenticate
 import os #To delete photo
@@ -1574,6 +1577,7 @@ def photocrop_view(request, id):
 	ctx = {'form':form, 'information':info,'photo':photo,'w1':w1,'h1':h1}
 	return render_to_response('photocrop.html',ctx,context_instance=RequestContext(request))
 	
+#000
 @login_required(login_url=singin_url)
 @verified_email_required
 def photorotate_view(request, id):
@@ -1583,30 +1587,48 @@ def photorotate_view(request, id):
 	if request.method == "POST":
 		form = photoRotate_Form(request.POST)
 		if form.is_valid():
-			rotation = form.cleaned_data['rotation']
-			path = str(photo.location.path)
-			filenamewhole = str(photo.location)[7:]
-			filename, ext = os.path.splitext(filenamewhole)
-			#print "Rotation: "+str(rotation)
-			cad = settings.UPLOAD_DISH + '/'
+			if settings.LOCAL_DEV:
+				print "In photorotate_view local"
+				rotation = form.cleaned_data['rotation']
+				path = str(photo.location.path)
+				filenamewhole = str(photo.location)[7:]
+				filename, ext = os.path.splitext(filenamewhole)
+				#print "Rotation: "+str(rotation)
+				cad = settings.UPLOAD_DISH + '/'
 
-			main_1 = Image.open(path)
-			main_2 = main_1.rotate(rotation, expand=1)
-			main_2.save(path)
+				main_1 = Image.open(path)
+				main_2 = main_1.rotate(rotation, expand=1)
+				main_2.save(path)
 
-			reg_1 = Image.open(cad+filename+'-reg'+ext)
-			reg_2 = reg_1.rotate(rotation, expand=1)
-			reg_2.save(cad+filename+'-reg'+ext)
+				reg_1 = Image.open(cad+filename+'-reg'+ext)
+				reg_2 = reg_1.rotate(rotation, expand=1)
+				reg_2.save(cad+filename+'-reg'+ext)
 
-			med_1 = Image.open(cad+filename+'-med'+ext)
-			med_2 = med_1.rotate(rotation, expand=1)
-			med_2.save(cad+filename+'-med'+ext)
+				med_1 = Image.open(cad+filename+'-med'+ext)
+				med_2 = med_1.rotate(rotation, expand=1)
+				med_2.save(cad+filename+'-med'+ext)
 
-			thum_1 = Image.open(cad+filename+'-thum'+ext)
-			thum_2 = thum_1.rotate(rotation, expand=1)
-			thum_2.save(cad+filename+'-thum'+ext)
+				thum_1 = Image.open(cad+filename+'-thum'+ext)
+				thum_2 = thum_1.rotate(rotation, expand=1)
+				thum_2.save(cad+filename+'-thum'+ext)
 
-			return HttpResponseRedirect('/photo/%s/%d/'%(photo.urlname,1))
+			else:
+				print "In photorotate_view production"
+				# create lambda client
+				payload = {"photoid":id}
+				print "photoid: "+str(payload['photoid'])
+				client = boto3.client('lambda',
+					region_name= 'us-east-2',
+					aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+					aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
+				result = client.invoke(FunctionName='rotateImage',
+                    InvocationType='RequestResponse',                                      
+                    Payload=json.dumps(payload))
+				range = result['photoid'].read()
+				print "Finishes lambda"
+				print range
+		return HttpResponseRedirect('/photo/%s/%d/'%(photo.urlname,1))
+			
 	form = photoRotate_Form()
 	ctx = {'form':form, 'information':info,'photo':photo}
 	return render_to_response('photorotate.html',ctx,context_instance=RequestContext(request))
@@ -1687,7 +1709,6 @@ def photodelete_view(request, id):
 				os.remove(settings.UPLOAD_DISH+"/"+urlname+"-thum"+ext)
 		else:
 			## Remove files in the  bucket
-			import boto3
 			s3 = boto3.resource('s3')
 			bucket = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 			basename = os.path.basename(photo.location.url)

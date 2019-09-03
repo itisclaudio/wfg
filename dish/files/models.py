@@ -535,27 +535,25 @@ class Picture(models.Model):
 			request = requests.get(self.location.url)
 			if request.status_code == 200:
 				## There is already a picture
-				#print "File exists: {}".format(self.location.url)
 				import boto3
-				#s3 = boto3.client('s3')
 				s3 = boto3.resource('s3')
 				bucket = os.environ.get('AWS_STORAGE_BUCKET_NAME')
-				#filename, extension = os.path.splitext(self.location.url)
 				basename = os.path.basename(self.location.url)
-				#print "basename: {}".format(basename)
 				filename, extension = os.path.splitext(basename)
-				#print "self.urlname: {}, filename: {}, extension: {} ".format(self.urlname, filename, extension)
+				
+				## Getting current names
 				oldkey = 'media/dishes/{}{}'.format(filename, extension)
 				oldkey_reg = 'media/dishes/{}-reg{}'.format(filename, extension)
 				oldkey_med = 'media/dishes/{}-med{}'.format(filename, extension)
 				oldkey_thum = 'media/dishes/{}-thum{}'.format(filename, extension)
-				#print "oldkey: "+oldkey
+				
+				## Getting new names
 				newkey = "media/dishes/{}{}".format(self.urlname,extension)
-				#print "newkey: "+newkey
 				newkey_reg = "media/dishes/{}-reg{}".format(self.urlname,extension)
 				newkey_med = "media/dishes/{}-med{}".format(self.urlname,extension)
 				newkey_thum = "media/dishes/{}-thum{}".format(self.urlname,extension)
-				#copy_source = {'Bucket': str(bucket), 'Key': key}
+				
+				## Deleting files but making a copy with the new name first
 				s3.Object(bucket,newkey).copy_from(CopySource='wfgs/'+oldkey)
 				s3.Object(bucket,oldkey).delete()
 				s3.Object(bucket,newkey_reg).copy_from(CopySource='wfgs/'+oldkey_reg)
@@ -565,17 +563,16 @@ class Picture(models.Model):
 				s3.Object(bucket,newkey_thum).copy_from(CopySource='wfgs/'+oldkey_thum)
 				s3.Object(bucket,oldkey_thum).delete()
 				
-				## Rename original photo
+				## Rename photo in "dishes_original" folder
 				key_original = 'media/dishes_original/{}{}'.format(filename, extension)
-				print "key_original: "+key_original
 				key_original_new = "media/dishes_original/{}{}".format(self.urlname,extension)
-				print "key_original_new: "+key_original_new
 				s3.Object(bucket,key_original_new).copy_from(CopySource='wfgs/'+key_original)
 				s3.Object(bucket,key_original).delete()
 				
 				## Update photo with new location
 				new_location = 'dishes/{}{}'.format(self.urlname, extension)
 				self.location = new_location
+			## Save actual field
 			super(Picture, self).save()
 		UpdateMainPhoto(self.dish.pk)#Updates
 		
