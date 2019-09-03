@@ -1624,7 +1624,7 @@ def photorotate_view(request, id):
 				result = client.invoke(FunctionName='rotateImage',
                     InvocationType='RequestResponse',                                      
                     Payload=json.dumps(payload))
-				range = result['photoid'].read()
+				range = result['photoid']
 				print "Finishes lambda"
 				print range
 		return HttpResponseRedirect('/photo/%s/%d/'%(photo.urlname,1))
