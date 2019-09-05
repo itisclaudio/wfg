@@ -1588,7 +1588,7 @@ def photorotate_view(request, id):
 		form = photoRotate_Form(request.POST)
 		if form.is_valid():
 			rotation = form.cleaned_data['rotation']
-			path = str(photo.location.path)
+			path = str(photo.location.url)
 			filenamewhole = str(photo.location)[7:]
 			filename, ext = os.path.splitext(filenamewhole)
 			if settings.LOCAL_DEV:
