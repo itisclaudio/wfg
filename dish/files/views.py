@@ -1587,12 +1587,12 @@ def photorotate_view(request, id):
 	if request.method == "POST":
 		form = photoRotate_Form(request.POST)
 		if form.is_valid():
+			rotation = form.cleaned_data['rotation']
+			path = str(photo.location.path)
+			filenamewhole = str(photo.location)[7:]
+			filename, ext = os.path.splitext(filenamewhole)
 			if settings.LOCAL_DEV:
 				print "In photorotate_view local"
-				rotation = form.cleaned_data['rotation']
-				path = str(photo.location.path)
-				filenamewhole = str(photo.location)[7:]
-				filename, ext = os.path.splitext(filenamewhole)
 				#print "Rotation: "+str(rotation)
 				cad = settings.UPLOAD_DISH + '/'
 
@@ -1616,7 +1616,8 @@ def photorotate_view(request, id):
 				print "In photorotate_view production"
 				# create lambda client
 				payload = {"photoid":id}
-				print "photoid: "+str(payload['photoid'])
+				payload = {"filename":filename, "ext":ext}
+				print "filename: {}, ext: {} ".format(payload['filename']),payload['ext']))
 				client = boto3.client('lambda',
 					region_name= 'us-west-2',
 					aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
