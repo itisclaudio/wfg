@@ -1615,9 +1615,8 @@ def photorotate_view(request, id):
 			else:
 				print "In photorotate_view production"
 				# create lambda client
-				payload = {"photoid":id}
-				payload = {"filename":filename, "ext":ext}
-				print "filename: {}, ext: {} ".format(payload['filename'],payload['ext'])
+				payload = {"filename":filename, "ext":ext, "rotation":rotation}
+				print "filename: {}, ext: {}, rotation: {} ".format(payload['filename'],payload['ext'],payload['rotation'])
 				client = boto3.client('lambda',
 					region_name= 'us-west-2',
 					aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
