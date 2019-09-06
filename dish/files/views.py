@@ -19,8 +19,6 @@ from datetime import date, datetime #To calculate todays date
 from django.contrib.auth.models import User
 from dish import settings #To call media locations, MEDIA_URL
 
-import boto3 #photodelete, photorotate
-
 #For login
 from django.contrib.auth import login,logout,authenticate
 import os #To delete photo
@@ -1615,6 +1613,7 @@ def photorotate_view(request, id):
 			else:
 				print "In photorotate_view production"
 				# create lambda client
+				import boto3
 				payload = {"filename":filename, "ext":ext, "rotation":rotation}
 				print "filename: {}, ext: {}, rotation: {} ".format(payload['filename'],payload['ext'],payload['rotation'])
 				client = boto3.client('lambda',
@@ -1709,6 +1708,7 @@ def photodelete_view(request, id):
 				os.remove(settings.UPLOAD_DISH+"/"+urlname+"-thum"+ext)
 		else:
 			## Remove files in the  bucket
+			import boto3
 			s3 = boto3.resource('s3')
 			bucket = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 			basename = os.path.basename(photo.location.url)
