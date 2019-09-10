@@ -95,7 +95,7 @@
 	{## PHOTO ##}
 	<a href="/photofullscreen/{{object.id}}/">
 	{% if reload = '1' %}
-		<img id="photo" src="{{object.filename}}-reg{{object.extension}}?cachebuster={%now 'H:i:s'%}" alt="{{ object.dish }}" class="img-rounded" width="100%" style="margin-top:6px;margin-bottom:10px;"/>
+		<img id="photo" src="{{object.filename}}-reg{{object.extension}}?cache=none" alt="{{ object.dish }}" class="img-rounded" width="100%" style="margin-top:6px;margin-bottom:10px;"/>
 	{% else %}
 		<img id="photo" src="{{object.filename}}-reg{{object.extension}}" alt="{{ object.dish }}" class="img-rounded" width="100%" style="margin-top:6px;margin-bottom:10px;"/>
 	{% endif %}
