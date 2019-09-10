@@ -6,8 +6,25 @@
 {% endblock %}
 
 {% block content %}
-
 	<h1>Rotate photo</h1>
+	
+	<!--Modal 0 -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<h1 class="modal-title" id="myModalLabel">Processing...</h1>
+		  </div>
+		  <div class="modal-body">
+			<div class="progress">
+				  <div class="progress-bar progress-bar-striped progress-bar-warning active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+				  </div>
+			</div>
+		  </div>
+		</div>
+	  </div>
+	</div>	
+	
 	<div class="well">
     <table border="0" align="center" cellpadding="2" cellspacing="2">
   <tr>
@@ -34,7 +51,10 @@
 			<div style="display:none">
 				{{ form.rotation }}
 			</div>
-		<button class="btn btn-lg btn-custom" type="submit"/>Save</button>
+		{% comment %}
+			<button class="btn btn-lg btn-custom" type="submit"/>Save</button>
+		{% endcomment %}
+		<button class="btn btn-lg btn-custom" type="submit" value="Submit" onclick="loading();"/>Save</button>
 		<a class="btn btn-lg btn-custom " href="/photo/{{photo.urlname}}">Cancel</a>
 		</form>
 
@@ -80,6 +100,10 @@ $(document).ready(function(){
 	});
 	
 });
+//function to show the modal "Processing" when loading results page
+function loading(){
+	$("#myModal").modal('show');
+};
 </script>
 
 {% endblock %}

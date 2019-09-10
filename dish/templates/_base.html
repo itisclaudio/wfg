@@ -113,7 +113,7 @@
 					<li><a href="{% url 'view_cuisinenew' %}">New Cuisine</a></li>
 					<li><a href="{% url 'view_cuisines' %}">All Cuisines</a></li>
 					<li role="separator" class="divider"></li>
-					<li><a href="{% url 'view_userphotos' username=user.username %}">My Photos</a></li>
+					<li><a href="{% url 'view_photos_mine' %}">My Photos</a></li>
 					<li><a href="{% url 'view_disheslatest' %}">Latest Dishes</a></li>
 					<li><a href="{% url 'view_latestphotos' %}">Latest Photos</a></li>
 					<li><a href="{% url 'view_photos' %}">Top 100 Photos</a></li>
@@ -137,7 +137,7 @@
 					<li><a href="{% url 'view_privacy' %}">Privacy Settings</a></li>
 					<li><a href="{% url 'view_logout' %}">Log Out</a></li>
 					<li role="separator" class="divider"></li>
-					<li><a href="{% url 'view_userphotos' username=user.username %}">My Photos</a></li>
+					<li><a href="{% url 'view_photos_mine' %}">My Photos</a></li>
 					<li><a href="{% url 'view_lists_mine' %}">My Lists</a></li>
 					<li role="separator" class="divider"></li>
 					<li><a href="{% url 'view_foodies' %}">All Foodies</a></li>

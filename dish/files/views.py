@@ -1752,6 +1752,31 @@ def photodelete_view(request, id):
 	ctx = {'information':info, 'photo':photo}
 	return render_to_response('photodelete.html',ctx,context_instance=RequestContext(request))
 
+@login_required(login_url=singin_url)
+@verified_email_required
+def photos_mine_view(request, page=None):
+	profile = userProfile.objects.get(pk=request.user.pk)
+	#user = User.objects.get(username=username)
+	
+	#req_user = request.user
+	#req_profile = userProfile.objects.get(user=req_user)
+	#obj = LikePicture.objects.get(profile=req_profile, picture=pho)
+
+	#list_all = Picture.objects.filter(owner=user.id).select_related('dish','owner','owner__user').prefetch_related('dish__cuisines').order_by('dish')
+	list_all = Picture.objects.filter(owner=profile).select_related('dish','owner','owner__user').prefetch_related('dish__cuisines').order_by('dish')
+	paginator = Paginator(list_all,20)
+	try:
+		page = int(page)
+	except:
+		page = 1
+	try:
+		paginatorlist = paginator.page(page)
+	except (EmptyPage, InvalidPage):
+		paginatorlist = paginator.page(paginator.num_pages)
+	#cxt = {'list':paginatorlist,'profile':user,'temp':list_all,}
+	cxt = {'list':paginatorlist,'profile':profile.user,'temp':list_all,}
+	return render_to_response('userphotos.html',cxt,context_instance=RequestContext(request))
+	
 #################################
 ######   S E A R C H      #######
 #################################
