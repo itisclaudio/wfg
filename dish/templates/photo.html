@@ -52,7 +52,11 @@
 		{% if reload = '1' %}
 		{## MAIN PHOTO ##}
 		<a href="/photofullscreen/{{object.id}}/">
+		{% comment %}
 		<img id="photo" src="{{object.location.url}}?cachebuster=blah23" alt="{{object.dish}}" class="img-rounded" width="100%"></a>
+		{% endcomment %}
+		<img id="photo" src="{{object.location.url}}?cache=none" alt="{{object.dish}}" class="img-rounded" width="100%"></a>
+		
 		{% else %}
 		<a href="/photofullscreen/{{object.id}}/">
 		<img id="photo" src="{{object.location.url}}" alt="{{object.dish}}" class="img-rounded" width="100%"></a>
