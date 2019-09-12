@@ -1503,7 +1503,9 @@ def photo_redirect_view(request,id):
 def photocrop_view(request, id):
 	info = 0
 	photo = Picture.objects.get(pk=id)
-	med = Image.open(settings.UPLOAD_DISH+'/'+photo.filename()[7:]+'-med'+photo.extension())
+	filenamewhole = str(photo.location)[7:]
+	filename, ext = os.path.splitext(filenamewhole)
+	med = Image.open(settings.UPLOAD_DISH+'/'+filename+'-med'+photo.extension())
 	w1 = med.width
 	h1 = med.height
 	if request.method == "POST":
@@ -1516,8 +1518,6 @@ def photocrop_view(request, id):
 			if settings.LOCAL_DEV:
 				print "In photocrop_view local"
 				path = str(photo.location.path)
-				filenamewhole = str(photo.location)[7:]
-				filename, ext = os.path.splitext(filenamewhole)
 				#print "Rotation: "+str(rotation)
 				cad = settings.UPLOAD_DISH + '/'
 				#w, h = photo.size
