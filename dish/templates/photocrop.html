@@ -11,7 +11,7 @@
 <div class="well">
 	<div class="row">
 		<div class="col-md-8" align="center">
-			<img id="photo" src="/media/{{ photo.filename }}-med{{photo.extension}}?cachebuster={%now 'H:i:s'%}" title="{{ photo.dish.name }}"/>
+			<img id="photo" src="{{ photo.filename }}-med{{photo.extension}}?cachebuster={%now 'H:i:s'%}" title="{{ photo.dish.name }}"/>
 		</div>
 		<div class="col-md-4" align="left">
 			<form action="." method="POST">
