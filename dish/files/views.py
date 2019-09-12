@@ -1505,9 +1505,9 @@ def photocrop_view(request, id):
 	photo = Picture.objects.get(pk=id)
 	filenamewhole = str(photo.location)[7:]
 	filename, ext = os.path.splitext(filenamewhole)
-	med = Image.open(settings.UPLOAD_DISH+'/'+filename+'-med'+photo.extension())
-	w1 = med.width
-	h1 = med.height
+	#med = Image.open(settings.UPLOAD_DISH+'/'+filename+'-med'+photo.extension())
+	#w1 = med.width
+	#h1 = med.height
 	if request.method == "POST":
 		form = photoCrop_Form(request.POST)
 		if form.is_valid():
@@ -1589,7 +1589,8 @@ def photocrop_view(request, id):
 				print result
 			return HttpResponseRedirect('/photo/%s/%d/'%(photo.urlname,1))
 	form = photoCrop_Form()
-	ctx = {'form':form, 'information':info,'photo':photo,'w1':w1,'h1':h1}
+	#ctx = {'form':form, 'information':info,'photo':photo,'w1':w1,'h1':h1}
+	ctx = {'form':form, 'information':info,'photo':photo}
 	return render_to_response('photocrop.html',ctx,context_instance=RequestContext(request))
 
 @login_required(login_url=singin_url)
