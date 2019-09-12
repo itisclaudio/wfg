@@ -1513,69 +1513,85 @@ def photocrop_view(request, id):
 			y = form.cleaned_data['y']
 			w = form.cleaned_data['w']
 			h = form.cleaned_data['h']
-			path = str(photo.location.path)
-			filenamewhole = str(photo.location)[7:]
-			filename, ext = os.path.splitext(filenamewhole)
-			#print "Rotation: "+str(rotation)
-			cad = settings.UPLOAD_DISH + '/'
-			#w, h = photo.size
-			med_ori = Image.open(cad+filename+'-med'+ext)
-			reg_ori = Image.open(cad+filename+'-reg'+ext)
-			thum_ori = Image.open(cad+filename+'-thum'+ext)
-			max_ori = Image.open(cad+filename+ext)
-			sizes={'thum':{'h':thum_ori.height,'w':thum_ori.width},'med':{'h':med_ori.height,'w':med_ori.width},'reg':{'h':reg_ori.height,'w':reg_ori.width},'max':{'h':max_ori.height,'w':max_ori.width},}
+			if settings.LOCAL_DEV:
+				print "In photocrop_view local"
+				path = str(photo.location.path)
+				filenamewhole = str(photo.location)[7:]
+				filename, ext = os.path.splitext(filenamewhole)
+				#print "Rotation: "+str(rotation)
+				cad = settings.UPLOAD_DISH + '/'
+				#w, h = photo.size
+				med_ori = Image.open(cad+filename+'-med'+ext)
+				reg_ori = Image.open(cad+filename+'-reg'+ext)
+				thum_ori = Image.open(cad+filename+'-thum'+ext)
+				max_ori = Image.open(cad+filename+ext)
+				sizes={'thum':{'h':thum_ori.height,'w':thum_ori.width},'med':{'h':med_ori.height,'w':med_ori.width},'reg':{'h':reg_ori.height,'w':reg_ori.width},'max':{'h':max_ori.height,'w':max_ori.width},}
 
-			max_new = max_ori.crop((x*3,y*3,w*3+x*3,h*3+y*3))
-			max_new.save(cad+filename+ext)
-			
-			thum_new = thum_ori.crop((x/4,y/4,w/4+x/4,h/4+y/4))
-			thum_new.save(cad+filename+'-thum'+ext)
-
-			med_new = med_ori.crop((x,y,w+x,h+y))
-			med_new.save(cad+filename+'-med'+ext)
-
-			reg_new = reg_ori.crop((x*2,y*2,w*2+x*2,h*2+y*2))
-			reg_new.save(cad+filename+'-reg'+ext)
-
-			if h > w:
-				thum_wsize = int(sizes['thum']['h']*thum_new.width/thum_new.height)
-				thum = thum_new.resize((thum_wsize,int(sizes['thum']['h'])), Image.ANTIALIAS)
-				thum.save(cad+filename+'-thum'+ext)
+				max_new = max_ori.crop((x*3,y*3,w*3+x*3,h*3+y*3))
+				max_new.save(cad+filename+ext)
 				
-				med_wsize = int(sizes['med']['h']*med_new.width/med_new.height)
-				med = med_new.resize((med_wsize,int(sizes['med']['h'])), Image.ANTIALIAS)
-				med.save(cad+filename+'-med'+ext)
-				
-				reg_wsize = int(sizes['reg']['h']*reg_new.width/reg_new.height)
-				reg = reg_new.resize((reg_wsize,int(sizes['reg']['h'])), Image.ANTIALIAS)
-				reg.save(cad+filename+'-reg'+ext)
-				
-				max_wsize = int(sizes['max']['h']*max_new.width/max_new.height)
-				max = max_new.resize((max_wsize,int(sizes['max']['h'])), Image.ANTIALIAS)
-				max.save(cad+filename+ext)
+				thum_new = thum_ori.crop((x/4,y/4,w/4+x/4,h/4+y/4))
+				thum_new.save(cad+filename+'-thum'+ext)
+
+				med_new = med_ori.crop((x,y,w+x,h+y))
+				med_new.save(cad+filename+'-med'+ext)
+
+				reg_new = reg_ori.crop((x*2,y*2,w*2+x*2,h*2+y*2))
+				reg_new.save(cad+filename+'-reg'+ext)
+
+				if h > w:
+					thum_wsize = int(sizes['thum']['h']*thum_new.width/thum_new.height)
+					thum = thum_new.resize((thum_wsize,int(sizes['thum']['h'])), Image.ANTIALIAS)
+					thum.save(cad+filename+'-thum'+ext)
+					
+					med_wsize = int(sizes['med']['h']*med_new.width/med_new.height)
+					med = med_new.resize((med_wsize,int(sizes['med']['h'])), Image.ANTIALIAS)
+					med.save(cad+filename+'-med'+ext)
+					
+					reg_wsize = int(sizes['reg']['h']*reg_new.width/reg_new.height)
+					reg = reg_new.resize((reg_wsize,int(sizes['reg']['h'])), Image.ANTIALIAS)
+					reg.save(cad+filename+'-reg'+ext)
+					
+					max_wsize = int(sizes['max']['h']*max_new.width/max_new.height)
+					max = max_new.resize((max_wsize,int(sizes['max']['h'])), Image.ANTIALIAS)
+					max.save(cad+filename+ext)
+				else:
+					thum_hsize = int(thum_new.height*sizes['thum']['w']/thum_new.width)
+					thum = thum_new.resize((int(sizes['thum']['w']),thum_hsize), Image.ANTIALIAS)
+					thum.save(cad+filename+'-thum'+ext)
+					
+					med_hsize = int(med_new.height*sizes['med']['w']/med_new.width)
+					med = med_new.resize((int(sizes['med']['w']),med_hsize), Image.ANTIALIAS)
+					med.save(cad+filename+'-med'+ext)
+					
+					reg_hsize = int(reg_new.height*sizes['reg']['w']/reg_new.width)
+					reg = reg_new.resize((int(sizes['reg']['w']),reg_hsize), Image.ANTIALIAS)
+					reg.save(cad+filename+'-reg'+ext)
+					
+					max_hsize = int(max_new.height*sizes['max']['w']/max_new.width)
+					max = max_new.resize((int(sizes['max']['w']),max_hsize), Image.ANTIALIAS)
+					max.save(cad+filename+ext)
 			else:
-				thum_hsize = int(thum_new.height*sizes['thum']['w']/thum_new.width)
-				thum = thum_new.resize((int(sizes['thum']['w']),thum_hsize), Image.ANTIALIAS)
-				thum.save(cad+filename+'-thum'+ext)
-				
-				med_hsize = int(med_new.height*sizes['med']['w']/med_new.width)
-				med = med_new.resize((int(sizes['med']['w']),med_hsize), Image.ANTIALIAS)
-				med.save(cad+filename+'-med'+ext)
-				
-				reg_hsize = int(reg_new.height*sizes['reg']['w']/reg_new.width)
-				reg = reg_new.resize((int(sizes['reg']['w']),reg_hsize), Image.ANTIALIAS)
-				reg.save(cad+filename+'-reg'+ext)
-				
-				max_hsize = int(max_new.height*sizes['max']['w']/max_new.width)
-				max = max_new.resize((int(sizes['max']['w']),max_hsize), Image.ANTIALIAS)
-				max.save(cad+filename+ext)
-				
+				print "In photocrop_view production"
+				# create lambda client
+				import boto3
+				payload = {"filename":filename, "ext":ext, "x":x, "y":y, "w":w, "h":h}
+				print "filename: {}, ext: {}".format(payload['filename'],payload['ext'])
+				client = boto3.client('lambda',
+					region_name= 'us-west-2',
+					aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+					aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
+				result = client.invoke(FunctionName='wfgPhotoCrop',
+                    InvocationType='RequestResponse',                                      
+                    Payload=json.dumps(payload))
+				#range = result['photoid']
+				print "Finishes lambda"
+				print result
 			return HttpResponseRedirect('/photo/%s/%d/'%(photo.urlname,1))
 	form = photoCrop_Form()
 	ctx = {'form':form, 'information':info,'photo':photo,'w1':w1,'h1':h1}
 	return render_to_response('photocrop.html',ctx,context_instance=RequestContext(request))
-	
-#000
+
 @login_required(login_url=singin_url)
 @verified_email_required
 def photorotate_view(request, id):
