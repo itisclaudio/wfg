@@ -8,6 +8,24 @@
 
 {% block content %}
 <h1 align="center">Crop Photo</h1>
+
+	<!--Modal 0 -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<h1 class="modal-title" id="myModalLabel">Processing...</h1>
+		  </div>
+		  <div class="modal-body">
+			<div class="progress">
+				  <div class="progress-bar progress-bar-striped progress-bar-warning active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+				  </div>
+			</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+
 <div class="well">
 	<div class="row">
 		<div class="col-md-8" align="center">
@@ -35,6 +53,11 @@
 <script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
 <script src="{% static 'dist/jcrop/js/jquery.Jcrop.js' %}"></script>
 <script type="text/javascript">
+
+//function to show the modal "Processing" when loading results page
+function loading(){
+	$("#myModal").modal('show');
+};
 
 function updateCoords(c)
 	{
