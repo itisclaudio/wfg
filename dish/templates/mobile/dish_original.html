@@ -339,7 +339,7 @@ $(document).ready(function(){
 	  </a>
 	{% endfor %}
 		<div class="list-group-item" style="padding:4px;">
-			<a class="btn btn-custom btn-lg btn-block" title="Add related dish" type="button" data-toggle="modal" data-target="#modal_adddish_similar"> <i class="glyphicon glyphicon-plus icon-white"></i> Add related dish</a>
+			<a class="btn btn-custom btn-lg btn-block" title="Add related dish" type="button" data-toggle="modal" data-target="#modal_adddish_similar"> <i class="fa fa-plus" aria-hidden="true"></i> Add related dish</a>
 			<a class="btn btn-custom btn-lg btn-block" title="Edit related dishes" href="/dishsimilar/{{dish.urlname}}/">Add/delete related dishes</a>
 		</div>
 {% endif %}
@@ -347,7 +347,7 @@ $(document).ready(function(){
 {% if similar_total  == 0 %}
 	<div class="well well-tight well-white">
 		<p style="margin:10px;text-align:center;">There are no related dishes.</p>
-		<a class="btn btn-custom btn-lg btn-block" title="Add related dish" type="button" data-toggle="modal" data-target="#modal_adddish_similar"> <i class="glyphicon glyphicon-plus icon-white"></i> Add related dish</a>
+		<a class="btn btn-custom btn-lg btn-block" title="Add related dish" type="button" data-toggle="modal" data-target="#modal_adddish_similar"> <i class="fa fa-plus" aria-hidden="true"></i> Add related dish</a>
 	</div>
 {% endif %}
 </div>
@@ -376,14 +376,14 @@ $(document).ready(function(){
 	  <div id="{{p.urlname}}" style="display:none;"></div>
 	{% endfor %}
 	<div class="well well-tight well-white">
-		<a class="btn btn-custom btn-lg btn-block" type="button" data-toggle="modal" data-target="#modal_adddish_tolist"> <i class="glyphicon glyphicon-plus icon-white"></i> Add this dish to a list</a>
+		<a class="btn btn-custom btn-lg btn-block" type="button" data-toggle="modal" data-target="#modal_adddish_tolist"> <i class="fa fa-plus" aria-hidden="true"></i> Add this dish to a list</a>
 	</div>
 {% endif %}
 {% if list_count  == 0 %}
 	<div class="well well-tight well-white">
 		<p style="margin:10px;text-align:center;">No list has this Dish.</p>
 		<a class="btn btn-custom btn-lg btn-block" href="/listnew/" style="margin-bottom:4px;">Create new list</a>
-		<a class="btn btn-custom btn-lg btn-block" type="button" data-toggle="modal" data-target="#modal_adddish_tolist"> <i class="glyphicon glyphicon-plus icon-white"></i> Add this dish to a list</a>
+		<a class="btn btn-custom btn-lg btn-block" type="button" data-toggle="modal" data-target="#modal_adddish_tolist"> <i class="fa fa-plus" aria-hidden="true"></i> Add this dish to a list</a>
 	</div>
 {% endif %}
 {# invisible list of all lists used to make sure the dish selected doesn't already exist in a list #}
