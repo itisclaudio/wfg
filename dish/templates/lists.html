@@ -67,7 +67,7 @@
 		{% for p in paginatorlist.object_list %}
 		<div class="list-group-item">
 			<h2 style="color:#845505;margin-bottom:2px; margin-top:0px;text-align: left;"><a href="/list/{{p.urlname}}"><b>{{p.name|truncatechars:100}}</b></a></h2>
-			<p class="smallfont" style="margin-bottom:4px;">by <a href="/foodie/{{p.owner.user.username}}"><b>{{p.owner.user.username|truncatechars:20}}</b></a> ({{p.likestot}} <i class="glyphicon glyphicon-thumbs-up"></i>)
+			<p class="smallfont" style="margin-bottom:4px;">by <a href="/foodie/{{p.owner.user.username}}"><b>{{p.owner.user.username|truncatechars:20}}</b></a> ({{p.likestot}} <i class="fa fa-thumbs-up" aria-hidden="true"></i>)
 				{% if p.type = '3' %}
 					<i style="color:red;">{{ p.get_type_display }}</i>
 				{% else %}

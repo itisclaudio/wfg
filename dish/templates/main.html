@@ -28,7 +28,7 @@
 				<li style="display:inline;">by 
 					<a href="/profile/{{p.owner.user.username}}/">{{p.owner.user.username}}</a>
 				</li>
-				<li style="display:inline;">({{p.likestot}} <i class="glyphicon glyphicon-thumbs-up"></i>)
+				<li style="display:inline;">({{p.likestot}} <i class="fa fa-thumbs-up" aria-hidden="true"></i>)
 				</li>
 			</ul>
 			{% endfor %}
@@ -41,7 +41,7 @@
 				<ul>
 				<li style="display:inline;">by </li> 
 				<li style="display:inline;"> <a href="/profile/{{p.owner.user.username}}/">{{p.owner.user.username}}</a></li>
-				<li style="display:inline;">({{p.likestot}} <i class="glyphicon glyphicon-thumbs-up"></i>)</li>
+				<li style="display:inline;">({{p.likestot}} <i class="fa fa-thumbs-up" aria-hidden="true"></i>)</li>
 				</ul>
 				</td>
 				
@@ -88,7 +88,7 @@
 						<a class="btn btn-default" href="/dish/{{p.urlname}}" title="{{p.name}}">
 							<b>{{p.name|truncatechars:25}}</b>
 						</a>
-						<li style="display:inline;">{{p.likestot}} <i class="glyphicon glyphicon-thumbs-up"></i></li>
+						<li style="display:inline;">{{p.likestot}} <i class="fa fa-thumbs-up" aria-hidden="true"></i></li>
 					</ul>
 					{% if p.cuisines.all|length > 0 %}
 						{% for p in p.cuisines.all|slice:":7" %}

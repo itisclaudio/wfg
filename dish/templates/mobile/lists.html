@@ -74,7 +74,7 @@
 		{% for p in paginatorlist.object_list %}
 		<a class="list-group-item" href="/list/{{p.urlname}}" style="padding:4px;">
 			<h3 class="list-group-item-heading" style="color:#845505;margin-bottom:2px;"><b>{{p.name|truncatechars:100}}</b></h3>
-			<p class="text-small" style="margin-bottom:4px;">{{p.modified|date:"M yy"}} by <b>{{p.owner.user.username|truncatechars:20}}</b> ({{p.likestot}} <i class="glyphicon glyphicon-thumbs-up"></i>)
+			<p class="text-small" style="margin-bottom:4px;">{{p.modified|date:"M yy"}} by <b>{{p.owner.user.username|truncatechars:20}}</b> ({{p.likestot}} <i class="fa fa-thumbs-up" aria-hidden="true"></i>)
 				{% if p.type = '3' %}<i style="color:red;">Private List</i>{% endif %}
 				{% if p.type = '1' %} Personal List {% endif %}
 				{% if p.type = '2' %} Public List{% endif %}

@@ -154,7 +154,7 @@
 		<div class="row">
 			<div class="col-xs-12">
 				<p style="color:#845505;margin-bottom:0px;"><b>{{p.name|truncatechars:76 }}</b></p>
-				<p class="small clear" style="margin-bottom:0px;">by {{p.owner.user.username}} ({{p.likestot}} <i class="glyphicon glyphicon-thumbs-up"></i>)
+				<p class="small clear" style="margin-bottom:0px;">by {{p.owner.user.username}} ({{p.likestot}} <i class="fa fa-thumbs-up" aria-hidden="true"></i>)
 					{% if p.type = '3' %}<i style="color:red;">Private List</i>{% endif %}
 					{% if p.type = '1' %} Personal List {% endif %}
 					{% if p.type = '2' %} Public List{% endif %}

@@ -364,7 +364,7 @@ $(document).ready(function(){
 	{% for p in lists|slice:":5" %}
 	  <a href="/list/{{p.urlname}}/" class="list-group-item">
 		<h3 class="list-group-item-heading" style="color:#845505;margin-bottom:0px;"><b>{{p.name|truncatewords:12 }}</b></h3>
-		<p class="text-small"><i><b>by {{p.owner.user.username}} ({{p.likestot}} <i class="glyphicon glyphicon-thumbs-up"></i>)
+		<p class="text-small"><i><b>by {{p.owner.user.username}} ({{p.likestot}} <i class="fa fa-thumbs-up" aria-hidden="true"></i>)
 			{% if p.type = '3' %}
 				<b style="color:red;">{{ p.get_type_display }}</b>
 			{% else %}

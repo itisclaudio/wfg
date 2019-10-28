@@ -259,7 +259,7 @@
 		{% for p in top_lists %}
 		  <a href="/list/{{p.urlname}}/" class="list-group-item" style="padding:8px;" title="Go to list page: {{p.name}}">
 			<p style="color:#845505;margin-bottom:2px; margin-top:0px;"><b>{{p.name|truncatechars:92}}</b></p>
-			<p class="smallfont" style="margin-bottom:4px;">by <b>{{p.owner.user.username|truncatechars:20}}</b> ({{p.likestot}} <i class="glyphicon glyphicon-thumbs-up"></i>)
+			<p class="smallfont" style="margin-bottom:4px;">by <b>{{p.owner.user.username|truncatechars:20}}</b> ({{p.likestot}} <i class="fa fa-thumbs-up" aria-hidden="true"></i>)
 				{% if p.type = '3' %}<i style="color:red;">Private List</i>{% endif %}
 				{% if p.type = '1' %} Personal List {% endif %}
 				{% if p.type = '2' %} Public List{% endif %}
