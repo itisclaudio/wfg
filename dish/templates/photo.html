@@ -45,9 +45,9 @@
 			{% endif %}
 				<span id="likes" style="display:inline-block;">{{object.likestot}}</span>
 					{% if liked = 1 %}
-						<li id="likeicon" style="display:inline-block;" class="glyphicon glyphicon-thumbs-down icon-white"></li>
+						<li id="likeicon" style="display:inline-block;" class="fa fa-thumbs-down" aria-hidden="true"></li>
 					{% else %}
-						<li id="likeicon" style="display:inline-block;" class="glyphicon glyphicon-thumbs-up icon-white"></li>
+						<li id="likeicon" style="display:inline-block;" class="fa fa-thumbs-up" aria-hidden="true"></li>
 					{% endif %}
 				</button>
 		{% if reload = '1' %}

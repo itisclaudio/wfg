@@ -151,9 +151,9 @@ $(document).ready(function(){
 			{% endif %}
 				<span id="likes" style="display:inline-block;">{{dish.likestot}}</span>
 				{% if liked = 1 %}
-					<li style="display:inline-block;" id="likeicon" class="glyphicon glyphicon-thumbs-down icon-white"></li>
+					<li style="display:inline-block;" id="likeicon" class="fa fa-thumbs-down" aria-hidden="true"></li>
 				{% else %}
-					<li style="display:inline-block;" id="likeicon" class="glyphicon glyphicon-thumbs-up icon-white"></li>
+					<li style="display:inline-block;" id="likeicon" class="fa fa-thumbs-up" aria-hidden="true"></li>
 				{% endif %}
 				</button>
 		</div>
