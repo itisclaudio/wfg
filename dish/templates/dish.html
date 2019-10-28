@@ -150,9 +150,9 @@ $(document).ready(function(){
 		{% endif %}
 			<span id="likes" style="display:inline;">{{dish.likestot}}</span>
 				{% if liked = 1 %}
-					<li style="display:inline;" id="likeicon" class="glyphicon glyphicon-thumbs-down icon-white"></li>
+					<li style="display:inline;" id="likeicon" class="fa fa-thumbs-down" aria-hidden="true"></li>
 				{% else %}
-					<li style="display:inline;" id="likeicon" class="glyphicon glyphicon-thumbs-up icon-white"></li>
+					<li style="display:inline;" id="likeicon" class="fa fa-thumbs-up" aria-hidden="true"></li>
 				{% endif %}
 			</button>
 			
@@ -411,7 +411,7 @@ $(document).ready(function(){
 						<h3 style="color:#845505;margin-bottom:2px; margin-top:0px;text-align: left;">
 							<a id="{{p.urlname}}" href="/list/{{p.urlname}}"><b>{{p.name|truncatechars:100}}</b></a>
 						</h3>
-						<p class="smallfont" style="margin-bottom:4px;">by <b>{{p.owner|truncatechars:20}}</b> ({{p.likestot}} <i class="glyphicon glyphicon-thumbs-up"></i>)
+						<p class="smallfont" style="margin-bottom:4px;">by <b>{{p.owner|truncatechars:20}}</b> ({{p.likestot}} <i class="fa fa-thumbs-up" aria-hidden="true"></i>)
 							{% if p.type = '3' %}
 								<i style="color:red;">{{ p.get_type_display }}</i>
 							{% else %}
@@ -682,10 +682,10 @@ $('#likeaction').click(function(){
 		success: function(data){
 			//{#  data:(first char={1=liked,0=unliked} rest of char=total numer o likes)  #}
 			if (data.charAt(0) == "0"){
-				$('#likeicon').attr("class","glyphicon glyphicon-thumbs-up icon-white");
+				$('#likeicon').attr("class","fa fa-thumbs-up");
 				}
 			if (data.charAt(0) == "1"){
-				$('#likeicon').attr("class","glyphicon glyphicon-thumbs-down icon-white");
+				$('#likeicon').attr("class","fa fa-thumbs-down");
 			}
 			//{#  total number of likes starts at the second char of data  #}
 			$('#likes').html(data.substr(1));
