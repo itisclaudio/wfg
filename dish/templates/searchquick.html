@@ -40,10 +40,10 @@ Results for:
 	<td style="vertical-align:bottom;">   
 		<ul class="pagination pull-right" style="margin:0px 7px -1px 0px;">
 			{% if paginatorlist.has_previous %}
-				<li><a href="/searchquickres/0/{{search}}/1/"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+				<li><a href="/searchquickres/0/{{search}}/1/"><i class="fa fa-fast-backward" aria-hidden="true"></i></a><li>
 				<li><a href="/searchquickres/0/{{search}}/{{paginatorlist.previous_page_number}}" id="prev"><i class="fa fa-step-backward" aria-hidden="true"></i></a><li>
 			{% else %}
-				<li class="disabled"><a href="#"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+				<li class="disabled"><a href="#"><i class="fa fa-fast-backward" aria-hidden="true"></i></a><li>
 				<li class="disabled"><a href="#"><i class="fa fa-step-backward" aria-hidden="true"></i></a><li>
 			{% endif %}
 			<li class="disabled"><a href="#">{{paginatorlist.number}} of {{paginatorlist.paginator.num_pages}}</a><li>
@@ -133,10 +133,10 @@ Results for:
 	{% if paginatorlist.paginator.count > 20 %}
 	<ul class="pagination pull-right" style="margin-top:0px;margin-bottom:5px;padding-right:2px;">
 		{% if paginatorlist.has_previous %}
-			<li><a href="/searchquickres/0/{{search}}/1/"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+			<li><a href="/searchquickres/0/{{search}}/1/"><i class="fa fa-fast-backward" aria-hidden="true"></i></a><li>
 			<li><a href="/searchquickres/0/{{search}}/{{paginatorlist.previous_page_number}}" id="prev"><i class="fa fa-step-backward" aria-hidden="true"></i></a><li>
 		{% else %}
-			<li class="disabled"><a href="#"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+			<li class="disabled"><a href="#"><i class="fa fa-fast-backward" aria-hidden="true"></i></a><li>
 			<li class="disabled"><a href="#"><i class="fa fa-step-backward" aria-hidden="true"></i></a><li>
 		{% endif %}
 		<li class="disabled"><a href="#">{{paginatorlist.number}} of {{paginatorlist.paginator.num_pages}}</a><li>

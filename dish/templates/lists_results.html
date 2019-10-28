@@ -41,10 +41,10 @@
 	<div class="col-xs-5" style="padding-left:0px; padding-right:0px;">
 		<ul class="pagination pull-right" style="margin:0px 7px -1px 0px;">
 			{% if paginatorlist.has_previous %}
-				<li><a href="/list_search_results/{{search}}/1/"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+				<li><a href="/list_search_results/{{search}}/1/"><i class="fa fa-fast-backward" aria-hidden="true"></i></a><li>
 				<li><a href="/list_search_results/{{search}}/{{paginatorlist.previous_page_number}}" id="prev"><i class="fa fa-step-backward" aria-hidden="true"></i></a><li>
 			{% else %}
-				<li class="disabled"><a><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+				<li class="disabled"><a><i class="fa fa-fast-backward" aria-hidden="true"></i></a><li>
 				<li class="disabled"><a><i class="fa fa-step-backward" aria-hidden="true"></i></a><li>
 			{% endif %}
 			<li class="disabled hidden-xs"><a>{{paginatorlist.number}} of {{paginatorlist.paginator.num_pages}}</a><li>
@@ -135,10 +135,10 @@
 {% if paginatorlist.paginator.count > 10 %}
 	<ul class="pagination pull-right" style="margin:0px 7px -1px 0px;">
 		{% if paginatorlist.has_previous %}
-			<li><a href="/list_search_results/{{search}}/1/"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+			<li><a href="/list_search_results/{{search}}/1/"><i class="fa fa-fast-backward" aria-hidden="true"></i></a><li>
 			<li><a href="/list_search_results/{{search}}/{{paginatorlist.previous_page_number}}" id="prev"><i class="fa fa-step-backward" aria-hidden="true"></i></a><li>
 		{% else %}
-			<li class="disabled"><a><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+			<li class="disabled"><a><i class="fa fa-fast-backward" aria-hidden="true"></i></a><li>
 			<li class="disabled"><a><i class="fa fa-step-backward" aria-hidden="true"></i></a><li>
 		{% endif %}
 		<li class="disabled hidden-xs"><a>{{paginatorlist.number}} of {{paginatorlist.paginator.num_pages}}</a><li>

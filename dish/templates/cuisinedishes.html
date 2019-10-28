@@ -42,10 +42,10 @@
   <td style="vertical-align:bottom;">
 	<ul class="pagination pull-right" style="margin:0px 7px -1px 0px;">
 		{% if paginatorlist.has_previous %}
-			<li><a href="/cuisinedishes/{{obj.urlname}}/1/"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+			<li><a href="/cuisinedishes/{{obj.urlname}}/1/"><i class="fa fa-fast-backward" aria-hidden="true"></i></a><li>
 			<li><a href="/cuisinedishes/{{obj.urlname}}/{{paginatorlist.previous_page_number}}" id="prev"><span class="glyphicon glyphicon-step-backward"></a><li>
 		{% else %}
-			<li class="disabled"><a href="#"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+			<li class="disabled"><a href="#"><i class="fa fa-fast-backward" aria-hidden="true"></i></a><li>
 			<li class="disabled"><a href="#"><span class="glyphicon glyphicon-step-backward"></a></li>
 		{% endif %}
 		<li class="disabled hidden-xs"><a href="#"> Page {{paginatorlist.number}} of {{paginatorlist.paginator.num_pages}}  </a><li>
@@ -106,10 +106,10 @@
     {% if paginatorlist.paginator.count > 20 %}
 		<ul class="pagination pull-right" style="margin-top:0px">
 		{% if paginatorlist.has_previous %}
-			<li><a href="/cuisinedishes/{{obj.urlname}}/1/"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+			<li><a href="/cuisinedishes/{{obj.urlname}}/1/"><i class="fa fa-fast-backward" aria-hidden="true"></i></a><li>
 			<li><a href="/cuisinedishes/{{obj.urlname}}/{{paginatorlist.previous_page_number}}" id="prev"><span class="glyphicon glyphicon-step-backward"></a><li>
 		{% else %}
-			<li class="disabled"><a href="#"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+			<li class="disabled"><a href="#"><i class="fa fa-fast-backward" aria-hidden="true"></i></a><li>
 			<li class="disabled"><a href="#"><span class="glyphicon glyphicon-step-backward"></a><li>
 		{% endif %}
 		<li class="disabled"><a href="#"> Page {{paginatorlist.number}} of {{paginatorlist.paginator.num_pages}}  </a></li>

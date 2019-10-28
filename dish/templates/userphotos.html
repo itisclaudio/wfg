@@ -37,10 +37,10 @@
   <td style="vertical-align:bottom;">
 	<ul class="pagination pull-right" style="margin:0px 7px -1px 0px;">
 		{% if list.has_previous %}
-			<li><a href="/userphotos/{{profile.username}}/1/"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+			<li><a href="/userphotos/{{profile.username}}/1/"><i class="fa fa-fast-backward" aria-hidden="true"></i></a><li>
 			<li><a href="/userphotos/{{profile.username}}/{{list.previous_page_number}}" id="prev" ><i class="fa fa-step-backward" aria-hidden="true"></i></a><li>
 		{% else %}
-			<li class="disabled"><a href="#"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+			<li class="disabled"><a href="#"><i class="fa fa-fast-backward" aria-hidden="true"></i></a><li>
 			<li class="disabled"><a href="#"><i class="fa fa-step-backward" aria-hidden="true"></i></a><li>
 		{% endif %}
 		<li class="disabled hidden-xs"><a href="#">{{list.number}} of {{list.paginator.num_pages}}</a></li>
@@ -98,10 +98,10 @@
     {% if list.paginator.count > list.paginator.per_page %}
 		<ul class="pagination pull-right" style="margin-top:0px">
 		{% if list.has_previous %}
-			<li><a href="/userphotos/{{profile.username}}/1/"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+			<li><a href="/userphotos/{{profile.username}}/1/"><i class="fa fa-fast-backward" aria-hidden="true"></i></a><li>
 			<li><a href="/userphotos/{{profile.username}}/{{list.previous_page_number}}" id="prev" ><i class="fa fa-step-backward" aria-hidden="true"></i></a><li>
 		{% else %}
-			<li class="disabled"><a href="#"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+			<li class="disabled"><a href="#"><i class="fa fa-fast-backward" aria-hidden="true"></i></a><li>
 			<li class="disabled"><a href="#"><i class="fa fa-step-backward" aria-hidden="true"></i></a><li>
 		{% endif %}
 		<li class="disabled"><a href="#">{{list.number}} of {{list.paginator.num_pages}}</a></li>

@@ -41,10 +41,10 @@
   <td style="vertical-align:bottom;">  
         <ul class="pagination pull-right" style="margin:0px 7px -1px 0px;">
             {% if paginatorlist.has_previous %}
-				<li><a href="/lists/1/"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+				<li><a href="/lists/1/"><i class="fa fa-fast-backward" aria-hidden="true"></i></a><li>
                 <li><a href="/lists/{{paginatorlist.previous_page_number}}" id="prev"><i class="fa fa-step-backward" aria-hidden="true"></i></a><li>
             {% else %}
-                <li class="disabled"><a><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+                <li class="disabled"><a><i class="fa fa-fast-backward" aria-hidden="true"></i></a><li>
 				<li class="disabled"><a><i class="fa fa-step-backward" aria-hidden="true"></i></a><li>
             {% endif %}
 			<li class="disabled hidden-xs"><a> Page {{paginatorlist.number}} of {{paginatorlist.paginator.num_pages}}  </a><li>
@@ -122,10 +122,10 @@
 		{% if paginatorlist.paginator.count > 10 %}
 			<ul class="pagination pull-right" style="margin:0px 7px -1px 0px;">
 				{% if paginatorlist.has_previous %}
-					<li><a href="/lists/1/"><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+					<li><a href="/lists/1/"><i class="fa fa-fast-backward" aria-hidden="true"></i></a><li>
 					<li><a href="/lists/{{paginatorlist.previous_page_number}}" id="prev"><i class="fa fa-step-backward" aria-hidden="true"></i></a><li>
 				{% else %}
-					<li class="disabled"><a><span class="glyphicon glyphicon-fast-backward"></span></a><li>
+					<li class="disabled"><a><i class="fa fa-fast-backward" aria-hidden="true"></i></a><li>
 					<li class="disabled"><a><i class="fa fa-step-backward" aria-hidden="true"></i></a><li>
 				{% endif %}
 				<li class="disabled  hidden-xs"><a> Page {{paginatorlist.number}} of {{paginatorlist.paginator.num_pages}}  </a><li>
