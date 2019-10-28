@@ -3,6 +3,7 @@
 
 {% block super-extra-head %}
 	{% load static %}
+	<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
 	<link href="{% static 'dist/jcrop/css/jquery.Jcrop.css' %}" rel="stylesheet"/>
 {% endblock %}
 
@@ -34,15 +35,21 @@
 		<div class="col-md-4" align="left">
 			<form action="." method="POST">
 			{% csrf_token %}
-			<button class="btn btn-lg btn-custom btn-block" type="submit"/>Crop and Save</button>
+			<button id="crop" class="btn btn-lg btn-custom btn-block" type="submit"/>Crop and Save</button>
 			<a class="btn btn-custom btn-lg btn-block" href="/photo/{{photo.urlname}}">Cancel</a>
 			<p> Click on the photo, resize and press "crop and save"</p>
 				<div style="display:none">
-					{{ form.x }}
-					{{ form.y }}
-					{{ form.w }}
-					{{ form.h }}
+					x%: {{ form.x }}<br>
+					y%: {{ form.y }}<br>
+					w%: {{ form.w }}<br>
+					h%: {{ form.h }}
 				</div>
+			</form>
+			<form style="display:none">
+			  img x:<input id="x" type="text"><br>
+			  img y:<input id="y" type="text"><br>
+			  img w:<input id="w" type="text"><br>
+			  img h:<input id="h" type="text">
 			</form>
 		</div>
 	</div>
@@ -50,24 +57,36 @@
 {% endblock %}
 
 {% block extra-bottom %}
-<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
 <script src="{% static 'dist/jcrop/js/jquery.Jcrop.js' %}"></script>
 <script type="text/javascript">
 
-//function to show the modal "Processing" when loading results page
-function loading(){
+$("#crop").click(function(){
+	var image_width = $('#photo')[0].naturalWidth;
+	var image_height = $('#photo')[0].naturalHeight;
+	var crop_width = $("#w").val();
+	var crop_height = $("#h").val();
+	var crop_x = $("#x").val();
+	var crop_y = $("#y").val();
+	var width_per = crop_width*100/image_width;
+	var height_per = crop_height*100/image_height;
+	var x_per = crop_x*100/image_width;
+	var y_per = crop_y*100/image_height;
+	$("#id_w").val(width_per);
+	$("#id_h").val(height_per);
+	$("#id_x").val(x_per);
+	$("#id_y").val(y_per);
 	$("#myModal").modal('show');
-};
+});
 
 function updateCoords(c)
 	{
-		$("#id_x").val(c.x);
-		$("#id_y").val(c.y);
-		$("#id_w").val(c.w);
-		$("#id_h").val(c.h);
-	}
-
-$(document).ready(function(){
+		$("#x").val(c.x);
+		$("#y").val(c.y);
+		$("#w").val(c.w);
+		$("#h").val(c.h);
+	};
+	
+$(document).ready(function(){	
 
 	//Jcrop -Start-
 	$("#photo").Jcrop({

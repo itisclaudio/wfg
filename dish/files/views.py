@@ -155,15 +155,19 @@ def SaveEmailQueue(username,obj,action,url=None):
 	#CheckEmails()
 
 def UpdateMainPhoto(id_dish):
-	#print "Updatting main_photo"
+	print "Updatting main_photo in views"
 	dish = Dish.objects.get(pk=id_dish)
 	favphoto = Picture.objects.filter(dish=dish.id).order_by('-likestot').first()
+	print "favphoto:"
+	print favphoto
 	if favphoto:
 		## There is a photo, use obj
+		print "There is a photo, use obj"
 		dish.photo_main = str(favphoto.location)
-		#print str(favphoto.location)
+		print str(favphoto.location)
 	else:
 		## There is no photo, clear photo_m
+		print "There is no photo, clear photo_m"
 		dish.photo_main = ""
 	dish.save()
 
@@ -1377,7 +1381,7 @@ def photosfull_view(request):
 def photouploadmain_view(request):
 	return render_to_response('photouploadmain.html',context_instance=RequestContext(request))
 
-#000
+
 @login_required(login_url=singin_url)
 @verified_email_required
 def photonew_view(request, id):
@@ -1511,10 +1515,12 @@ def photocrop_view(request, id):
 	if request.method == "POST":
 		form = photoCrop_Form(request.POST)
 		if form.is_valid():
+			## Form sends the percentage of crop
 			x = form.cleaned_data['x']
 			y = form.cleaned_data['y']
 			w = form.cleaned_data['w']
 			h = form.cleaned_data['h']
+			print "x: {}%, y: {}% , w: {}%, h: {}%".format(x,y,w,h)
 			if settings.LOCAL_DEV:
 				print "In photocrop_view local"
 				path = str(photo.location.path)
@@ -1526,17 +1532,42 @@ def photocrop_view(request, id):
 				thum_ori = Image.open(cad+filename+'-thum'+ext)
 				max_ori = Image.open(cad+filename+ext)
 				sizes={'thum':{'h':thum_ori.height,'w':thum_ori.width},'med':{'h':med_ori.height,'w':med_ori.width},'reg':{'h':reg_ori.height,'w':reg_ori.width},'max':{'h':max_ori.height,'w':max_ori.width},}
-
-				max_new = max_ori.crop((x*3,y*3,w*3+x*3,h*3+y*3))
+				print sizes
+				## .crop((left, top, right, bottom))
+				#max_new = max_ori.crop((x*3,y*3,w*3+x*3,h*3+y*3))
+				max_new = max_ori.crop((
+					int(round(sizes['max']['w']*x/100)),
+					int(round(sizes['max']['h']*y/100)),
+					int(round(sizes['max']['w']*w/100)) + int(round(sizes['max']['w']*x/100)) ,
+					int(round(sizes['max']['h']*h/100)) + int(round(sizes['max']['h']*y/100))
+					))
 				max_new.save(cad+filename+ext)
 				
-				thum_new = thum_ori.crop((x/4,y/4,w/4+x/4,h/4+y/4))
+				#thum_new = thum_ori.crop((x/4,y/4,w/4+x/4,h/4+y/4))
+				thum_new = thum_ori.crop((
+					int(round(sizes['thum']['w']*x/100)) ,
+					int(round(sizes['thum']['h']*y/100)) ,
+					int(round(sizes['thum']['w']*w/100)) + int(round(sizes['thum']['w']*x/100)) ,
+					int(round(sizes['thum']['h']*h/100)) + int(round(sizes['thum']['h']*y/100))
+					))
 				thum_new.save(cad+filename+'-thum'+ext)
 
-				med_new = med_ori.crop((x,y,w+x,h+y))
+				#med_new = med_ori.crop((x,y,w+x,h+y))
+				med_new = med_ori.crop((
+					int(round(sizes['med']['w']*x/100)) ,
+					int(round(sizes['med']['h']*y/100)),
+					int(round(sizes['med']['w']*w/100)) + int(round(sizes['med']['w']*x/100)),
+					int(round(sizes['med']['h']*h/100)) + int(round(sizes['med']['h']*y/100))
+					))
 				med_new.save(cad+filename+'-med'+ext)
 
-				reg_new = reg_ori.crop((x*2,y*2,w*2+x*2,h*2+y*2))
+				#reg_new = reg_ori.crop((x*2,y*2,w*2+x*2,h*2+y*2))
+				reg_new = reg_ori.crop((
+					int(round(sizes['reg']['w']*x/100)) ,
+					int(round(sizes['reg']['h']*y/100)) ,
+					int(round(sizes['reg']['w']*w/100)) + int(round(sizes['reg']['w']*x/100)) ,
+					int(round(sizes['reg']['h']*h/100)) + int(round(sizes['reg']['h']*y/100))
+					))
 				reg_new.save(cad+filename+'-reg'+ext)
 
 				if h > w:
@@ -1766,6 +1797,7 @@ def photodelete_view(request, id):
 				pass
 		SaveEmailQueue(request.user.username,'Photo','Deleted',photo.urlname)
 		photo.delete()
+		UpdateMainPhoto(dish.pk)
 		return HttpResponseRedirect('/dish/%s'%(dish.urlname))
 	ctx = {'information':info, 'photo':photo}
 	return render_to_response('photodelete.html',ctx,context_instance=RequestContext(request))

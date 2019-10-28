@@ -1,42 +1,49 @@
-{% extends '_base.html' %}
-{% block title %} - Crop Photo{% endblock %}
-
-{% block super-extra-head %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head>
+	<title>WorldFood.Guide</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	{% load static %}
 	<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
+	<link href="{% static 'dist/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" >
+	<link href="{% static 'css/mobile.css' %}" rel="stylesheet" >
 	<link href="{% static 'dist/jcrop/css/jquery.Jcrop.css' %}" rel="stylesheet"/>
-{% endblock %}
-
-{% block content %}
-
-<!--Modal 0 -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog" role="document">
-	<div class="modal-content">
-	  <div class="modal-header">
-		<h1 class="modal-title" id="myModalLabel">Processing...</h1>
-	  </div>
-	  <div class="modal-body">
-		<div class="progress">
-			  <div class="progress-bar progress-bar-striped progress-bar-warning active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+	<link rel="icon" href="{% static 'images/main_icon_32.png' %}" sizes="32x32">
+	<link href="{% static 'images/icons/favicon-16x16.png' %}" rel="icon" type="image/x-icon">
+</head>
+<body style="background-color:#FFFFE8;">
+	<div class="well-1">
+		<h1 align="center">Crop Photo</h1>
+		
+		<!--Modal 0 -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+		  <div class="modal-dialog" role="document">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<h1 class="modal-title" id="myModalLabel">Processing...</h1>
 			  </div>
+			  <div class="modal-body">
+				<div class="progress">
+					  <div class="progress-bar progress-bar-striped progress-bar-warning active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+					  </div>
+				</div>
+			  </div>
+			</div>
+		  </div>
 		</div>
-	  </div>
+		
+		<p> Click on the photo, crop and press "Crop and Save"</p>
 	</div>
-  </div>
-</div>
-
-<div class="well-1">
-<h1 align="center">Crop Photo</h1>
-	<p align="center"> Click on the photo, crop and press "Crop and Save"</p>
-	
 	<div id="holder" align="center" >
 		<img id="photo" src="{{photo.filename}}-med{{photo.extension}}?cachebuster={%now 'H:i:s'%}" alt="{{ photo.food }}"/>
 	</div>
-	
+<br/>
+<div class="well-1">
 	<form action="." method="POST">
 	{% csrf_token %}
-		<div style="display:none">
+		<!--<div style="display:none">-->
+		<div style="display:inline-block">
 			{{ form }}
 		<p>width: <input id="width" type="text" name="width"></p>
 		<p>height: <input id="height" type="text" name="height"></p>
@@ -44,23 +51,21 @@
 	<button id="crop" class="btn btn-custom btn-lg btn-block" type="submit"/>Crop and Save</button>
 	<a class="btn btn-custom btn-lg btn-block" href="/photo/{{photo.urlname}}">Cancel</a>
 	</form>
-	<div style="display:none">
+	<form>
 	  img x:<input id="x" type="text"><br>
 	  img y:<input id="y" type="text"><br>
 	  img w:<input id="w" type="text"><br>
 	  img h:<input id="h" type="text">
 	</form>
-	
 </div>
-
-
-{% endblock %}
-
-{% block extra-bottom %}
-
+<a id="show_modal" class="btn btn-custom btn-lg btn-block" >Modal</a>
 <script src="{% static 'dist/jcrop/js/jquery.Jcrop.js' %}"></script>
 
 <script type="text/javascript">
+
+$("#show_modal").click(function(){
+	$("#myModal").modal('show');
+});
 
 $("#crop").click(function(){
 	var image_width = $('#photo')[0].naturalWidth;
@@ -104,5 +109,5 @@ $(document).ready(function(){
 
 });
 </script>
-
-{% endblock %}
+</body>
+</html>

@@ -144,10 +144,10 @@ class photoRotate_Form(forms.Form):
 	rotation = forms.IntegerField(initial=0)
 
 class photoCrop_Form(forms.Form):
-	x = forms.IntegerField(initial=0,label="X")
-	y = forms.IntegerField(initial=0,label="Y")
-	w = forms.IntegerField(initial=0,label="width")
-	h = forms.IntegerField(initial=0,label="height")
+	x = forms.FloatField(initial=0,label="X %")
+	y = forms.FloatField(initial=0,label="Y %")
+	w = forms.FloatField(initial=0,label="width %")
+	h = forms.FloatField(initial=0,label="height %")
 #333
 class dishForm(BaseForm):
 	name = forms.CharField(max_length=50,widget=forms.TextInput(attrs={'placeholder': '50 charactes max. Only alphanumeric characters and - \' are allowed','autocomplete':'off'}),required=True, validators=[alphanumeric])

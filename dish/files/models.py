@@ -389,15 +389,23 @@ class ListDish(models.Model):
 		ordering = ('list','index')
 
 def UpdateMainPhoto(id_dish):
-	print "In: UpdateMainPhoto 2"
+	print "In: UpdateMainPhoto in models"
 	dish = Dish.objects.get(pk=id_dish)
+	pics = Picture.objects.filter(dish=dish.id).order_by('-likestot')
+	print "pics"
+	print pics
 	favphoto = Picture.objects.filter(dish=dish.id).order_by('-likestot').first()
+	print "favphoto:"
+	print favphoto
 	if favphoto:
 		## There is a photo, use obj
+		print "There is a photo, use obj"
 		dish.photo_main = str(favphoto.location)
+		print str(favphoto.location)
 	else:
 		## There is no photo, clear photo_m
 		dish.photo_main = ""
+		print "There is no photo, clear photo_m"
 	dish.save()
 #000		
 class Picture(models.Model):
@@ -464,7 +472,8 @@ class Picture(models.Model):
 			if os.path.exists(file):
 				## No new file, renaming current file and thumbs
 				filenamewhole = str(self.location)
-				print filenamewhole
+				print "No new file, renaming current file and thumbs"
+				print "filenamewhole: {}".format(filenamewhole)
 				filenamewhole = filenamewhole.replace("dishes/", "")
 				filename, ext = os.path.splitext(filenamewhole)
 				cad = settings.UPLOAD_DISH + '/'
