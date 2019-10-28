@@ -35,7 +35,7 @@
 	{% endif %}
 	<div style="margin:4px;">
 	<span class="label label-default">{{cuisine.dishes_count}} <img src="{% static 'images/icons/food-16-white.png' %}"/></span>
-	<span class="label label-default">{{cuisine.pictures_count}} <i class="glyphicon glyphicon-camera icon-white"></i></span>
+	<span class="label label-default">{{cuisine.pictures_count}} <i class="fa fa-camera" aria-hidden="true"></i></span>
 	</div>
 	{% if cuisine.description %}
 		{{ cuisine.description|urlizetrunc:45|escape|linebreaks }}
