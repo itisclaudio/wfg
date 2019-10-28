@@ -163,7 +163,7 @@ $(document).ready(function(){
 				<span class="caret"></span>
 			  </button>
 			  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-			  <li><a href="{% url 'view_searchadvance' %}"><i class="glyphicon glyphicon-search icon-white"></i> Search dish</a></li>
+			  <li><a href="{% url 'view_searchadvance' %}"><i class="fa fa-search" aria-hidden="true"></i> Search dish</a></li>
 				{% if user.is_authenticated %}
 					<li><a href="{% url 'view_dishedit' id=dish.id %}"><i class="glyphicon glyphicon-pencil icon-white"></i> Edit dish</a></li>
 					<li><a href="{% url 'view_photonew' id=dish.id %}"><i class="glyphicon glyphicon-camera icon-white"></i> Upload photo</a></li>

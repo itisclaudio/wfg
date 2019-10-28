@@ -168,7 +168,7 @@ $(document).ready(function(){
 					<li><a href="{% url 'view_listnew' %}" title="Create New List"><i class="glyphicon glyphicon-plus icon-white"></i> Create new list
 					</a></li>
 				{% endif %}
-				<li><a title="Search list" href="{% url 'view_list_search' %}"><i class="glyphicon glyphicon-search icon-white"></i> Search list</a></li>
+				<li><a title="Search list" href="{% url 'view_list_search' %}"><i class="fa fa-search" aria-hidden="true"></i> Search list</a></li>
 				<li>
 					<a href="/lists_foodie/{{list.owner}}/1/" title="See all lists by: {{list.owner}}">Lists by "{{list.owner|truncatechars:13}}"</a></li>
 			  </ul>
