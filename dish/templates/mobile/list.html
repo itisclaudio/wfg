@@ -100,12 +100,12 @@ $(document).ready(function(){
 	<div style="padding-left:10px;padding-right:10px; margin:0px;">
 	{% if list.type = '2' %}
 		<a class="btn btn-custom" onclick="processing();" href="{% url 'view_listedit' urlname=list.urlname%}" title="Edit list and dishes" style="padding:3px 8px 3px 8px;">
-			<i class="glyphicon glyphicon-pencil icon-white"></i>
+			<i class="fa fa-pencil" aria-hidden="true"></i>
 		</a>
 	{% else %}
 		{% if user.id = list.owner.user.id %}
 			<a class="btn btn-custom" onclick="processing();" href="{% url 'view_listedit' urlname=list.urlname%}" title="Edit list and dishes" style="padding:3px 8px 3px 8px;">
-				<i class="glyphicon glyphicon-pencil icon-white"></i>
+				<i class="fa fa-pencil" aria-hidden="true"></i>
 			</a>
 		{% endif %}
 	{% endif %}

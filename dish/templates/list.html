@@ -156,11 +156,11 @@ $(document).ready(function(){
 			  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 				{% if list.type = '2' %}
 					<li><a type="button" data-toggle="modal" data-target="#modal_adddish"><i class="glyphicon glyphicon-plus icon-white"></i> Add Dish</a></li>
-					<li><a href="{% url 'view_listedit' urlname=list.urlname%}"><i class="glyphicon glyphicon-pencil icon-white"></i> Edit list</a></li>
+					<li><a href="{% url 'view_listedit' urlname=list.urlname%}"><i class="fa fa-pencil" aria-hidden="true"></i> Edit list</a></li>
 				{% else %}
 					{% if user.id = list.owner.user.id %}
 						<li><a data-toggle="modal" data-target="#modal_adddish"><i class="glyphicon glyphicon-plus icon-white"></i> Add Dish</a></li>
-						<li><a href="{% url 'view_listedit' urlname=list.urlname%}"><i class="glyphicon glyphicon-pencil icon-white"></i> Edit list </a></li>
+						<li><a href="{% url 'view_listedit' urlname=list.urlname%}"><i class="fa fa-pencil" aria-hidden="true"></i> Edit list </a></li>
 						<li><a id="delete" data-toggle="modal" data-target="#modal_deletelist" title="Delete list"><i class="glyphicon glyphicon-trash"></i> Delele list</a></li>
 					{% endif %}
 				{% endif %}

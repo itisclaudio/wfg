@@ -221,7 +221,7 @@
 								<i>{{p.description|urlizetrunc:20|truncatewords:20|escape|linebreaks}}</i>
 							</div>
 							{% if user.id = list.owner.user.id %}
-								<a class="btn btn-default" id="comment_{{p.id}}" name="{{p.index}}"  title="Edit comment"><i class="glyphicon glyphicon-pencil icon-white"></i></a>
+								<a class="btn btn-default" id="comment_{{p.id}}" name="{{p.index}}"  title="Edit comment"><i class="fa fa-pencil" aria-hidden="true"></i></a>
 							{% endif %}
 						</div>
 						<p id="comment_whole_{{p.index}}" style="display:none;">

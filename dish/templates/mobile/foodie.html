@@ -87,7 +87,7 @@ $(window).bind('resize',positionPopup);
 	<h2 style="margin-top:2px;margin-bottom:2px;"><i>{{ profile.user.first_name }} {{ profile.user.last_name }}</i>
 	{% if user.is_authenticated %}
 		{% if user.id = profile.user.id %}
-			<a class="btn btn-custom" href="{% url 'view_myprofile' %}"><i class="glyphicon glyphicon-pencil icon-white"></i></a> 
+			<a class="btn btn-custom" href="{% url 'view_myprofile' %}"><i class="fa fa-pencil" aria-hidden="true"></i></a> 
 		{% endif %}
 	{% endif %}
 	</h2>
