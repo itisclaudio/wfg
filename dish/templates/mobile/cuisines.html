@@ -20,7 +20,7 @@
 		{% else %}
 			<a class="btn btn-custom btn-block disabled">
 		{% endif %}
-		<span class="glyphicon glyphicon-step-backward"></span></a>
+		<i class="fa fa-step-backward" aria-hidden="true"></i></a>
 	</div>
 	<div class="col-xs-4" style="padding:1px;">
 		<a class="btn btn-custom btn-block" href="{% url 'view_cuisinenew' %}" style="padding-left:6px; padding-right:6px;">
@@ -33,7 +33,7 @@
 		{% else %}
 			<a class="btn btn-custom btn-block disabled">
 		{% endif %}
-		<span class="glyphicon glyphicon-step-forward"></span></a>
+		<i class="fa fa-step-forward" aria-hidden="true"></i></a>
 	</div>
 	<div class="col-xs-2" style="padding:1px;">
 		{% if paginatorlist.has_next %}
@@ -103,7 +103,7 @@
 				{% else %}
 					<a class="btn btn-custom btn-block disabled">
 				{% endif %}
-				<span class="glyphicon glyphicon-step-backward"></span></a>
+				<i class="fa fa-step-backward" aria-hidden="true"></i></a>
 			</div>
 			<div class="col-xs-3" style="padding:1px;">
 				{% if paginatorlist.has_next %}
@@ -111,7 +111,7 @@
 				{% else %}
 					<a class="btn btn-custom btn-block disabled">
 				{% endif %}
-				<span class="glyphicon glyphicon-step-forward"></span></a>
+				<i class="fa fa-step-forward" aria-hidden="true"></i></a>
 			</div>
 			<div class="col-xs-3" style="padding:1px;">
 				{% if paginatorlist.has_next %}
