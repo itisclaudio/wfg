@@ -170,7 +170,7 @@ $(document).ready(function(){
 					<li><a href="{% url 'view_dishphotonew' id_cui=0 %}"><i class="fa fa-plus" aria-hidden="true"></i> New dish</a></li>
 					<li><a type="button" data-toggle="modal" data-target="#modal_adddish_tolist"> <i class="fa fa-plus" aria-hidden="true"></i> Add to list</a></li>
 					{% if dish.userprofile.id = user.id %}
-						<li><a href="{% url 'view_dishdelete' id=dish.id %}"><i class="glyphicon glyphicon-trash icon-white"></i> Delele dish</a></li>
+						<li><a href="{% url 'view_dishdelete' id=dish.id %}"><i class="fa fa-trash" aria-hidden="true"></i> Delele dish</a></li>
 					{% endif %}
 				{% endif %}
 			  </ul>
