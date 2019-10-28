@@ -38,10 +38,10 @@
 			<li class="disabled hidden-xs"><a href="#">Page {{paginatorlist.number}} of {{paginatorlist.paginator.num_pages}}</a><li>
 			{% if paginatorlist.has_next %}
 				<li><a href="/dishes/{{paginatorlist.next_page_number}}" id="next"><i class="fa fa-step-forward" aria-hidden="true"></i></a><li>
-				<li><a href="/dishes/{{paginatorlist.paginator.num_pages}}"><span class="glyphicon glyphicon-fast-forward"></span></a><li>
+				<li><a href="/dishes/{{paginatorlist.paginator.num_pages}}"><i class="fa fa-fast-forward" aria-hidden="true"></i></a><li>
 			{% else %}
 				<li class="disabled"><a href="#"><i class="fa fa-step-forward" aria-hidden="true"></i></a><li>
-				<li class="disabled"><a href="#"><span class="glyphicon glyphicon-fast-forward"></span></a><li>
+				<li class="disabled"><a href="#"><i class="fa fa-fast-forward" aria-hidden="true"></i></a><li>
 			{% endif %}
 		</ul>
 </td>
@@ -103,10 +103,10 @@
 		<li class="disabled hidden-xs"><a href="#">Page {{paginatorlist.number}} of {{paginatorlist.paginator.num_pages}}</a><li>
 		{% if paginatorlist.has_next %}
 			<li><a href="/dishes/{{paginatorlist.next_page_number}}" id="next"><i class="fa fa-step-forward" aria-hidden="true"></i></a><li>
-			<li><a href="/dishes/{{paginatorlist.paginator.num_pages}}"><span class="glyphicon glyphicon-fast-forward"></span></a><li>
+			<li><a href="/dishes/{{paginatorlist.paginator.num_pages}}"><i class="fa fa-fast-forward" aria-hidden="true"></i></a><li>
 		{% else %}
 			<li class="disabled"><a href="#"><i class="fa fa-step-forward" aria-hidden="true"></i></a><li>
-			<li class="disabled"><a href="#"><span class="glyphicon glyphicon-fast-forward"></span></a><li>
+			<li class="disabled"><a href="#"><i class="fa fa-fast-forward" aria-hidden="true"></i></a><li>
 		{% endif %}
         </ul>
     {% endif %}
