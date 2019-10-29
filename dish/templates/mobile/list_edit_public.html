@@ -137,9 +137,9 @@
 			{% for p in dishes %}
 			<tr>
 				<td width="40%" style="padding: 2px;">
-					{% if p.dish.favphoto %}
+					{% if p.dish.photo_main %}
 						<a href="/photo/{{p.dish.favphoto.urlname}}">
-						<img id="url_{{p.dish.id}}" src="/media/{{ p.dish.favphoto.filename }}-thum{{p.dish.favphoto.extension}}" class="img-rounded" width="100%"></a>
+						<img id="url_{{p.dish.id}}" src="{{ p.dish.favphotothum}}" class="img-rounded" width="100%"></a>
 					{% else %}
 						<a href="/photonew/{{p.dish.id}}/">
 							<img  id="url_{{p.dish.id}}" src="/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
@@ -284,7 +284,7 @@ function searchSuccess(json)
 			$('#modal-othernames').html(json.othernames);
 		};
 		if (json.favphoto != "0"){
-			$('#modal-image').attr('src', "/media/"+json.favphoto);
+			$('#modal-image').attr('src', json.favphoto);
 		}
 		else{
 			$('#modal-image').attr('src', "/media/images/upload-med.jpg");
