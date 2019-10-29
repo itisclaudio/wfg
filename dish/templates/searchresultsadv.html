@@ -33,7 +33,7 @@
 {% endif %}
 <span class="label label-default" style="display:inline;">{{ paginatorlist.paginator.count }}</span>
 <a class="btn btn-custom hidden-xs" style="margin:0px 2px 8px 2px;" href="/searchadvance/" title="Advance Search">
-	<li class="glyphicon glyphicon-search icon-white"></li>
+	<li class="fa fa-search icon-white"></li>
 </a>
 <a class="btn btn-custom hidden-xs" style="vertical-align:top;margin-top:0px;" title="New dish / photo" href="{% url 'view_dishphotonew' %}">New dish</a> 
 </h1>
@@ -85,7 +85,7 @@
 				<p style="display:inline;" title="{{p.othernames }}">{{p.othernames|truncatechars:30 }}</p>
 			{% endif %}
 			<p style="display:inline;">
-				({{p.likestot}} <i id="likeicon"  title="Number of likes" class="glyphicon glyphicon-thumbs-up"></i>)
+				({{p.likestot}} <i id="likeicon"  title="Number of likes" class="fa fa-thumbs-up" aria-hidden="true"></i>)
 				({{p.picture__count}} <i class="fa fa-camera"  title="Number of photos"></i>)
 			</p>
 			{% if p.cuisines.all %}
@@ -137,11 +137,11 @@
 	</td></tr>
 	<tr>
 		<td width="50%"><button class="btn btn-custom btn-lg btn-block" style="margin:0px 6px 0px 0px;">Search 
-			<li class="glyphicon glyphicon-search icon-white"></li></button>
+			<li class="fa fa-search icon-white"></li></button>
 		</td>
 		<td width="50%">
 			<a class="btn btn-custom btn-lg btn-block" href="/searchadvance/" title="Advance Search"style="margin:0px 0px 0px 6px;">Advance Search 
-			<li class="glyphicon glyphicon-search icon-white"></li></a>
+			<li class="fa fa-search icon-white"></li></a>
 		</td>		
 		</form>
 	</tr>

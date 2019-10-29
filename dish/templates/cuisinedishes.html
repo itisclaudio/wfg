@@ -43,10 +43,10 @@
 	<ul class="pagination pull-right" style="margin:0px 7px -1px 0px;">
 		{% if paginatorlist.has_previous %}
 			<li><a href="/cuisinedishes/{{obj.urlname}}/1/"><i class="fa fa-fast-backward" aria-hidden="true"></i></a><li>
-			<li><a href="/cuisinedishes/{{obj.urlname}}/{{paginatorlist.previous_page_number}}" id="prev"><span class="glyphicon glyphicon-step-backward"></a><li>
+			<li><a href="/cuisinedishes/{{obj.urlname}}/{{paginatorlist.previous_page_number}}" id="prev"><span class="fa fa-step-backward" aria-hidden="true"></a><li>
 		{% else %}
 			<li class="disabled"><a href="#"><i class="fa fa-fast-backward" aria-hidden="true"></i></a><li>
-			<li class="disabled"><a href="#"><span class="glyphicon glyphicon-step-backward"></a></li>
+			<li class="disabled"><a href="#"><span class="fa fa-step-backward" aria-hidden="true"></a></li>
 		{% endif %}
 		<li class="disabled hidden-xs"><a href="#"> Page {{paginatorlist.number}} of {{paginatorlist.paginator.num_pages}}  </a><li>
 		{% if paginatorlist.has_next %}
@@ -85,7 +85,7 @@
 			{% if p.othernames %} <p style="display:inline;" title="{{p.othernames }}">{{p.othernames|truncatechars:30 }}</p>
 			{% endif %}
 			<p style="display:inline;">
-				({{p.likestot}} <i id="likeicon"  title="Number of likes" class="glyphicon glyphicon-thumbs-up"></i>)
+				({{p.likestot}} <i id="likeicon"  title="Number of likes" class="fa fa-thumbs-up" aria-hidden="true"></i>)
 				({{p.picture__count}} <i class="fa fa-camera"  title="Number of photos"></i>)
 			</p>
 			{% if p.cuisines.all %}
@@ -107,10 +107,10 @@
 		<ul class="pagination pull-right" style="margin-top:0px">
 		{% if paginatorlist.has_previous %}
 			<li><a href="/cuisinedishes/{{obj.urlname}}/1/"><i class="fa fa-fast-backward" aria-hidden="true"></i></a><li>
-			<li><a href="/cuisinedishes/{{obj.urlname}}/{{paginatorlist.previous_page_number}}" id="prev"><span class="glyphicon glyphicon-step-backward"></a><li>
+			<li><a href="/cuisinedishes/{{obj.urlname}}/{{paginatorlist.previous_page_number}}" id="prev"><span class="fa fa-step-backward" aria-hidden="true"></a><li>
 		{% else %}
 			<li class="disabled"><a href="#"><i class="fa fa-fast-backward" aria-hidden="true"></i></a><li>
-			<li class="disabled"><a href="#"><span class="glyphicon glyphicon-step-backward"></a><li>
+			<li class="disabled"><a href="#"><span class="fa fa-step-backward" aria-hidden="true"></a><li>
 		{% endif %}
 		<li class="disabled"><a href="#"> Page {{paginatorlist.number}} of {{paginatorlist.paginator.num_pages}}  </a></li>
 		{% if paginatorlist.has_next %}

@@ -32,7 +32,7 @@
 	<div align="center">
 		<img src="{{object.filename}}-med{{object.extension}}" class="img-rounded" width="100%">
 		<p>By: {{ object.owner|truncatechars:13 }}. {{ object.datetime|date:"N j, Y"}}
-			({{ likestotal }} <i style="display:inline;" title="Number of likes" class="glyphicon glyphicon-thumbs-up"></i>)
+			({{ likestotal }} <i style="display:inline;" title="Number of likes" class="fa fa-thumbs-up" aria-hidden="true"></i>)
 		</p>
 	</div>
 	<form enctype='multipart/form-data' action="." method="POST" id="myform">

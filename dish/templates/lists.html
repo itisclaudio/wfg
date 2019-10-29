@@ -34,7 +34,7 @@
 		<a class="btn btn-custom hidden-xs" style="vertical-align:top;margin-top:-5px;" title="Create New List" href="{% url 'view_listnew' %}">Create List</a>
 		<a class="btn btn-custom hidden-xs" style="vertical-align:top;margin-top:-5px;" title="Go to my Lists" href="{% url 'view_lists_mine' %}">See my Lists</a>
 	{% endif %}
-	<a class="btn btn-custom hidden-xs" style="vertical-align:top;margin-top:-5px;" title="Search List" href="{% url 'view_list_search' %}"><span class="glyphicon glyphicon-search"></span> Lists</a>
+	<a class="btn btn-custom hidden-xs" style="vertical-align:top;margin-top:-5px;" title="Search List" href="{% url 'view_list_search' %}"><span class="fa fa-search"></span> Lists</a>
 </td>
 
 {% if paginatorlist.paginator.count > 10 %}

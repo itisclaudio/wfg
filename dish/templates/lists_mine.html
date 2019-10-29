@@ -26,9 +26,9 @@
 	</a>
 	<span class="label label-default" style="display:inline;vertical-align:top;">{{ paginatorlist.paginator.count }}</span>
 	{% if user.is_authenticated %}
-		<a class="btn btn-custom hidden-xs" style="vertical-align:top;margin-top:-5px;" title="Create New List" href="{% url 'view_listnew' %}"><span class="glyphicon glyphicon-plus"></span></a>
+		<a class="btn btn-custom hidden-xs" style="vertical-align:top;margin-top:-5px;" title="Create New List" href="{% url 'view_listnew' %}"><span class="fa fa-plus"></span></a>
 	{% endif %}
-	<a class="btn btn-custom hidden-xs" style="vertical-align:top;margin-top:-5px;" title="Search List" href="{% url 'view_list_search' %}"><span class="glyphicon glyphicon-search"></span></a>
+	<a class="btn btn-custom hidden-xs" style="vertical-align:top;margin-top:-5px;" title="Search List" href="{% url 'view_list_search' %}"><span class="fa fa-search"></span></a>
 </td>
 
   {% if paginatorlist.paginator.count > 10 %}

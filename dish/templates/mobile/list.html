@@ -216,7 +216,7 @@ $(document).ready(function(){
 	{% if user.is_authenticated %}
 		{% if user.id = list.owner.user.id %}
 			<a id="delete" class="btn btn-custom btn-lg btn-block" data-toggle="modal" data-target="#modal_deletelist" title="Delete list">
-			<i class="glyphicon glyphicon-trash"></i> Delete list</a>
+			<i class="fa fa-trash" aria-hidden="true"></i> Delete list</a>
 		{% endif %}
 	{% endif %}
 	<a class="btn btn-custom btn-lg btn-block" href="{% url 'view_listnew' %}">Create New list</a>
@@ -270,10 +270,10 @@ $('#likeaction').click(function(){
 		success: function(data){
 			//data:(first char={1=liked,0=unliked} rest of char=total numer o likes)
 			if (data.charAt(0) == "0"){
-				$('#likeicon').attr("class","glyphicon glyphicon-thumbs-up icon-white");
+				$('#likeicon').attr("class","fa fa-thumbs-up icon-white");
 				}
 			if (data.charAt(0) == "1"){
-				$('#likeicon').attr("class","glyphicon glyphicon-thumbs-down icon-white");
+				$('#likeicon').attr("class","fa fa-thumbs-down icon-white");
 			}
 			//total number of likes starts at the second char of data
 			$('#likes').html(data.substr(1));

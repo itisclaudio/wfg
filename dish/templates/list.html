@@ -161,7 +161,7 @@ $(document).ready(function(){
 					{% if user.id = list.owner.user.id %}
 						<li><a data-toggle="modal" data-target="#modal_adddish"><i class="fa fa-plus" aria-hidden="true"></i> Add Dish</a></li>
 						<li><a href="{% url 'view_listedit' urlname=list.urlname%}"><i class="fa fa-pencil" aria-hidden="true"></i> Edit list </a></li>
-						<li><a id="delete" data-toggle="modal" data-target="#modal_deletelist" title="Delete list"><i class="glyphicon glyphicon-trash"></i> Delele list</a></li>
+						<li><a id="delete" data-toggle="modal" data-target="#modal_deletelist" title="Delete list"><i class="fa fa-trash" aria-hidden="true"></i> Delele list</a></li>
 					{% endif %}
 				{% endif %}
 				{% if user.is_authenticated %}
@@ -400,10 +400,10 @@ $('#likeaction').click(function(){
 		success: function(data){
 			//data:(first char={1=liked,0=unliked} rest of char=total numer o likes)
 			if (data.charAt(0) == "0"){
-				$('#likeicon').attr("class","glyphicon glyphicon-thumbs-up icon-white");
+				$('#likeicon').attr("class","fa fa-thumbs-up icon-white");
 				}
 			if (data.charAt(0) == "1"){
-				$('#likeicon').attr("class","glyphicon glyphicon-thumbs-down icon-white");
+				$('#likeicon').attr("class","fa fa-thumbs-down icon-white");
 			}
 			//total number of likes starts at the second char of data
 			$('#likes').html(data.substr(1));

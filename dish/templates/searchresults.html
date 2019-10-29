@@ -19,7 +19,7 @@
 	</td>
 	<td class="pull-right">
 		<a class="btn btn-custom" href="{% url 'view_searchadvance' %}" title="Advance Search">
-			<li class="glyphicon glyphicon-search icon-white"></li>
+			<li class="fa fa-search icon-white"></li>
 		</a>
 		<a class="btn btn-custom" title="Add New Cuisine" href="{% url 'view_cuisinenew' %}">Add Cuisine</a>
 	</td>
@@ -79,7 +79,7 @@
 	</td>
 	<td class="pull-right">
 		<a class="btn btn-custom" href="{% url 'view_searchadvance' %}" title="Advance Search">
-			<li class="glyphicon glyphicon-search icon-white"></li>
+			<li class="fa fa-search icon-white"></li>
 		</a>
 		<a class="btn btn-custom hidden-xs" title="New dish / photo" href="{% url 'view_dishphotonew' %}">New dish</a>
 	</td>
@@ -109,7 +109,7 @@
 					<p style="display:inline;" title="{{p.othernames }}">{{p.othernames|truncatechars:40 }}</p>
 				{% endif %}
 				<p style="margin-bottom: 0px;">
-					({{p.likestot}} <i id="likeicon"  title="Number of likes" class="glyphicon glyphicon-thumbs-up"></i>)
+					({{p.likestot}} <i id="likeicon"  title="Number of likes" class="fa fa-thumbs-up" aria-hidden="true"></i>)
 					({{p.picture__count}} <i class="fa fa-camera"  title="Number of photos"></i>)
 				</p>
 				{% if p.cuisines.all %}
@@ -145,7 +145,7 @@
 	</td>
 	<td class="pull-right">
 		<a class="btn btn-custom" href="{% url 'view_list_search' %}" title="List Search">
-			<li class="glyphicon glyphicon-search icon-white"></li>
+			<li class="fa fa-search icon-white"></li>
 		</a>
 		<a class="btn btn-custom" title="Add New Cuisine" href="{% url 'view_listnew' %}">Add List</a>
 	</td>

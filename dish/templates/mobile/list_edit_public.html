@@ -151,7 +151,7 @@
 						{{p.index}}. <b id="dishname_{{p.dish.id}}">{{p.dish.name|truncatechars:20}} </b>
 					</a>
 					{% if user.id = p.owner.user.id %}
-						<a id="{{p.dish.id}}" style="display:inline-block;" name="delete_{{p.dish.id}}" class="btn btn-custom pull-right" title="Delete dish form list"><i class="glyphicon glyphicon-remove"></i></a>
+						<a id="{{p.dish.id}}" style="display:inline-block;" name="delete_{{p.dish.id}}" class="btn btn-custom pull-right" title="Delete dish form list"><i class="fa fa-remove"></i></a>
 					{% endif %}
 					<div class="text-reg" id="{{p.dish.urlname}}" style="display:none;"></div>
 					<p class="text-reg" style="margin-bottom: 5px;">
