@@ -9,12 +9,12 @@
 
 {% block super-extra-head %}
 {% load static %}
-<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
 <!--Facebook tags (Start)-->
 <meta property="og:title"  content="{{object.dish}} photo by {{object.owner.user.username}}" />
 <meta property="og:image" content="https://worldfood.guide/media/{{object.location}}" />
 <meta name="description" content="{{ object.dish.description|truncatechars:170 }}"/>
 <!--Facebook tags (End)-->
+<script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
 <!--Sharethis script (Start)-->
 <script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5bf2e117d741e40011ae96ac&product=social-ab' async='async'></script>
 <!--Sharethis script (End)-->
