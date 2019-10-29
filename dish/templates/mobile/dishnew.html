@@ -47,7 +47,7 @@
 			{% for p in list %}
 				<tbody>
 				<tr>
-					<td><a class="btn btn-lg btn-custom btn-block" href="/dish/{{p.urlname}}/"><i class="glyphicon glyphicon-eye-open-white"></i> {{ p.name|truncatechars:20 }}</a>
+					<td><a class="btn btn-lg btn-custom btn-block" href="/dish/{{p.urlname}}/"><i class="fa fa-eye" aria-hidden="true"></i> {{ p.name|truncatechars:20 }}</a>
 					{% if p.othernames %}
 						<p class="footer-rest" style="margin-top: 6px;">{{ p.othernames|truncatewords:5 }}</p>
 					{% endif %}
@@ -73,7 +73,7 @@
 					{% endif %}
 					</td>
 					{% if user.is_authenticated %}
-						<td><a class="btn btn-default btn-lg" href="/dishedit/{{ p.id }}/"><li class="glyphicon glyphicon-pencil"></li> Edit </a></td>
+						<td><a class="btn btn-default btn-lg" href="/dishedit/{{ p.id }}/"><i class="fa fa-pencil" aria-hidden="true"></i> Edit </a></td>
 					{% endif %}
 				</tr>
 				</tbody>

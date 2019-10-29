@@ -24,8 +24,8 @@
 
 <!--
 {% if user.id = list.owner.user.id %}
-	<a class="btn btn-custom btn-lg btn-block" href="{% url 'view_listedit' urlname=list.urlname%}">Edit info <i class="glyphicon glyphicon-arrow-up"></i></a>
-	<a class="btn btn-custom btn-lg btn-block" href="{% url 'view_listindexedit' urlname=list.urlname%}">Change dishe's order <i class="glyphicon glyphicon-arrow-down"></i></a>
+	<a class="btn btn-custom btn-lg btn-block" href="{% url 'view_listedit' urlname=list.urlname%}">Edit info <i class="fa fa-arrow-up" aria-hidden="true"></i></a>
+	<a class="btn btn-custom btn-lg btn-block" href="{% url 'view_listindexedit' urlname=list.urlname%}">Change dishe's order <i class="fa fa-arrow-down" aria-hidden="true"></i></a>
 {% endif %}
 -->
 <h2>Dishes in list:</h2>
@@ -57,7 +57,7 @@
 		{{ form.non_field_errors }}
 		<div id="insert" class="insert"></div>
 		<div class="col-xs-12" id="div_input" name="div_input" style="padding:2px 0px;">
-			<label for="id_auto">Add dishes: <i class="glyphicon glyphicon-arrow-up"></i></label>
+			<label for="id_auto">Add dishes: <i class="fa fa-arrow-up" aria-hidden="true"></i></label>
 			<input class="form-control ui-autocomplete-input" id="id_auto" name="auto" type="text"  placeholder="type dish here.." autocomplete="off"/>
 		</div>
 		<br clear="all"/>
