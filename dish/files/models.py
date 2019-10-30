@@ -466,6 +466,9 @@ class Picture(models.Model):
 		
 	def save(self):
 		##** Done with lambda in AWS S3, Done manually localy
+		print "self.location: "+str(self.location)
+		print "self.urlname: "+self.urlname
+		print "in save method in Picture model"
 		if settings.LOCAL_DEV:
 			#Test
 			file = self.location.path.encode('utf-8')
@@ -476,25 +479,30 @@ class Picture(models.Model):
 				print "filenamewhole: {}".format(filenamewhole)
 				filenamewhole = filenamewhole.replace("dishes/", "")
 				filename, ext = os.path.splitext(filenamewhole)
-				cad = settings.UPLOAD_DISH + '/'
-				fileThum = cad+filename+'-thum'+ext
-				fileMed = cad+filename+'-med'+ext
-				fileReg = cad+filename+'-reg'+ext
-				urlname = self.dish.urlname
-				newname1 = cad+urlname+'_'+str(self.id)+ext
-				newThum =  cad+urlname+'_'+str(self.id)+'-thum'+ext
-				newMed =  cad+urlname+'_'+str(self.id)+'-med'+ext
-				newReg =  cad+urlname+'_'+str(self.id)+'-reg'+ext
-				if os.path.exists(file):
-					os.rename(file, newname1)
-				if os.path.exists(fileThum):
-					os.rename(fileThum, newThum)
-				if os.path.exists(fileMed):
-					os.rename(fileMed, newMed)
-				if os.path.exists(fileReg):
-					os.rename(fileReg, newReg)
-				self.urlname = urlname+'_'+str(self.id)
-				self.location = 'dishes/'+urlname+'_'+str(self.id)+ext
+				print "filename: "+str(filename)
+				if filename != self.urlname:
+					print "photo has changed, update photo file names"
+					cad = settings.UPLOAD_DISH + '/'
+					fileThum = cad+filename+'-thum'+ext
+					fileMed = cad+filename+'-med'+ext
+					fileReg = cad+filename+'-reg'+ext
+					urlname = self.dish.urlname
+					newname1 = cad+urlname+'_'+str(self.id)+ext
+					newThum =  cad+urlname+'_'+str(self.id)+'-thum'+ext
+					newMed =  cad+urlname+'_'+str(self.id)+'-med'+ext
+					newReg =  cad+urlname+'_'+str(self.id)+'-reg'+ext
+					if os.path.exists(file):
+						print "renaiming: "+str(file)
+						print "to: "+newname1
+						os.rename(file, newname1)
+					if os.path.exists(fileThum):
+						os.rename(fileThum, newThum)
+					if os.path.exists(fileMed):
+						os.rename(fileMed, newMed)
+					if os.path.exists(fileReg):
+						os.rename(fileReg, newReg)
+					self.urlname = urlname+'_'+str(self.id)
+					self.location = 'dishes/'+urlname+'_'+str(self.id)+ext
 				#pic.save()
 				super(Picture, self).save()
 				return
@@ -550,37 +558,43 @@ class Picture(models.Model):
 				basename = os.path.basename(self.location.url)
 				filename, extension = os.path.splitext(basename)
 				
-				## Getting current names
-				oldkey = 'media/dishes/{}{}'.format(filename, extension)
-				oldkey_reg = 'media/dishes/{}-reg{}'.format(filename, extension)
-				oldkey_med = 'media/dishes/{}-med{}'.format(filename, extension)
-				oldkey_thum = 'media/dishes/{}-thum{}'.format(filename, extension)
-				
-				## Getting new names
-				newkey = "media/dishes/{}{}".format(self.urlname,extension)
-				newkey_reg = "media/dishes/{}-reg{}".format(self.urlname,extension)
-				newkey_med = "media/dishes/{}-med{}".format(self.urlname,extension)
-				newkey_thum = "media/dishes/{}-thum{}".format(self.urlname,extension)
-				
-				## Deleting files but making a copy with the new name first
-				s3.Object(bucket,newkey).copy_from(CopySource='wfgs/'+oldkey)
-				s3.Object(bucket,oldkey).delete()
-				s3.Object(bucket,newkey_reg).copy_from(CopySource='wfgs/'+oldkey_reg)
-				s3.Object(bucket,oldkey_reg).delete()
-				s3.Object(bucket,newkey_med).copy_from(CopySource='wfgs/'+oldkey_med)
-				s3.Object(bucket,oldkey_med).delete()
-				s3.Object(bucket,newkey_thum).copy_from(CopySource='wfgs/'+oldkey_thum)
-				s3.Object(bucket,oldkey_thum).delete()
-				
-				## Rename photo in "dishes_original" folder
-				key_original = 'media/dishes_original/{}{}'.format(filename, extension)
-				key_original_new = "media/dishes_original/{}{}".format(self.urlname,extension)
-				s3.Object(bucket,key_original_new).copy_from(CopySource='wfgs/'+key_original)
-				s3.Object(bucket,key_original).delete()
-				
-				## Update photo with new location
-				new_location = 'dishes/{}{}'.format(self.urlname, extension)
-				self.location = new_location
+				print "self.urlname: "+self.urlname
+				print "filename: "+str(filename)
+				## If urlname is equal than the new name then we don't need to update file names
+				if filename != self.urlname:
+					print "photo has changed, update photo file names"
+					## Getting current names
+					oldkey = 'media/dishes/{}{}'.format(filename, extension)
+					oldkey_reg = 'media/dishes/{}-reg{}'.format(filename, extension)
+					oldkey_med = 'media/dishes/{}-med{}'.format(filename, extension)
+					oldkey_thum = 'media/dishes/{}-thum{}'.format(filename, extension)
+					
+					## Getting new names
+					newkey = "media/dishes/{}{}".format(self.urlname,extension)
+					newkey_reg = "media/dishes/{}-reg{}".format(self.urlname,extension)
+					newkey_med = "media/dishes/{}-med{}".format(self.urlname,extension)
+					newkey_thum = "media/dishes/{}-thum{}".format(self.urlname,extension)
+					
+					## Deleting files but making a copy with the new name first
+					s3.Object(bucket,newkey).copy_from(CopySource='wfgs/'+oldkey)
+					s3.Object(bucket,oldkey).delete()
+					s3.Object(bucket,newkey_reg).copy_from(CopySource='wfgs/'+oldkey_reg)
+					s3.Object(bucket,oldkey_reg).delete()
+					s3.Object(bucket,newkey_med).copy_from(CopySource='wfgs/'+oldkey_med)
+					s3.Object(bucket,oldkey_med).delete()
+					s3.Object(bucket,newkey_thum).copy_from(CopySource='wfgs/'+oldkey_thum)
+					s3.Object(bucket,oldkey_thum).delete()
+					
+					## Rename photo in "dishes_original" folder
+					key_original = 'media/dishes_original/{}{}'.format(filename, extension)
+					key_original_new = "media/dishes_original/{}{}".format(self.urlname,extension)
+					s3.Object(bucket,key_original_new).copy_from(CopySource='wfgs/'+key_original)
+					s3.Object(bucket,key_original).delete()
+					
+					## Update photo with new location
+					new_location = 'dishes/{}{}'.format(self.urlname, extension)
+					self.location = new_location
+				print "Photo name hasn't changed, no need to update picture files names"
 			## Save actual field
 			super(Picture, self).save()
 		UpdateMainPhoto(self.dish.pk)#Updates
