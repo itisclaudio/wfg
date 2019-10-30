@@ -588,8 +588,10 @@ class Picture(models.Model):
 					## Rename photo in "dishes_original" folder
 					key_original = 'media/dishes_original/{}{}'.format(filename, extension)
 					key_original_new = "media/dishes_original/{}{}".format(self.urlname,extension)
-					s3.Object(bucket,key_original_new).copy_from(CopySource='wfgs/'+key_original)
-					s3.Object(bucket,key_original).delete()
+					if key_original != "":
+						## check that original exist, old photos don't have it
+						s3.Object(bucket,key_original_new).copy_from(CopySource='wfgs/'+key_original)
+						s3.Object(bucket,key_original).delete()
 					
 					## Update photo with new location
 					new_location = 'dishes/{}{}'.format(self.urlname, extension)
