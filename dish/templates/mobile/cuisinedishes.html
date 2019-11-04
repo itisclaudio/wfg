@@ -7,7 +7,7 @@
 
 
 {% block super-extra-head %}
-	
+	{% load static %}
 	<meta name="description" content="{{ obj.description|truncatechars:170 }}"/>
 	<meta property="og:title"  content="{{obj.name}} Cuisine" />
 	<meta property="og:description" content="{{ obj.description|truncatechars:170 }}" />
@@ -107,15 +107,15 @@
 	   {% endif %}
 		<div class="col-xs-5" style="padding-left:0px; padding-right:0px;">
 			{% if p.favphoto %}
-				<img src="/media/{{p.favphoto.filename}}-med{{p.favphoto.extension}}" class="img-rounded" width="100%">
+				<img src="{{p.favphotomed}}" class="img-rounded" width="100%">
 			{% else %}
-				<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+				<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%">
 			{% endif %}
 		</div>
 	  </a>
   {% endfor %}
 </div>
-{## END NEW ##}
+{## END DISHES ##}
 
 <div class="row" style="margin:2px;">
 	<div class="col-xs-3" style="padding:1px;">

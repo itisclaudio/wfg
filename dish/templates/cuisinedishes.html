@@ -69,9 +69,9 @@
   {% for p in paginatorlist.object_list %}
 	  <div class="list-group-item row" style="margin-left:0px; margin-right:0px; padding:4px;">
 		<div class="col-sm-3 col-xs-12" style="padding-left:2px;">
-        {% if p.favphoto %}
-			<a href="/photo/{{p.favphoto.urlname}}">
-				<img src="/media/{{p.favphoto.filename}}-med{{p.favphoto.extension}}" class="img-rounded" width="100%">
+        {% if p.photo_main %}
+			<a href="/dish/{{p.urlname}}">
+				<img src="{{p.favphotomed}}" class="img-rounded" width="100%">
 			</a>
         {% else %}
 			<a href="/photonew/{{p.id}}/">
