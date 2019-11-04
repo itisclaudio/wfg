@@ -1605,30 +1605,33 @@ def photocrop_view(request, id):
 					max.save(cad+filename+ext)
 			else:
 				print "In photocrop_view production"
-				## Ir original file exists, work with it
 				
+				import boto3
+				payload = {"filename":filename, "ext":ext, "x":x, "y":y, "w":w, "h":h}
+				print "filename: {}, ext: {}".format(payload['filename'],payload['ext'])
+				client = boto3.client('lambda',
+					region_name= 'us-west-2',
+					aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+					aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
+				
+				## Ir original file exists, work with it
 				photopath = "https://wfgs.s3.amazonaws.com/media/dishes_original/{}{}".format(filename, ext)
 				import requests
 				request = requests.get(photopath)
 				if request.status_code == 200:
 					print "photo original exists!"
+					FuncName = "wfgOriginalPhotoCrop"
 				else:
+					FuncName = "wfgPhotoCrop"
 					##Photo original doesn't exists, work with thumbs
 					# create lambda client
 					print "photo original Doesn't exists!"
-					import boto3
-					payload = {"filename":filename, "ext":ext, "x":x, "y":y, "w":w, "h":h}
-					print "filename: {}, ext: {}".format(payload['filename'],payload['ext'])
-					client = boto3.client('lambda',
-						region_name= 'us-west-2',
-						aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-						aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
-					result = client.invoke(FunctionName='wfgPhotoCrop',
-						InvocationType='RequestResponse',                                      
-						Payload=json.dumps(payload))
-					#range = result['photoid']
-					print "Finishes lambda"
-					print result
+				result = client.invoke(FunctionName=FuncName,
+					InvocationType='RequestResponse',                                      
+					Payload=json.dumps(payload))
+				#range = result['photoid']
+				print "Finishes lambda"
+				print result
 			return HttpResponseRedirect('/photo/%s/%d/'%(photo.urlname,1))
 	form = photoCrop_Form()
 	#ctx = {'form':form, 'information':info,'photo':photo,'w1':w1,'h1':h1}
