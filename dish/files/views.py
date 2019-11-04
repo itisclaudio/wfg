@@ -1607,7 +1607,7 @@ def photocrop_view(request, id):
 				print "In photocrop_view production"
 				## Ir original file exists, work with it
 				
-				photopath = "https://wfgs.s3.amazonaws.com/media/dishes_original/{}{}".format(filename, extension)
+				photopath = "https://wfgs.s3.amazonaws.com/media/dishes_original/{}{}".format(filename, ext)
 				import requests
 				request = requests.get(photopath)
 				if request.status_code == 200:
