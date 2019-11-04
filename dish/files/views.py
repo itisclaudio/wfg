@@ -1502,6 +1502,7 @@ def photo_redirect_view(request,id):
 	pho = Picture.objects.get(pk=id)
 	return photourl_view(request,pho.urlname)
 
+#000
 @login_required(login_url=singin_url)
 @verified_email_required
 def photocrop_view(request, id):
@@ -1604,20 +1605,30 @@ def photocrop_view(request, id):
 					max.save(cad+filename+ext)
 			else:
 				print "In photocrop_view production"
-				# create lambda client
-				import boto3
-				payload = {"filename":filename, "ext":ext, "x":x, "y":y, "w":w, "h":h}
-				print "filename: {}, ext: {}".format(payload['filename'],payload['ext'])
-				client = boto3.client('lambda',
-					region_name= 'us-west-2',
-					aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-					aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
-				result = client.invoke(FunctionName='wfgPhotoCrop',
-                    InvocationType='RequestResponse',                                      
-                    Payload=json.dumps(payload))
-				#range = result['photoid']
-				print "Finishes lambda"
-				print result
+				## Ir original file exists, work with it
+				
+				photopath = "https://wfgs.s3.amazonaws.com/media/dishes_original/{}{}".format(filename, extension)
+				import requests
+				request = requests.get(photopath)
+				if request.status_code == 200:
+					print "photo original exists!"
+				else:
+					##Photo original doesn't exists, work with thumbs
+					# create lambda client
+					print "photo original Doesn't exists!"
+					import boto3
+					payload = {"filename":filename, "ext":ext, "x":x, "y":y, "w":w, "h":h}
+					print "filename: {}, ext: {}".format(payload['filename'],payload['ext'])
+					client = boto3.client('lambda',
+						region_name= 'us-west-2',
+						aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+						aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
+					result = client.invoke(FunctionName='wfgPhotoCrop',
+						InvocationType='RequestResponse',                                      
+						Payload=json.dumps(payload))
+					#range = result['photoid']
+					print "Finishes lambda"
+					print result
 			return HttpResponseRedirect('/photo/%s/%d/'%(photo.urlname,1))
 	form = photoCrop_Form()
 	#ctx = {'form':form, 'information':info,'photo':photo,'w1':w1,'h1':h1}
