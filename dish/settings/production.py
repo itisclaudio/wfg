@@ -56,8 +56,8 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 #For Amazon S3
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-#AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
-AWS_STORAGE_BUCKET_NAME = "s3-us-west-2"
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+#AWS_STORAGE_BUCKET_NAME = "s3-us-west-2"
 AWS_S3_REGION_NAME = 'us-west-2'
 #AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_FILE_OVERWRITE = False
@@ -71,7 +71,8 @@ AWS_QUERYSTRING_AUTH = False#Doesn't add signature after media files
 MEDIAFILES_LOCATION = 'media'
 DEFAULT_FILE_STORAGE = 'custom_storages.MediaRootS3BotoStorage'
 STATICFILES_STORAGE = 'custom_storages.StaticRootS3BotoStorage'
-S3_URL = 'https://{}.s3-{}.amazonaws.com/'.format(AWS_STORAGE_BUCKET_NAME,AWS_S3_REGION_NAME)
+S3_URL = 'https://wfgs.s3-us-west-2.amazonaws.com/'
+#S3_URL = 'https://{}.s3-{}.amazonaws.com/'.format(AWS_STORAGE_BUCKET_NAME,AWS_S3_REGION_NAME)
 #S3_URL = 'https://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 
 # If we're not using our S3 backend storage we need to serve the media files via path
