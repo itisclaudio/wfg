@@ -7,7 +7,8 @@ StaticRootS3BotoStorage = lambda: S3Boto3Storage(location='static') #'static' is
 #MediaRootS3BotoStorage = lambda: S3Boto3Storage(location='media')
 
 class MediaRootS3BotoStorage(S3Boto3Storage):
-	#bucket_name = settings.AWS_STORAGE_BUCKET_NAME
-	bucket_name = "s3-us-west-2"
+	bucket_name = settings.AWS_STORAGE_BUCKET_NAME
+	#bucket_name = "wfgs.s3-us-west-2"
+	region_name='us-west-2'
 	#location = settings.MEDIA_URL
 	location = 'media'
