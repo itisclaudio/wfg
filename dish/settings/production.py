@@ -70,7 +70,8 @@ MEDIAFILES_LOCATION = 'media'
 DEFAULT_FILE_STORAGE = 'custom_storages.MediaRootS3BotoStorage'
 STATICFILES_STORAGE = 'custom_storages.StaticRootS3BotoStorage'
 S3DIRECT_REGION = 'us-west-2'
-S3_URL = 'https://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
+S3_URL = 'https://{}.s3-{}.amazonaws.com/'.format(AWS_STORAGE_BUCKET_NAME,S3DIRECT_REGION)
+#S3_URL = 'https://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 
 # If we're not using our S3 backend storage we need to serve the media files via path
 #if DEFAULT_FILE_STORAGE == "custom_storages.MediaRootS3BotoStorage":
