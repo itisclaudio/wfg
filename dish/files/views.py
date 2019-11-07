@@ -755,7 +755,7 @@ def dishphotonew_view(request,id_cui=None,name=None):
 						p.save()
 						## code that waits until S3 finished creating thumbnails with lambda (only production)
 						#photopath = "https://wfgs.s3.amazonaws.com/media/{}".format(p.location)
-						photopath = settings.MEDIA_URL+p.location
+						photopath = settings.MEDIA_URL+str(p.location)
 						print "photopath: {}".format(photopath)
 						import requests
 						import time
