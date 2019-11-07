@@ -57,8 +57,8 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = 'us-west-2'
 #AWS_STORAGE_BUCKET_NAME = "s3-us-west-2"
-#AWS_S3_REGION_NAME = 'us-west-2'
 #AWS_DEFAULT_REGION = 'us-west-2'
 #AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_FILE_OVERWRITE = False
@@ -70,6 +70,9 @@ AWS_QUERYSTRING_AUTH = False#Doesn't add signature after media files
 #MEDIA_URL = "https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/"
 #MEDIA_URL = "https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/"
 MEDIAFILES_LOCATION = 'media'
+
+#### Adding this will tell django to save uploaded files to S3 bucket
+#### and use S3 URL to link them
 DEFAULT_FILE_STORAGE = 'custom_storages.MediaRootS3BotoStorage'
 STATICFILES_STORAGE = 'custom_storages.StaticRootS3BotoStorage'
 S3_URL = 'https://wfgs.s3-us-west-2.amazonaws.com/'
@@ -90,7 +93,7 @@ MEDIA_ROOT = os.path.join(S3_URL, "media")
 #MEDIA_ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.dirname(__file__)),'media/'))
 #MEDIA_ROOT = 'https://worldfood.guide/media/'
 STATIC_URL = S3_URL + 'static/'
-MEDIA_URL = S3_URL + 'media/'
+MEDIA_URL = S3_URL + 'media/' #Also used in views to check if photo has been uloaded
 ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 
 #STATIC_URL = 'https://%s.s3.amazonaws.com/static/' % AWS_STORAGE_BUCKET_NAME

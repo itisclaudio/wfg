@@ -650,7 +650,7 @@ def dishedit_view(request,id):
 	form=dishForm(initial={'name':f.name,'othernames':f.othernames,'ingredients':f.ingredients,'description':f.description, 'features':f.features.all})
 	ctx = {'form':form,'dish':f,'cuisines':cui_query, 'cuisines_h':cui_query, 'features':query_features, 'features_selected':current_query_features, 'feature_current_id_list':feature_current_id_list,'MEDIA_URL':settings.MEDIA_URL}
 	return render_to_response('dishedit.html',ctx,context_instance=RequestContext(request))
-
+#111
 @login_required(login_url=singin_url)
 @verified_email_required
 def dishphotonew_view(request,id_cui=None,name=None):
@@ -748,8 +748,33 @@ def dishphotonew_view(request,id_cui=None,name=None):
 					p.save()
 					email_url=request.build_absolute_uri('/')+'photo/%s/'%(p.urlname)
 					SaveEmailQueue(req_user.username,'Photo','Added',email_url)
-				return HttpResponseRedirect('/dish/%s/'%(d.urlname))
-			else:#No new dish was created, the used selected one from the system. Check for photo
+					if not settings.LOCAL_DEV:
+						##Change location from dishes_original to dishes
+						loc = str(p.location)
+						p.location = loc.replace("dishes_original/", "dishes/")
+						p.save()
+						## code that waits until S3 finished creating thumbnails with lambda (only production)
+						#photopath = "https://wfgs.s3.amazonaws.com/media/{}".format(p.location)
+						photopath = settings.MEDIA_URL+p.location
+						print "photopath: {}".format(photopath)
+						import requests
+						import time
+						for x in range(20):
+							## If the request of the photo is 200, it exists and redirects to photo
+							print "Second in try: "+str(x)
+							request = requests.get(photopath)
+							if request.status_code == 200:
+								print "resoleved, redirecting to /photo/"
+								return HttpResponseRedirect('/dish/%s/'%(d.urlname))
+							else:
+								## If request is not 200, lambda is still working, waits 1 second and ask again
+								x=+1
+								time.sleep(1)
+						return HttpResponseRedirect('/dish/%s/'%(d.urlname))
+					else:
+						## If we are in development, it doesn't need to wait for lambda
+						return HttpResponseRedirect('/dish/%s/'%(d.urlname))
+			else:#No new dish was created, the user selected one from the system. Check for photo
 				if photo:
 					dish = Dish.objects.get(id=dish_selected)
 					p = Picture()
@@ -771,7 +796,32 @@ def dishphotonew_view(request,id_cui=None,name=None):
 					p.save() # Guardar la informacion
 					email_url=request.build_absolute_uri('/')+'photo/%s/'%(p.urlname)
 					SaveEmailQueue(req_user.username,'Photo','Added',email_url)
-					return HttpResponseRedirect('/photo/%s'%(p.urlname))
+					if not settings.LOCAL_DEV:
+						##Change location from dishes_original to dishes
+						loc = str(p.location)
+						p.location = loc.replace("dishes_original/", "dishes/")
+						p.save()
+						## code that waits until S3 finished creating thumbnails with lambda (only production)
+						#photopath = "https://wfgs.s3.amazonaws.com/media/{}".format(p.location)
+						photopath = settings.MEDIA_URL+p.location
+						print "photopath: {}".format(photopath)
+						import requests
+						import time
+						for x in range(20):
+							## If the request of the photo is 200, it exists and redirects to photo
+							print "Second in try: "+str(x)
+							request = requests.get(photopath)
+							if request.status_code == 200:
+								print "resoleved, redirecting to /photo/"
+								return HttpResponseRedirect('/dish/%s/'%(d.urlname))
+							else:
+								## If request is not 200, lambda is still working, waits 1 second and ask again
+								x=+1
+								time.sleep(1)
+						return HttpResponseRedirect('/dish/%s/'%(d.urlname))
+					else:
+						## If we are in development, it doesn't need to wait for lambda
+						return HttpResponseRedirect('/dish/%s/'%(d.urlname))
 		else:
 			### Form not valid, Return ###
 			#print "Form not valid: "+str(form.errors.as_text)
@@ -1381,7 +1431,7 @@ def photosfull_view(request):
 def photouploadmain_view(request):
 	return render_to_response('photouploadmain.html',context_instance=RequestContext(request))
 
-
+#000
 @login_required(login_url=singin_url)
 @verified_email_required
 def photonew_view(request, id):
@@ -1415,6 +1465,7 @@ def photonew_view(request, id):
 			profile = userProfile.objects.get(user=req_user)
 			p.owner = profile
 			p.save() # Guardar la informacion
+			print "Before, p.location: {}".format(p.location)
 			loc = str(p.location)
 			#dishes_original/bud_light_beer_35.jpg 
 			p.location = loc.replace("dishes_original/", "dishes/")
@@ -1878,7 +1929,6 @@ def searchquick_view(request):
 	#return redirect('searchadvance_view')
 	return searchadvance_view(request)
 
-#111
 def dish_search(string_sent):
 	#print "--------------in dish_search()--------------"
 	#string_stripped = string_sent.strip()
@@ -1949,7 +1999,7 @@ def dish_search(string_sent):
 							dishes_count = len(dishes_result)
 							#print "Results with combined words: "+str(dishes_count)
 	return dishes_result
-#111
+
 def searchquickres_view(request,alert=None,search=None,page=None):
 	#print "---------in searchquickres_view()---------------"
 	cui_count = 0 #result counter for cuisines
