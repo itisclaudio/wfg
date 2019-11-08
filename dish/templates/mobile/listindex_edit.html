@@ -95,9 +95,9 @@
             <td width="40%"  style="padding:2px;">
 				{% if p.dish.favphoto %}
 					<a href="/photo/{{p.dish.favphoto.urlname}}">
-					<img src="/media/{{ p.dish.favphoto.filename }}-thum{{p.dish.favphoto.extension}}" class="img-rounded" width="100%"></a>
+					<img src="{{ p.dish.favphotothum }}" class="img-rounded" width="100%"></a>
 				{% else %}
-					<a href="/photonew/{{p.dish.id}}/"><img src="/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
+					<a href="/photonew/{{p.dish.id}}/"><img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%"></a>
 				{% endif %}
 			</td>
 		</tr>
