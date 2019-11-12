@@ -23,7 +23,7 @@ $(document).ready(function(){
 		}
 		var new_url = $('#photo' + nextp).attr('name');
 	  $("#counter").html(nextp+1);
-	  $("#image_element").attr("src", '/media/' + new_url);
+	  $("#image_element").attr("src", new_url);
 	  $("#image_element").attr("name", nextp);
 	  $("#image_link").attr("href", '/fullscreen_photo/'+$('#data_pic_id' + nextp).html());
 	  $("#title").html($('#data_name' + nextp).html());
@@ -53,7 +53,7 @@ $(document).ready(function(){
 		}
 		var new_url = $('#photo' + nextp).attr('name');
 	  $("#counter").html(nextp+1);
-	  $("#image_element").attr("src", '/media/' + new_url);
+	  $("#image_element").attr("src", new_url);
 	  $("#image_element").attr("name", nextp);
 	  $("#image_link").attr("href", '/fullscreen_photo/'+$('#data_pic_id' + nextp).html());
 	  $("#title").html($('#data_name' + nextp).html());
@@ -134,7 +134,7 @@ $(window).bind('resize',positionPopup);
 <tr>
 <td style="padding:0px; vertical-align: middle;border-top:none;">
 	<div align="center"><a href="#" id="prev">
-	  <img src="/media/images/arrow-left.png" width="50px" alt="previous" />
+	  <img src="{% static 'images/arrow-left.png' %}" width="50px" alt="previous" />
 	  </a></div>
 </td>
 <td style="padding:0px; border-top:none;">
@@ -146,7 +146,7 @@ $(window).bind('resize',positionPopup);
 <td valign="middle" style="padding:0px; vertical-align: middle; border-top:none;">
 <div align="center">
 <a href="#" id="next"/>
-	<img src="/media/images/arrow-right.png" width="50px" alt="next" />
+	<img src="{% static 'images/arrow-right.png' %}" width="50px" alt="next" />
 		</a></div>
 </td>
 </tr>
@@ -159,7 +159,7 @@ $(window).bind('resize',positionPopup);
 <img id="image_element" name="0" src="/media/{{ list.0.location }}" width="100%">
 </a>
 -->
-<a href="#" id="pop"><img id="image_element" name="0" src="/media/{{ list.0.location }}" class="img-rounded" width="100%"></a>
+<a href="#" id="pop"><img id="image_element" name="0" src="{{list.0.location.url}}" class="img-rounded" width="100%"></a>
 
 <a id="location" href="/dish/{{list.0.dish.urlname}}"><h2 id="title" name="name">{{ list.0.dish.name }}</h2></a>
 <div class="well-1" id="lables" name="dd">
@@ -182,7 +182,7 @@ $(window).bind('resize',positionPopup);
 </div>
 <div id="list_photos" name="{{ list|length }}" style="display:none">
 	{% for t in list %}
-		<div id="photo{{forloop.counter0}}" name="{{t.location}}">photo{{forloop.counter0}} - {{t.location}}</div>
+		<div id="photo{{forloop.counter0}}" name="{{t.location.url}}">photo{{forloop.counter0}} - {{t.location.url}}</div>
 		<div id="data_id{{forloop.counter0}}">{{t.dish.urlname}}</div>
 		<div id="data_pic_id{{forloop.counter0}}">{{t.id}}</div>
 		<div id="data_name{{forloop.counter0}}">{{t.dish.name}}</div>
