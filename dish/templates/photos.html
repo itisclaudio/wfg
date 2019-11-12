@@ -167,8 +167,7 @@
 <img id="image_element" name="0" src="/media/{{ list.0.location }}" width="100%">
 </a>
 -->
-<a href="#" id="pop"><img id="image_element" name="0" src="/media/{{ list.0.location }}" class="img-rounded" width="100%"></a>
-
+<a href="#" id="pop"><img id="image_element" name="0" src="{{list.0.filename}}-med{{list.0.extension}}" class="img-rounded" width="100%"></a>
 <a id="location" href="/dish/{{list.0.dish.urlname}}"><h2 id="title" name="name">{{ list.0.dish.name }}</h2></a>
 <div class="well" id="lables" name="dd">
 <p>Cuisine(s): 
@@ -189,8 +188,8 @@
 <p>Date Uploaded: <b id="uploaded">{{ list.0.datetime }}</b></p>
 <p id="comments">{{list.0.comments}}</p>
 </div>
-<!--<div id="list_photos" name="{{ list|length }}">-->
-<div id="list_photos" name="{{ list|length }}" style="display:none">
+<div id="list_photos" name="{{ list|length }}">
+<!--<div id="list_photos" name="{{ list|length }}" style="display:none">-->
 	{% for t in list %}
 		<b>Counter:</b> {{forloop.counter0}}<br>
 		<p style="display:inline;"><b>Photo:</b> <div style="display:inline;" id="photo{{forloop.counter0}}" name="{{t.location}}">photo{{forloop.counter0}} - {{t.location}}</div></p>
