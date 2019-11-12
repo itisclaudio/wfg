@@ -142,7 +142,7 @@
 						<img id="url_{{p.dish.id}}" src="{{ p.dish.favphotothum}}" class="img-rounded" width="100%"></a>
 					{% else %}
 						<a href="/photonew/{{p.dish.id}}/">
-							<img  id="url_{{p.dish.id}}" src="/media/images/upload-med.jpg" class="img-rounded" width="100%"></a>
+							<img  id="url_{{p.dish.id}}" src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%"></a>
 					{% endif %}
 					<div id="{{p.dish.urlname}}" style="display:none;"></div>
 				</td>
@@ -287,7 +287,7 @@ function searchSuccess(json)
 			$('#modal-image').attr('src', json.favphoto);
 		}
 		else{
-			$('#modal-image').attr('src', "/media/images/upload-med.jpg");
+			$('#modal-image').attr('src', "{% static 'images/upload-med.jpg' %}");
 			};
 		if (json.description != "0"){
 			$('#modal-dishdescription').html(json.description.substring(0, 200));
