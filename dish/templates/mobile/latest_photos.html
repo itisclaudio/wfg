@@ -93,7 +93,7 @@
 	   {% endif %}
 		<div class="col-xs-5" style="padding-left:0px; padding-right:0px;">
 			{% if p.location %}
-				<img src="{{p.filename}}-med{{p.extension}}" class="img-rounded" width="100%">
+				<img src="{{p.dish.favphotomed}}" class="img-rounded" width="100%">
 			{% else %}
 				<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%">
 			{% endif %}
