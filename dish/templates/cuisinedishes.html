@@ -23,9 +23,9 @@
 	<meta property="og:title"  content="{{obj.name}} Cuisine" />
 	<meta property="og:description" content="{{ obj.description|truncatechars:170 }}" />
 	{% if fav_pic.favphoto %}
-		<meta property="og:image" content="http://worldfood.guide/media/{{fav_pic.favphoto.filename}}-reg{{fav_pic.favphoto.extension}}" />
+		<meta property="og:image" content="https://worldfood.guide/media/{{fav_pic.favphoto.filename}}-reg{{fav_pic.favphoto.extension}}" />
 	{% else %}
-		<meta property="og:image" content="http://worldfood.guide/media/images/worldfoodguide.png" />
+		<meta property="og:image" content="https://worldfood.guide/media/images/worldfoodguide.png" />
 	{% endif %}
 	
 {% endblock %}
@@ -75,7 +75,7 @@
 			</a>
         {% else %}
 			<a href="/photonew/{{p.id}}/">
-				<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+				<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%">
 			</a>
         {% endif %}
 		</div>
