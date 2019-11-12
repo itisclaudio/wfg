@@ -4,11 +4,15 @@
 <head>
 <title>Dish Photos Fullscreen</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link rel="icon" type="image/png" sizes="32x32" href="http://worldfood.guide/media/images/icons/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="96x96" href="http://worldfood.guide/media/images/icons/favicon-96x96.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="http://worldfood.guide/media/images/icons/favicon-16x16.png">
-<link rel="shortcut icon" type="image/x-icon" href="http://worldfood.guide/media/images/icons/favicon.ico" >
-<link rel="icon" href="/media/images/main_icon_32.png" sizes="32x32">
+<link rel="icon" type="image/png" sizes="32x32" href="https://worldfood.guide/media/images/icons/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="https://worldfood.guide/media/images/icons/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="https://worldfood.guide/media/images/icons/favicon-16x16.png">
+<link rel="shortcut icon" type="image/x-icon" href="https://worldfood.guide/media/images/icons/favicon.ico" >
+
+<link href="{% static 'images/icons/favicon-16x16.png' %}" rel="icon" type="image/x-icon">
+{# For home screen icons in android/apple: #}
+<link rel="apple-touch-icon" sizes="128x128" href="{% static 'images/icons/apple-icon.png' %}">
+
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <link href="{% static 'css/desktop.css' %}" rel="stylesheet" type="text/css" media="screen" />
@@ -39,7 +43,7 @@ $("#next").click(function(){
 		var nextp = parseInt(current) + 1;
 	}
 	var new_url = $('#photo' + nextp).attr('name');
-  $("#image_element").attr("src", '/media/' + new_url);
+  $("#image_element").attr("src", new_url);
   $("#image_element").attr("name", nextp);
   $("#location").attr("href", '/dish/'+$('#data_urlname' + nextp).html());
   $("#location").html($('#data_name' + nextp).html());
@@ -58,7 +62,7 @@ $("#prev").click(function(){
 		var nextp = parseInt(current) - 1;
 	}
 	var new_url = $('#photo' + nextp).attr('name');
-  $("#image_element").attr("src", '/media/' + new_url);
+  $("#image_element").attr("src", new_url);
   $("#image_element").attr("name", nextp);
   $("#location").attr("href", '/dish/'+$('#data_urlname' + nextp).html());
   $("#location").html($('#data_name' + nextp).html());
@@ -80,13 +84,13 @@ $("#prev").click(function(){
 <a  class="btn btn-lg btn-warning" style="position:absolute;right:0.5%;top:0.5%;" href="javascript:window.history.go(-1);" id="esc" />Exit Fullscreen (Esc)</a>
  
 <a style="position:absolute; left:0.5%; top:40%;" href="#" id="prev" />
-<img src="/media/images/arrow-left.png"  alt="previous" />
+<img src="{% static 'images/arrow-left.png' %}"  alt="previous" />
 </a>
 
 <a style="position:absolute; right:0.5%; top:40%;" href="#" id="next"/>
 <!--<p style="font-size:36px;" class="icon-circle-arrow-right">1</p>-->
 
-<img src="/media/images/arrow-right.png" alt="next" />
+<img src="{% static 'images/arrow-right.png' %}" alt="next" />
 <!--<span class="icon-circle-arrow-right"></span>-->
 <!--<img src="/media/images/Arrow-right.jpg" alt="next" />-->
 </a>
@@ -108,11 +112,11 @@ $("#prev").click(function(){
 -->
 
 
-<img id="image_element" name="0" src="/media/{{ list.0.location }}" width="100%">
+<img id="image_element" name="0" src="{{ list.0.location.url }}" width="100%">
 
 <div id="list_photos" name="{{ list|length }}" style="display:none">
 	{% for t in list %}
-	<div id="photo{{forloop.counter0}}" name="{{t.location}}">photo{{forloop.counter0}} - {{t.location}}</div>
+	<div id="photo{{forloop.counter0}}" name="{{t.location.url}}">photo{{forloop.counter0}} - {{t.location.url}}</div>
 	<div id="data_urlname{{forloop.counter0}}">{{t.dish.urlname}}</div>
 	<div id="data_name{{forloop.counter0}}">{{t.dish.name}}</div>
 	<div id="data_owner{{forloop.counter0}}">{{t.owner}}</div>
