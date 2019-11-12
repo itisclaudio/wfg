@@ -23,7 +23,7 @@
 			}
 			var new_url = $('#photo' + nextp).attr('name');
 		  $("#counter").html(nextp+1);
-		  $("#image_element").attr("src", '/media/' + new_url);
+		  $("#image_element").attr("src", new_url);
 		  $("#image_element").attr("name", nextp);
 		  $("#image_link").attr("href", '/fullscreen_photo/'+$('#data_pic_id' + nextp).html());
 		  $("#title").html($('#data_name' + nextp).html());
@@ -53,7 +53,7 @@
 			}
 			var new_url = $('#photo' + nextp).attr('name');
 		  $("#counter").html(nextp+1);
-		  $("#image_element").attr("src", '/media/' + new_url);
+		  $("#image_element").attr("src", new_url);
 		  $("#image_element").attr("name", nextp);
 		  $("#image_link").attr("href", '/fullscreen_photo/'+$('#data_pic_id' + nextp).html());
 		  $("#title").html($('#data_name' + nextp).html());
@@ -192,7 +192,7 @@
 <!--<div id="list_photos" name="{{ list|length }}" style="display:none">-->
 	{% for t in list %}
 		<b>Counter:</b> {{forloop.counter0}}<br>
-		<p style="display:inline;"><b>Photo:</b> <div style="display:inline;" id="photo{{forloop.counter0}}" name="{{t.location}}">photo{{forloop.counter0}} - {{t.location}}</div></p>
+		<p style="display:inline;"><b>Photo:</b> <div style="display:inline;" id="photo{{forloop.counter0}}" name="{{t.location.url}}">photo{{forloop.counter0}} - {{t.location.url}}</div></p>
 		<p style="display:inline;"><b>Dish urlname:</b> <div style="display:inline;" id="data_id{{forloop.counter0}}">{{t.dish.urlname}}</div></p>
 		<p style="display:inline;"><b>Picture ID:</b> <div style="display:inline;" id="data_pic_id{{forloop.counter0}}">{{t.id}}</div></p>
 		<p style="display:inline;"><b>Dish Name:</b> <div style="display:inline;" id="data_name{{forloop.counter0}}">{{t.dish.name}}</div></p>
