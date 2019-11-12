@@ -38,7 +38,7 @@ $("#next").click(function(){
 	var new_url = $('#photo' + nextp).attr('name');
   $("#image_element").attr("src", new_url);
   $("#image_element").attr("name", nextp);
-  $("#location").attr("href", '/food/'+$('#data_id' + nextp).html());
+  $("#location").attr("href", '/dish/'+$('#data_urlname' + nextp).html());
   $("#location").html($('#data_name' + nextp).html());
   $("#owner").html($('#data_owner' + nextp).html());
   $("#likes").html($('#data_likes' + nextp).html());
@@ -57,7 +57,7 @@ $("#prev").click(function(){
 	var new_url = $('#photo' + nextp).attr('name');
   $("#image_element").attr("src", new_url);
   $("#image_element").attr("name", nextp);
-  $("#location").attr("href", '/food/'+$('#data_id' + nextp).html());
+  $("#location").attr("href", '/dish/'+$('#data_urlname' + nextp).html());
   $("#location").html($('#data_name' + nextp).html());
   //$("#title").html($('#data_name' + nextp).html());
   $("#owner").html($('#data_owner' + nextp).html());
@@ -94,7 +94,7 @@ $("#prev").click(function(){
 
 
 
-<h1 id="title" name="name" style="position:absolute;top:0px;left:10; color:#FFF">
+<h1 id="title" name="name" style="position:absolute;top:0.2%; left:10; color:#FFF; font-size: 24px; margin-top:4px;">
 	<a id="location" href="/dish/{{list.0.dish.urlname}}" style="color:#FFF">
 		{{ list.0.dish.name }}
 	</a>
@@ -117,8 +117,8 @@ $("#prev").click(function(){
 <div id="list_photos" name="{{ list|length }}" style="display:none">
 	{% for t in list %}
 	<div id="photo{{forloop.counter0}}" name="{{t.location.url}}">photo{{forloop.counter0}} - {{t.location.url}}</div>
-	<div id="data_id{{forloop.counter0}}">{{t.food.id}}</div>
-	<div id="data_name{{forloop.counter0}}">{{t.food.name}}</div>
+	<div id="data_urlname{{forloop.counter0}}">{{t.dish.urlname}}</div>
+	<div id="data_name{{forloop.counter0}}">{{t.dish.name}}</div>
 	<div id="data_owner{{forloop.counter0}}">{{t.owner}}</div>
 	<div id="data_likes{{forloop.counter0}}">{{t.likestot}}</div>
 	<!--<div id="data_uploaded{{forloop.counter0}}">{{t.datetime|date:"N j, Y"}}</div>-->
