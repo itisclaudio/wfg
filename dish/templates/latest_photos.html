@@ -58,7 +58,7 @@
 		<div class="col-sm-3 col-xs-12" style="padding-left:2px;">
         {% if p.location %}
 			<a href="/photo/{{p.urlname}}">
-				<img src="{{p.dish.favphotomed}}" class="img-rounded" title="Go to picture page" width="100%">
+				<img src="{{p.filename}}-med{{p.extension}}" class="img-rounded" title="Go to picture page" width="100%">
 			</a>
         {% else %}
 			<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%">
