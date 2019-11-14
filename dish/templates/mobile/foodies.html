@@ -68,7 +68,9 @@
 			<p class="text-small" style="margin-bottom:2px;">
 			<b>Name :</b>
 			{% if p.names_show = 1 %}
-				{{ p.user.first_name }} {{ p.user.last_name }}
+				{% if p.user.first_name  %}
+					{{ p.user.first_name|length }} {{ p.user.last_name }} |
+				{% endif %}
 			{% else %}
 				<i>"Not Public"</i>
 			{% endif %}<br/>
