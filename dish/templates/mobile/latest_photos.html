@@ -51,7 +51,7 @@
 	</p>
   </div>
   {% for p in list.object_list %}
-	  <a class="list-group-item row" href="/dish/{{p.dish.urlname}}/" style="margin-left:0px; margin-right:0px; padding:4px;">
+	  <a class="list-group-item row" href="/photo/{{p.urlname}}/" style="margin-left:0px; margin-right:0px; padding:4px;">
 	  {% if p.dish.name|length > 20 %}
 		<div class="col-xs-12" style="padding-left:2px;">
 			<p class="text-small" style="margin-bottom:2px;"><i>{{p.datetime|date:"N j, Y" }} - by: <b>{{p.userprofile|truncatechars:20}}</b></i></p>
