@@ -123,7 +123,7 @@ class userProfile(models.Model):
 			image.save(settings.UPLOAD_USER + '/' + filename +"-thum"+ext.lower())
 		else:
 			print "In class userProfile(models.Model): save event in Production"
-			return
+			super(userProfile, self).save()
 		
 	def __unicode__(self):
 		return self.user.username
