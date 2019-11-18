@@ -95,31 +95,32 @@ class userProfile(models.Model):
 		if self.about:
 			self.about = self.about.lstrip()
 		#**************To resize main image
-		if not self.photo:
+		if settings.LOCAL_DEV:
+			if not self.photo:
+				super(userProfile, self).save()
+				return
 			super(userProfile, self).save()
-			return
-		super(userProfile, self).save()
 
-		#file_path = str(self.photo.path)#Gives problems when files is: Bánh rán.jpg
-		file_path = self.photo.path.encode('utf-8')
-		user_filename, ext = os.path.splitext(self.photo.name)
-		image = Image.open(file_path)
+			#file_path = str(self.photo.path)#Gives problems when files is: Bánh rán.jpg
+			file_path = self.photo.path.encode('utf-8')
+			user_filename, ext = os.path.splitext(self.photo.name)
+			image = Image.open(file_path)
 
-		image.save(file_path)
-		sizes = {'full': {'height': 500, 'width': 500}, 'medium': {'height': 250, 'width': 250},'thumbnail': {'height': 100, 'width': 100},}
-		filename = user_filename.strip('users/')
-		
-		# create full image
-		image.thumbnail((sizes['full']['width'], sizes['full']['height']), Image.ANTIALIAS)
-		image.save(settings.UPLOAD_USER + '/' + filename+ext.lower())
-		
-		# create medium image
-		image.thumbnail((sizes['medium']['width'], sizes['medium']['height']), Image.ANTIALIAS)
-		image.save(settings.UPLOAD_USER + '/' + filename +"-med"+ext.lower())
+			image.save(file_path)
+			sizes = {'full': {'height': 500, 'width': 500}, 'medium': {'height': 250, 'width': 250},'thumbnail': {'height': 100, 'width': 100},}
+			filename = user_filename.strip('users/')
+			
+			# create full image
+			image.thumbnail((sizes['full']['width'], sizes['full']['height']), Image.ANTIALIAS)
+			image.save(settings.UPLOAD_USER + '/' + filename+ext.lower())
+			
+			# create medium image
+			image.thumbnail((sizes['medium']['width'], sizes['medium']['height']), Image.ANTIALIAS)
+			image.save(settings.UPLOAD_USER + '/' + filename +"-med"+ext.lower())
 
-		# create thumbnail
-		image.thumbnail((sizes['thumbnail']['width'], sizes['thumbnail']['height']), Image.ANTIALIAS)
-		image.save(settings.UPLOAD_USER + '/' + filename +"-thum"+ext.lower())
+			# create thumbnail
+			image.thumbnail((sizes['thumbnail']['width'], sizes['thumbnail']['height']), Image.ANTIALIAS)
+			image.save(settings.UPLOAD_USER + '/' + filename +"-thum"+ext.lower())
 		
 	def __unicode__(self):
 		return self.user.username
