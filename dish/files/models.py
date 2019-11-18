@@ -121,6 +121,9 @@ class userProfile(models.Model):
 			# create thumbnail
 			image.thumbnail((sizes['thumbnail']['width'], sizes['thumbnail']['height']), Image.ANTIALIAS)
 			image.save(settings.UPLOAD_USER + '/' + filename +"-thum"+ext.lower())
+		else:
+			print "In class userProfile(models.Model): save event in Production"
+			return
 		
 	def __unicode__(self):
 		return self.user.username
