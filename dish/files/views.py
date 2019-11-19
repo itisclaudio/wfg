@@ -1431,7 +1431,6 @@ def photosfull_view(request):
 def photouploadmain_view(request):
 	return render_to_response('photouploadmain.html',context_instance=RequestContext(request))
 
-#000
 @login_required(login_url=singin_url)
 @verified_email_required
 def photonew_view(request, id):
@@ -1554,7 +1553,6 @@ def photo_redirect_view(request,id):
 	pho = Picture.objects.get(pk=id)
 	return photourl_view(request,pho.urlname)
 
-#000
 @login_required(login_url=singin_url)
 @verified_email_required
 def photocrop_view(request, id):
@@ -3109,7 +3107,7 @@ def privacy_view(request):
 	form = PrivacyForm(initial={'names_show':profile.names_show,'email_show':profile.email_show,})
 	ctx = {'form':form, 'user':req_user}
 	return render_to_response('privacy.html',ctx,context_instance=RequestContext(request))
-
+#000
 @login_required(login_url=singin_url)
 def updatePicture_view(request):
 	mensa = 1
@@ -3126,6 +3124,12 @@ def updatePicture_view(request):
 			photo1 = form.cleaned_data['photo']
 			profile.photo = photo1
 			profile.save()
+			if not settings.LOCAL_DEV:
+				##Change location from users_original to users
+				print "porfile.photo: ".format(porfile.photo)
+				loc = str(porfile.photo)
+				profile.photo = loc.replace("users_original/", "users/")
+				profile.save()
 			return HttpResponseRedirect('/myprofile/')
 		else:
 			ctx = {'form':form}
