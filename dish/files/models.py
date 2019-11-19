@@ -23,8 +23,13 @@ def generate_url(instance,filename):
 	else:
 		getKey = instance.user.pk
 	ext = filename.split('.')[-1]
-	ruta = "users/%s.%s" %(str(getKey),ext.lower())
-	return ruta
+	if settings.LOCAL_DEV:
+		#return "dishes/%s_%s.%s" %(instance.dish.urlname,str(getKey),ext.lower())
+		return "users/{}.{}".format(getKey,ext.lower())
+	else:
+		return "users_original/{}.{}".format(getKey,ext.lower())
+	#ruta = "users/%s.%s" %(str(getKey),ext.lower())
+	#return ruta
 
 class EmailQueue(models.Model):
 	##Stores information from element updates to be sent by email 
