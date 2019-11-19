@@ -3126,7 +3126,7 @@ def updatePicture_view(request):
 			profile.save()
 			if not settings.LOCAL_DEV:
 				##Change location from users_original to users
-				print "porfile.photo: ".format(porfile.photo)
+				print "porfile.photo: ".format(profile.photo)
 				loc = str(porfile.photo)
 				profile.photo = loc.replace("users_original/", "users/")
 				profile.save()
