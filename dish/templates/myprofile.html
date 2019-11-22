@@ -283,7 +283,7 @@ $(document).ready(function(){
 			//Set loading gif while waiting for lambda to generate userphoto
 			document.getElementById('profile_photo').src = loading_photo_url;
 			var i = 1;                     //  set your counter to 1
-			function checkImage () {       //  create a loop function with delay to check if thumbs have been created
+			function checkImage () {       //  Definitoin of the function it will have to be called bellow ***
 				//Asigns setTimeout function to variable so it can be killed with image founded
 				timeout_ID = setTimeout(function () {
 				  //alert('index: '+i);
@@ -302,16 +302,14 @@ $(document).ready(function(){
 							 document.getElementById('profile_photo').src = profile_photo_url;
 							 //clears timeout function to stop it
 							 clearTimeout(timeout_ID);
-							 //i = 20;
+							 //i = 20; //Not needed?
 						}).fail(function() { 
 							// Image doesn't exist
-							console.log('Image doesnt  exist!');
+							console.log('Image doesnt exist!');
 					})
 					i++;          //  increment the counter
-					checkImage(); //call the function again
-				  }
-				  else
-				  {
+					checkImage(); //call the function again (Looping)
+				  }else{
 				  // it has been 20 times and there is no image, set up no image icon
 				  //console.log('En else (i =>10)');
 				  //alert('En else (i =>10)');
@@ -319,9 +317,9 @@ $(document).ready(function(){
 				  }
 			   }, 500) // setTimeout(function, time_period) in this case 1/2 second
 			}
-			//checkImage();
+			checkImage(); //***Calls the function 
 		return true;
-		};
+		};//End imgError function
 
 		function facebook_photo(){
 			//var fb_user = '{{social.uid}}';
