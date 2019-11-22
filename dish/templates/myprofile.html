@@ -276,15 +276,15 @@ $(document).ready(function(){
 		//The imgError functions gets trigger when Django sends a url image but the images doesn't exist yet.
 		{% endcomment %}
 		function imgError(image) {
-			image.onerror = "";
+			//image.onerror = "";
 			var loading_photo_url = "{% static 'images/loading512.gif' %}";
 			var profile_photo_url = "{{ profile.photofilename}}{{ profile.extension}}";
 			var no_photo_url = "{% static 'images/user.png' %}";
 			//Set loading gif while waiting for lambda to generate userphoto
 			document.getElementById('profile_photo').src = loading_photo_url;
 			var i = 1;                     //  set your counter to 1
-			function checkImage () {           //  create a loop function
-			   timeout_ID = setTimeout(function () {    //  call a 3s setTimeout when the loop is called
+			function checkImage () {       //  create a loop function
+			   setTimeout(function () {    //  call a 3s setTimeout when the loop is called
 				  //alert('index: '+i);      //  your code here
 				  console.log('index: '+i);
 				  //alert('profile_photo_url: '+profile_photo_url);      //  your code here
@@ -296,7 +296,7 @@ $(document).ready(function(){
 							 // Do something now you know the image exists.
 							 console.log('Image exist!');
 							 document.getElementById('profile_photo').src = profile_photo_url;
-							 clearTimeout(timeout_ID);
+							 //clearTimeout(timeout_ID);
 							 i = 20;
 						}).fail(function() { 
 							// Image doesn't exist - do something else.
