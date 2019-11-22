@@ -294,13 +294,16 @@ $(document).ready(function(){
 				  var status = http.status;
 				  //alert(status);
 				  console.log(status);
-				  if ( status == 200 ){
-					//Image exist;
-					//alert('Image exist!');
-					console.log('Image exist!');
-					document.getElementById('profile_photo').src = profile_photo_url;
-					i = 10;
-				  }
+				  $.get(profile_photo_url)
+					.done(function() { 
+						 // Do something now you know the image exists.
+						 console.log('Image exist!');
+						 document.getElementById('profile_photo').src = profile_photo_url;
+						 i = 10;
+					}).fail(function() { 
+						// Image doesn't exist - do something else.
+						console.log('Image doesnt  exist!');
+					})
 				  i++;                     //  increment the counter
 				  if (i < 10) {             //  if the counter < 10, call the loop function
 					 myLoop();             //  ..  again- which will trigger another 
