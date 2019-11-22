@@ -287,7 +287,7 @@ $(document).ready(function(){
 				//Asigns setTimeout function to variable so it can be killed with image founded
 				timeout_ID = setTimeout(function () {
 				  //alert('index: '+i);
-				  //console.log('index: '+i);
+				  console.log('index: '+i);
 				  //alert('profile_photo_url: '+profile_photo_url);      //  your code here
 				  if (i < 20) {             //  if the counter < 20, call the loop function
 					//This will be excecute up to 20 times or until image found
@@ -297,7 +297,7 @@ $(document).ready(function(){
 					$.get(profile_photo_url)
 						.done(function() { 
 							 // The image exists:
-							 //console.log('Image exist!');
+							 console.log('Image exist!');
 							 //reasigns image to img tag
 							 document.getElementById('profile_photo').src = profile_photo_url;
 							 //clears timeout function to stop it
@@ -319,7 +319,7 @@ $(document).ready(function(){
 				  }
 			   }, 500) // setTimeout(function, time_period) in this case 1/2 second
 			}
-			checkImage();
+			//checkImage();
 		return true;
 		};
 
