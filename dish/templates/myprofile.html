@@ -284,7 +284,8 @@ $(document).ready(function(){
 			document.getElementById('profile_photo').src = loading_photo_url;
 			var i = 1;                     //  set your counter to 1
 			function checkImage () {       //  create a loop function
-			   timeout_ID = setTimeout(function () {    //  call a 3s setTimeout when the loop is called
+			   //timeout_ID = setTimeout(function () {    //  call a 3s setTimeout when the loop is called
+			   setTimeout(function () {    //  call a 3s setTimeout when the loop is called
 				  //alert('index: '+i);      //  your code here
 				  console.log('index: '+i);
 				  //alert('profile_photo_url: '+profile_photo_url);      //  your code here
@@ -296,7 +297,7 @@ $(document).ready(function(){
 							 // Do something now you know the image exists.
 							 console.log('Image exist!');
 							 document.getElementById('profile_photo').src = profile_photo_url;
-							 clearTimeout(timeout_ID);
+							 //clearTimeout(timeout_ID);
 							 i = 20;
 						}).fail(function() { 
 							// Image doesn't exist - do something else.
