@@ -288,12 +288,6 @@ $(document).ready(function(){
 				  //alert('index: '+i);      //  your code here
 				  console.log('index: '+i);
 				  //alert('profile_photo_url: '+profile_photo_url);      //  your code here
-				  var http = new XMLHttpRequest();
-				  http.open('HEAD', profile_photo_url, false);
-				  http.send();
-				  var status = http.status;
-				  //alert(status);
-				  console.log(status);
 				  $.get(profile_photo_url)
 					.done(function() { 
 						 // Do something now you know the image exists.
