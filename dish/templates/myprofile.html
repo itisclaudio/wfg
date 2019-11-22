@@ -284,33 +284,34 @@ $(document).ready(function(){
 			document.getElementById('profile_photo').src = loading_photo_url;
 			var i = 1;                     //  set your counter to 1
 			function checkImage () {           //  create a loop function
-			   setTimeout(function () {    //  call a 3s setTimeout when the loop is called
+			   var timeout_ID = setTimeout(function () {    //  call a 3s setTimeout when the loop is called
 				  //alert('index: '+i);      //  your code here
 				  console.log('index: '+i);
 				  //alert('profile_photo_url: '+profile_photo_url);      //  your code here
 				  if (i < 10) {             //  if the counter < 10, call the loop function
 					console.log('En if (i < 10)');
-					//alert('En if (i < 10)');
-					
+					alert('En if (i < 10)');
 					$.get(profile_photo_url)
 						.done(function() { 
 							 // Do something now you know the image exists.
 							 console.log('Image exist!');
 							 document.getElementById('profile_photo').src = profile_photo_url;
-							 i = 10;
+							 clearTimeout(timeout_ID);
+							 //i = 10;
 						}).fail(function() { 
 							// Image doesn't exist - do something else.
 							console.log('Image doesnt  exist!');
-					})					
-					checkImage();             //  ..  again- which will trigger another 
+					})
+					i++;                     //  increment the counter
+					checkImage();
 				  }                        //  ..  setTimeout()
 				  else
 				  {
 				  console.log('En else (i =>10)');
-				  //alert('En else (i =>10)');
+				  alert('En else (i =>10)');
 				  document.getElementById('profile_photo').src = no_photo_url;
 				  }
-				  i++;                     //  increment the counter
+				  
 			   }, 500)
 			}
 			checkImage(); 
