@@ -11,7 +11,7 @@ from django.template.defaultfilters import truncatechars
 from django.core.urlresolvers import reverse#used in get_absolute_url for sitemaps in models
 from django.utils import timezone
 from allauth.account.models import EmailAddress#For:django-allauth, for def account_verified(self): in userProfile
-
+#000
 def generate_url(instance,filename):
 	if not instance.pk:
 		from django.db.models import Max

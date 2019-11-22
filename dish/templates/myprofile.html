@@ -125,9 +125,9 @@ $(document).ready(function(){
 <div class="row">
 	<div class="col-md-5 col-sm-5 col-xs-12">
 		{% if profile.photo %}
-			<img src="{{ profile.photofilename}}{{ profile.extension}}" class="img-rounded" width="100%"/>
+			<img id="profile_photo" src="{{ profile.photofilename}}{{ profile.extension}}" class="img-rounded" width="100%" onerror="imgError(this);"/>
 		{% else %}
-			<img src="{% static 'images/user.png' %}"  class="img-polaroid" width="100%"/>
+			<img src="{% static 'images/user.png' %}" class="img-polaroid" width="100%"/>
 		{% endif %}
 		<br/><br/>
 		<a class="btn btn-custom btn-block btn-lg" href="{% url 'view_updatePicture' %}">Upload new photo</a>
@@ -270,6 +270,69 @@ $(document).ready(function(){
 
 {% block extra-bottom %}
 	<script type="text/javascript">
+		{% comment %}...
+		//If a userPhoto has just uploaded. AWS takes a few seconds to generate thumbs because
+		//of this we load the page and ask 10 times every 1/2 a second for the picture.
+		//The imgError functions gets trigger when Django sends a url image but the images doesn't exist yet.
+		{% endcomment %}
+		function imgError(image) {
+			image.onerror = "";
+			var loading_photo_url = "{% static 'images/loading512.gif' %}";
+			var profile_photo_url = "{{ profile.photofilename}}{{ profile.extension}}";
+			var no_photo_url = "{% static 'images/user.png' %}";
+			//Set loading gif while waiting for lambda to generate userphoto
+			document.getElementById('profile_photo').src = loading_photo_url;
+			var i = 1;                     //  set your counter to 1
+			function myLoop () {           //  create a loop function
+			   setTimeout(function () {    //  call a 3s setTimeout when the loop is called
+				  //alert('index: '+i);      //  your code here
+				  console.log('index: '+i);
+				  //alert('profile_photo_url: '+profile_photo_url);      //  your code here
+				  var http = new XMLHttpRequest();
+				  http.open('HEAD', profile_photo_url, false);
+				  http.send();
+				  var status = http.status;
+				  //alert(status);
+				  console.log(status);
+				  if ( status == 200 ){
+					//Image exist;
+					//alert('Image exist!');
+					console.log('Image exist!');
+					document.getElementById('profile_photo').src = profile_photo_url;
+					i = 10;
+				  }
+				  i++;                     //  increment the counter
+				  if (i < 10) {             //  if the counter < 10, call the loop function
+					 myLoop();             //  ..  again- which will trigger another 
+				  }                        //  ..  setTimeout()
+				  else
+				  {
+				  document.getElementById('profile_photo').src = no_photo_url;
+				  }
+			   }, 500)
+			}
+
+			myLoop(); 
+		return true;
+		};
+		
+		function checkImage (profile_photo_url) {           //  create a loop function
+			setTimeout(function () {    //  call a 3s setTimeout when the loop is called
+				alert('No image');          //  your code here
+				alert(profile_photo_url);
+				var http = new XMLHttpRequest();
+				http.open('HEAD', image_url, false);
+			http.send();
+
+			return http.status != 404;
+			  document.getElementById('profile_photo').src = profile_photo_url;
+			  i++;                     //  increment the counter
+			  if (i < 10) {            //  if the counter < 10, call the loop function
+				 checkImage(profile_photo_url);             //  ..  again which will trigger another 
+			  }                        //  ..  setTimeout()
+		   }, 1000)
+		}
+		
 		function facebook_photo(){
 			//var fb_user = '{{social.uid}}';
 			var image_url = 'https://graph.facebook.com/'+'{{social.uid}}'+'/picture?width=800';
