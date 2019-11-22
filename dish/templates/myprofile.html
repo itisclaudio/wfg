@@ -298,17 +298,20 @@ $(document).ready(function(){
 						// Image doesn't exist - do something else.
 						console.log('Image doesnt  exist!');
 					})
-				  i++;                     //  increment the counter
 				  if (i < 10) {             //  if the counter < 10, call the loop function
-					 checkImage();             //  ..  again- which will trigger another 
+					console.log('En if (i < 10)');
+					//alert('En if (i < 10)');
+					checkImage();             //  ..  again- which will trigger another 
 				  }                        //  ..  setTimeout()
 				  else
 				  {
+				  console.log('En else (i =>10)');
+				  //alert('En else (i =>10)');
 				  document.getElementById('profile_photo').src = no_photo_url;
 				  }
+				  i++;                     //  increment the counter
 			   }, 500)
 			}
-
 			checkImage(); 
 		return true;
 		};
