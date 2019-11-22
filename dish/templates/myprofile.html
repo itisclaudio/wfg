@@ -288,19 +288,20 @@ $(document).ready(function(){
 				  //alert('index: '+i);      //  your code here
 				  console.log('index: '+i);
 				  //alert('profile_photo_url: '+profile_photo_url);      //  your code here
-				  $.get(profile_photo_url)
-					.done(function() { 
-						 // Do something now you know the image exists.
-						 console.log('Image exist!');
-						 document.getElementById('profile_photo').src = profile_photo_url;
-						 i = 10;
-					}).fail(function() { 
-						// Image doesn't exist - do something else.
-						console.log('Image doesnt  exist!');
-					})
 				  if (i < 10) {             //  if the counter < 10, call the loop function
 					console.log('En if (i < 10)');
 					//alert('En if (i < 10)');
+					
+					$.get(profile_photo_url)
+						.done(function() { 
+							 // Do something now you know the image exists.
+							 console.log('Image exist!');
+							 document.getElementById('profile_photo').src = profile_photo_url;
+							 i = 10;
+						}).fail(function() { 
+							// Image doesn't exist - do something else.
+							console.log('Image doesnt  exist!');
+					})					
 					checkImage();             //  ..  again- which will trigger another 
 				  }                        //  ..  setTimeout()
 				  else
