@@ -288,7 +288,7 @@ $(document).ready(function(){
 				  //alert('index: '+i);      //  your code here
 				  console.log('index: '+i);
 				  //alert('profile_photo_url: '+profile_photo_url);      //  your code here
-				  if (i < 10) {             //  if the counter < 10, call the loop function
+				  if (i < 20) {             //  if the counter < 10, call the loop function
 					console.log('En if (i < 10)');
 					//alert('En if (i < 10)');
 					$.get(profile_photo_url)
@@ -297,7 +297,7 @@ $(document).ready(function(){
 							 console.log('Image exist!');
 							 document.getElementById('profile_photo').src = profile_photo_url;
 							 clearTimeout(timeout_ID);
-							 i = 10;
+							 i = 20;
 						}).fail(function() { 
 							// Image doesn't exist - do something else.
 							console.log('Image doesnt  exist!');
@@ -311,7 +311,6 @@ $(document).ready(function(){
 				  //alert('En else (i =>10)');
 				  document.getElementById('profile_photo').src = no_photo_url;
 				  }
-				  
 			   }, 500)
 			}
 			checkImage(); 
