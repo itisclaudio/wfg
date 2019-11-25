@@ -75,8 +75,8 @@ MEDIAFILES_LOCATION = 'media'
 #### and use S3 URL to link them
 DEFAULT_FILE_STORAGE = 'custom_storages.MediaRootS3BotoStorage'
 STATICFILES_STORAGE = 'custom_storages.StaticRootS3BotoStorage'
-S3_URL = 'https://wfgs.s3-us-west-2.amazonaws.com/'
-#S3_URL = 'https://{}.s3-{}.amazonaws.com/'.format(AWS_STORAGE_BUCKET_NAME,AWS_S3_REGION_NAME)
+#S3_URL = 'https://wfgs.s3-us-west-2.amazonaws.com/'
+S3_URL = 'https://{}.s3-{}.amazonaws.com/'.format(AWS_STORAGE_BUCKET_NAME,AWS_S3_REGION_NAME)
 #S3_URL = 'https://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 
 # If we're not using our S3 backend storage we need to serve the media files via path
