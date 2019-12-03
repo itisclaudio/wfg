@@ -318,7 +318,7 @@ function searchSuccess(json)
 			$('#modal-image').attr('src', json.favphoto);
 		}
 		else{
-			$('#modal-image').attr('src', "/media/images/upload-med.jpg");
+			$('#modal-image').attr('src', "{% static 'images/upload-med.jpg' %}");
 			};
 		if (json.description != "0"){
 			$('#modal-dishdescription').html(json.description.substring(0, 200));
