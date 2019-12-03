@@ -29,7 +29,8 @@ MIDDLEWARE_CLASSES = (
 	'django_mobile.middleware.SetFlavourMiddleware',
 )
 
-BASE_URL = 'https://wfg-s.herokuapp.com/' # By me: for global_constants
+#BASE_URL = 'https://wfg-s.herokuapp.com/' # By me: for global_constants
+BASE_URL = os.environ.get('BASE_URL') # By me: for global_constants, not harcoding
 
 import dj_database_url
 #db_from_env = dj_database_url.config()
