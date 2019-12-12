@@ -774,6 +774,7 @@ def dishphotonew_view(request,id_cui=None,name=None):
 					else:
 						## If we are in development, it doesn't need to wait for lambda
 						return HttpResponseRedirect('/dish/%s/'%(d.urlname))
+				return HttpResponseRedirect('/dish/%s/'%(d.urlname))
 			else:#No new dish was created, the user selected one from the system. Check for photo
 				if photo:
 					dish = Dish.objects.get(id=dish_selected)
@@ -804,15 +805,15 @@ def dishphotonew_view(request,id_cui=None,name=None):
 						## code that waits until S3 finished creating thumbnails with lambda (only production)
 						#photopath = "https://wfgs.s3.amazonaws.com/media/{}".format(p.location)
 						photopath = settings.MEDIA_URL+str(p.location)
-						print "photopath: {}".format(photopath)
+						#print "photopath: {}".format(photopath)
 						import requests
 						import time
 						for x in range(20):
 							## If the request of the photo is 200, it exists and redirects to photo
-							print "Second in try: "+str(x)
+							#print "Second in try: "+str(x)
 							request = requests.get(photopath)
 							if request.status_code == 200:
-								print "resoleved, redirecting to /photo/"
+								#print "resoleved, redirecting to /photo/"
 								return HttpResponseRedirect('/dish/%s/'%(d.urlname))
 							else:
 								## If request is not 200, lambda is still working, waits 1 second and ask again
