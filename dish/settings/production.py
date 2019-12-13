@@ -30,7 +30,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 #BASE_URL = 'https://wfg-s.herokuapp.com/' # By me: for global_constants
-BASE_URL = os.environ.get('BASE_URL') # By me: for global_constants, not harcoding
+BASE_URL = os.environ.get('BASE_URL') # By me: for global_constants, not harcoding, ex: https://wfg-p.herokuapp.com/
 
 import dj_database_url
 #db_from_env = dj_database_url.config()

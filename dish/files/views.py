@@ -1664,9 +1664,12 @@ def photocrop_view(request, id):
 					region_name= 'us-west-2',
 					aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
 					aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
-				
-				## Ir original file exists, work with it
-				photopath = "https://wfgs.s3.amazonaws.com/media/dishes_original/{}{}".format(filename, ext)
+				#000
+				## If original file exists, work with it
+				## Because photos migrated from Webfation won't have original images in dishes_original folder
+				## We only trigger 
+				media_url = os.environ.get('MEDIA_URL_AWS')#This will get: https://wfgp.s3-us-west-2.amazonaws.com/media or wfgs
+				photopath = "{}/dishes_original/{}{}".format(media_url,filename, ext)
 				import requests
 				request = requests.get(photopath)
 				if request.status_code == 200:
