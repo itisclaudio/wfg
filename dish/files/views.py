@@ -1655,11 +1655,11 @@ def photocrop_view(request, id):
 					max = max_new.resize((int(sizes['max']['w']),max_hsize), Image.ANTIALIAS)
 					max.save(cad+filename+ext)
 			else:
-				print "In photocrop_view production"
-				
+				#print "In photocrop_view production"
 				import boto3
-				payload = {"filename":filename, "ext":ext, "x":x, "y":y, "w":w, "h":h}
-				print "filename: {}, ext: {}".format(payload['filename'],payload['ext'])
+				bucket = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+				payload = {"bucket":bucket, "filename":filename, "ext":ext, "x":x, "y":y, "w":w, "h":h}
+				#print "filename: {}, ext: {}".format(payload['filename'],payload['ext'])
 				client = boto3.client('lambda',
 					region_name= 'us-west-2',
 					aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
@@ -1670,7 +1670,7 @@ def photocrop_view(request, id):
 				import requests
 				request = requests.get(photopath)
 				if request.status_code == 200:
-					print "photo original exists!"
+					#print "photo original exists!"
 					FuncName = "wfgOriginalPhotoCrop"
 				else:
 					FuncName = "wfgPhotoCrop"
@@ -3108,7 +3108,7 @@ def privacy_view(request):
 	form = PrivacyForm(initial={'names_show':profile.names_show,'email_show':profile.email_show,})
 	ctx = {'form':form, 'user':req_user}
 	return render_to_response('privacy.html',ctx,context_instance=RequestContext(request))
-#000
+
 @login_required(login_url=singin_url)
 def updatePicture_view(request):
 	mensa = 1
