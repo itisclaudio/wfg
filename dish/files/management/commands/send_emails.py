@@ -9,9 +9,9 @@ class Command(BaseCommand):
 	help = 'Send emails in EmailQueue'
 
 	def handle(self, *args, **options):
-		print "in WFG Commands send_emails"
+		#print "in WFG Commands send_emails"
 		if EmailQueue.objects.filter(sent_flag = False).exists():
-			print "There are sent_flag"
+			#print "There are sent_flag"
 			emails = EmailQueue.objects.filter(sent_flag = False)
 			html_content = ""
 			#print emails
