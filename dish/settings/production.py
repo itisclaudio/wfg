@@ -104,10 +104,14 @@ ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 
 #MEDIA_ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.dirname(__file__)),'media/'))
 
-#To send emails
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
+#To send emails with sendgrid (Heroku add on)
+SEND_GRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = os.environ.get('SENDGRID_USERNAME')
+EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_PASSWORD')
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'worldfoodguideapp@gmail.com'
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'app153913174@heroku.com'
+EMAIL_BACKEND = 'django.core.mail.backends.smpt.EmailBackend'
+
 ADMINS = (('Claudio', 'itisclaudio@gmail.com'),) # A tuple that lists people who get code error notifications. When DEBUG=False
