@@ -1465,7 +1465,7 @@ def photonew_view(request, id):
 			req_user = request.user
 			profile = userProfile.objects.get(user=req_user)
 			p.owner = profile
-			#p.save() # Guardar la informacion
+			p.save() # Guardar la informacion
 			info = 2 #Not sure if it is been used
 			if not settings.LOCAL_DEV:
 				## This is only in production:
@@ -1498,7 +1498,6 @@ def photonew_view(request, id):
 				#If after 20 seconds this doesn't response, send anyways:
 				return HttpResponseRedirect('/photo/%s'%(p.urlname))
 			else:
-				p.save()
 				email_url=request.build_absolute_uri('/')+'photo/%s/'%(p.urlname)
 				SaveEmailQueue(req_user.username,'Dish photo','Added',email_url)
 				## If we are in development, it doesn't need to wait for lambda
