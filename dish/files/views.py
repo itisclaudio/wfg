@@ -1447,7 +1447,8 @@ def photonew_view(request, id):
 			creditsname = form.cleaned_data['creditsname'].strip()
 			creditsurl = form.cleaned_data['creditsurl']
 			p = Picture()
-			#print photo
+			print "in photonew_view(), valid form"
+			print photo
 			if photo:#Generamos validacion
 				p.location = photo
 			p.comments = comm
@@ -1490,6 +1491,7 @@ def photonew_view(request, id):
 						## If request is not 200, lambda is still working, waits 1 second and ask again
 						x=+1
 						time.sleep(1)
+				print "20 seconds passed and not 200 response, sent to photo page anyways"
 				#If after 20 seconds this doesn't response, send anyways:
 				return HttpResponseRedirect('/photo/%s'%(p.urlname))
 			else:
