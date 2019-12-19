@@ -1479,6 +1479,8 @@ def photonew_view(request, id):
 				## code that waits until S3 finished creating thumbnails with lambda (only production)
 				#photopath = "https://wfgs.s3.amazonaws.com/media/{}".format(p.location)
 				photopath = settings.MEDIA_URL+str(p.location)
+				print "photopath to request:"
+				print photopath
 				import requests
 				import time
 				for x in range(20):
