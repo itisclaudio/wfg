@@ -1,1 +1,1 @@
-web: gunicorn dish.wsgi --log-file -
+web: gunicorn --timeout 80 dish.wsgi --log-file -
