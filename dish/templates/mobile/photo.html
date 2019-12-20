@@ -97,7 +97,7 @@
 	{% if reload = '1' %}
 		<img id="photo" src="{{object.filename}}-reg{{object.extension}}?cache=none" alt="{{ object.dish }}" class="img-rounded" width="100%" style="margin-top:6px;margin-bottom:10px;"/>
 	{% else %}
-		<img id="photo" src="{{object.filename}}-reg{{object.extension}}" alt="{{ object.dish }}" class="img-rounded" width="100%" style="margin-top:6px;margin-bottom:10px;"/>
+		<img id="photo" src="{{object.filename}}-reg{{object.extension}}" alt="{{ object.dish }}" class="img-rounded" width="100%" style="margin-top:6px;margin-bottom:10px;" onerror="imgError(this);"/>
 	{% endif %}
 	</a>
 	<div style="margin-top:5px; margin-bottom: 5px;">
@@ -154,6 +154,57 @@
 </div>
 
 <script>
+
+function imgError(image) {
+	{% comment %}
+	//If a dish photo has just been uploaded. AWS takes a few seconds to generate thumbs because
+	//of this we load the page and ask up to 20 times every 1/2 a second for the picture.
+	//if the picture doesnt exist then will load the regular no photo icon
+	//The imgError functions gets trigger when Django sends a url image but the images doesn't exist.
+	{% endcomment %}
+	var loading_photo_url = "{% static 'images/loading512.gif' %}";
+	var photo_url = "{{object.location.url}}";
+	var no_photo_url = "{% static 'images/user.png' %}";
+	//Set loading gif while waiting for lambda to generate userphoto
+	document.getElementById('photo').src = loading_photo_url;
+	var i = 1;                     //  set your counter to 1
+	function checkImage () {       //  Definitoin of the function it will have to be called bellow ***
+		//Asigns setTimeout function to variable so it can be killed with image founded
+		timeout_ID = setTimeout(function () {
+		  //alert('index: '+i);
+		  console.log('index: '+i);
+		  //alert('photo_url: '+photo_url);      //  your code here
+		  if (i < 40) {             //  if the counter < 20, call the loop function
+			//This will be excecute up to 20 times or until image found
+			//console.log('En if (i < 10)');
+			//alert('En if (i < 10)');
+			//checks if there is an image in the usePhoto URL
+			$.get(photo_url)
+				.done(function() { 
+					 // The image exists:
+					 console.log('Image exist!');
+					 //reasigns image to img tag
+					 document.getElementById('photo').src = photo_url;
+					 //clears timeout function to stop it
+					 clearTimeout(timeout_ID);
+					 //i = 20; //Not needed?
+				}).fail(function() { 
+					// Image doesn't exist
+					console.log('Image doesnt exist!');
+			})
+			i++;          //  increment the counter
+			checkImage(); //call the function again (Looping)
+		  }else{
+		  // it has been 20 times and there is no image, set up no image icon
+		  //console.log('En else (i =>10)');
+		  //alert('En else (i =>10)');
+		  document.getElementById('photo').src = no_photo_url;
+		  }
+	   }, 500) // setTimeout(function, time_period) in this case 1/2 second
+	}
+	checkImage(); //***Calls the function 
+return true;
+};//End imgError function
 
 $('#likeaction').click(function(){
 	var photo = $('#id_obj').attr("name");
