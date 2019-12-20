@@ -1476,6 +1476,66 @@ def photonew_view(request, id):
 				p.save()
 				email_url=request.build_absolute_uri('/')+'photo/%s/'%(p.urlname)
 				SaveEmailQueue(req_user.username,'Dish photo','Added',email_url)
+				return HttpResponseRedirect('/photo/%s'%(p.urlname))
+			else:
+				email_url=request.build_absolute_uri('/')+'photo/%s/'%(p.urlname)
+				SaveEmailQueue(req_user.username,'Dish photo','Added',email_url)
+				## If we are in development, it doesn't need to wait for lambda
+				return HttpResponseRedirect('/photo/%s'%(p.urlname))
+		else:
+			info = 3 #for photonew, information = 3 : Invalid form
+			#form = photoAdd_Form(initial={'comments':pic.comments,'ownit':pic.ownit,'creditsname':pic.creditsname,'creditsurl':pic.creditsurl})
+			ctx = {'form':form, 'information':info,'dish':dish, 'ownit':form.cleaned_data['ownit']}
+			return render_to_response('photonew.html',ctx,context_instance=RequestContext(request))
+	form = photoAdd_Form()
+	ctx = {'form':form, 'information':info,'dish':dish}
+	return render_to_response('photonew.html',ctx,context_instance=RequestContext(request))
+
+#000
+@login_required(login_url=singin_url)
+@verified_email_required
+def photonew_OLD_view(request, id):
+	info = 0
+	form = photoAdd_Form()
+	dish = Dish.objects.get(pk=id)
+	if request.method == "POST":
+		form = photoAdd_Form(request.POST, request.FILES)
+		if form.is_valid():
+			photo = form.cleaned_data['location']#Esto se obtiene con el request.FILES
+			comm = form.cleaned_data['comments']
+			ownit = form.cleaned_data['ownit']
+			creditsname = form.cleaned_data['creditsname'].strip()
+			creditsurl = form.cleaned_data['creditsurl']
+			p = Picture()
+			print "in photonew_view(), valid form"
+			print photo
+			if photo:#Generamos validacion
+				p.location = photo
+			p.comments = comm
+			p.ownit = ownit
+			p.creditsname = creditsname
+			p.creditsurl = creditsurl
+			getKey = Picture.objects.aggregate(next=Max('id'))['next']
+			p.urlname = str(dish.urlname)+'_'+str(getKey+1)
+			#p.likes = 0
+			p.datetime = datetime.now()
+			p.active = 1
+			p.dish = dish
+			p.likestot = 0
+			req_user = request.user
+			profile = userProfile.objects.get(user=req_user)
+			p.owner = profile
+			p.save() # Guardar la informacion
+			info = 2 #Not sure if it is been used
+			if not settings.LOCAL_DEV:
+				## This is only in production:
+				print "Before, p.location: {}".format(p.location)
+				loc = str(p.location)
+				#dishes_original/bud_light_beer_35.jpg 
+				p.location = loc.replace("dishes_original/", "dishes/")
+				p.save()
+				email_url=request.build_absolute_uri('/')+'photo/%s/'%(p.urlname)
+				SaveEmailQueue(req_user.username,'Dish photo','Added',email_url)
 				## code that waits until S3 finished creating thumbnails with lambda (only production)
 				#photopath = "https://wfgs.s3.amazonaws.com/media/{}".format(p.location)
 				photopath = settings.MEDIA_URL+str(p.location)
@@ -1510,7 +1570,8 @@ def photonew_view(request, id):
 	form = photoAdd_Form()
 	ctx = {'form':form, 'information':info,'dish':dish}
 	return render_to_response('photonew.html',ctx,context_instance=RequestContext(request))
-
+	
+	
 def photourl_view(request, urlname, reload=None):
 	pho = Picture.objects.select_related('dish','owner__user').prefetch_related('dish__cuisines').get(urlname=urlname)
 	ind_pho = ""
