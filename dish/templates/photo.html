@@ -143,7 +143,7 @@ function imgError2(image) {
 	//Second script for when the favphoto is also the main dish photo and is still been
 	//generarted by lambda. Load the loading icon and refresh when image created
 	{% endcomment %}
-	var no_photo_url = "{% static 'images/user.png' %}";
+	var loading_photo_url = "{% static 'images/user.png' %}";
 	document.getElementById('favphoto').src = loading_photo_url;
 	//Keep adding code here
 	return true;
@@ -161,7 +161,7 @@ function imgError(image) {
 	//Set loading gif while waiting for lambda to generate userphoto
 	document.getElementById('photo').src = loading_photo_url;
 	main_photo_url = document.getElementById('photo').src;
-	alert('main_photo_url: '+main_photo_url);
+	//alert('main_photo_url: '+main_photo_url);
 	var i = 1;                     //  set your counter to 1
 	function checkImage () {       //  Definitoin of the function it will have to be called bellow ***
 		//Asigns setTimeout function to variable so it can be killed with image founded
