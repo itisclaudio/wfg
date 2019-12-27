@@ -163,8 +163,8 @@ function imgError(image) {
 	//var loading_photo_url = "{{ baseUrl }}images/{{LOADING_IMG}}";
 	//alert('loading_photo_url: '+loading_photo_url);
 	console.log('No Dish photo');
-	//var photo_url = "{{object.location.url}}";
-	var photo_url = "{{object.filename}}-thum{{object.extension}}";
+	var photo_url = "{{object.location.url}}";
+	var photo_check = "{{object.filename}}-thum{{object.extension}}";
 	//{{p.filename}}-med{{p.extension}}
 	var no_photo_url = "{% static 'images/user.png' %}";
 	//Set loading gif while waiting for lambda to generate userphoto
@@ -183,7 +183,7 @@ function imgError(image) {
 			//console.log('En if (i < 10)');
 			//alert('En if (i < 10)');
 			//checks if there is an image in the usePhoto URL
-			$.get(photo_url)
+			$.get(photo_check)
 				.done(function() { 
 					 // The image exists:
 					 console.log('in get, Image exist!');
