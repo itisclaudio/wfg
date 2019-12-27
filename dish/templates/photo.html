@@ -184,12 +184,12 @@ function imgError(image) {
 			$.get(photo_url)
 				.done(function() { 
 					 // The image exists:
-					 console.log('Image exist!');
+					 console.log('in get, Image exist!');
 					 //reasigns image to img tag
 					 document.getElementById('photo').src = photo_url;
 					 //Ask if main photo also needs to be loaded:   path.split('/').pop()
 					 main_photo = document.getElementById('favphoto').src.split('/').pop();
-					 console.log('main_photo: '+main_photo);
+					 console.log('before if, main_photo: '+main_photo);
 					 if (main_photo = "{{LOADING_IMG}}"){
 						//The main dish photo dish also need to be updated to the generated photo
 						//https://wfgs.s3-us-west-2.amazonaws.com/static/images/loading512.gif
