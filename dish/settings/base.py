@@ -114,7 +114,7 @@ STATICFILES_DIRS = (
 UPLOAD_DISH = 'dish/media/dishes'
 UPLOAD_USER = 'dish/media/users'
 
-LOADING_IMG = 'images/loading512.gif' #Used when images are being generated from Lambda (photo.html)
+LOADING_IMG = 'loading512.gif' #Used when images are being generated from Lambda (photo.html)
 
 #STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 

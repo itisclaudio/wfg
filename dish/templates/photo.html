@@ -141,13 +141,13 @@
 var S3_URL = "{{S3_URL}}"
 var url_delete = "{{BASE_URL}}"
 {% static "" as baseUrl %}
+var loading_photo_url = "{{ baseUrl }}images/{{LOADING_IMG}}";
 function imgError2(image) {
 	{% comment %}
 	//Second script for when the favphoto is also the main dish photo and is still been
 	//generarted by lambda. Load the loading icon and refresh when image created
 	{% endcomment %}
 	//var loading_photo_url = "{% static 'images/loading512.gif' %}";
-	var loading_photo_url = "{{ baseUrl }}{{LOADING_IMG}}";
 	//{{ baseUrl }}images/features/{{p.icon}}
 	document.getElementById('favphoto').src = loading_photo_url;
 	//Keep adding code here
@@ -161,8 +161,8 @@ function imgError(image) {
 	//The imgError functions gets trigger when Django sends a url image but the images doesn't exist.
 	{% endcomment %}
 	//var loading_photo_url = "{% static 'images/loading512.gif' %}";
-	var loading_photo_url = "{{ baseUrl }}{{LOADING_IMG}}";
-	alert('loading_photo_url: '+loading_photo_url);
+	//var loading_photo_url = "{{ baseUrl }}images/{{LOADING_IMG}}";
+	//alert('loading_photo_url: '+loading_photo_url);
 	var photo_url = "{{object.location.url}}";
 	var no_photo_url = "{% static 'images/user.png' %}";
 	//Set loading gif while waiting for lambda to generate userphoto
