@@ -163,7 +163,9 @@ function imgError(image) {
 	//var loading_photo_url = "{{ baseUrl }}images/{{LOADING_IMG}}";
 	//alert('loading_photo_url: '+loading_photo_url);
 	console.log('No Dish photo');
-	var photo_url = "{{object.location.url}}";
+	//var photo_url = "{{object.location.url}}";
+	var photo_url = "{{object.filename}}-thum{{object.extension}}";
+	//{{p.filename}}-med{{p.extension}}
 	var no_photo_url = "{% static 'images/user.png' %}";
 	//Set loading gif while waiting for lambda to generate userphoto
 	document.getElementById('photo').src = loading_photo_url;
