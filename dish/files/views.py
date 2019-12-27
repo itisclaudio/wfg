@@ -1519,7 +1519,7 @@ def photourl_view(request, urlname, reload=None):
 				liked = 1
 		except:
 			liked = 0
-	cxt = {'object':pho, 'liked':liked, 'reload':reload, 'next':next, 'prev':prev,'photos':len(indexes),'index':ind_pho+1,'MEDIA_URL':settings.MEDIA_URL}
+	cxt = {'object':pho, 'liked':liked, 'reload':reload, 'next':next, 'prev':prev,'photos':len(indexes),'index':ind_pho+1,'MEDIA_URL':settings.MEDIA_URL,'LOADING_IMG':settings.LOADING_IMG}
 	return render_to_response('photo.html',cxt,context_instance=RequestContext(request))
 
 def latestphotos_view(request, page=None):

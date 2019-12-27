@@ -157,7 +157,9 @@ function imgError(image) {
 	//if the picture doesnt exist then will load the regular no photo icon
 	//The imgError functions gets trigger when Django sends a url image but the images doesn't exist.
 	{% endcomment %}
-	var loading_photo_url = "{% static 'images/loading512.gif' %}";
+	//var loading_photo_url = "{% static 'images/loading512.gif' %}";
+	var loading_photo_url = "{% static {{LOADING_IMG}} %}";
+	alert('loading_photo_url: '+loading_photo_url);
 	var photo_url = "{{object.location.url}}";
 	var no_photo_url = "{% static 'images/user.png' %}";
 	//Set loading gif while waiting for lambda to generate userphoto
