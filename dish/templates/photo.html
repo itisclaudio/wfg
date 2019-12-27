@@ -183,6 +183,8 @@ function imgError(image) {
 					 //Ask if main photo also needs to be loaded:
 					 main_photo_url = document.getElementById('favphoto').src;
 					 loading_url = "{{S3_URL}}"+"static/images/loading512.gif"
+					 alert('loading_url: '+loading_url);
+					 alert('main_photo_url: '+main_photo_url);
 					 if (main_photo_url = loading_url){
 						//https://wfgs.s3-us-west-2.amazonaws.com/static/images/loading512.gif
 						//S3_URL = 'https://{}.s3-{}.amazonaws.com/'
