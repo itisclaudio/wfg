@@ -12,5 +12,5 @@ def show_dishes():
 	#dishes_list_id = Dish.objects.filter(active=True).values_list('id', flat=True).order_by('-datetime')[:4]
 	#photos = Picture.objects.filter(active=1, dish__pk__in = dishes_list_id).select_related('dish','owner__user').prefetch_related('dish__cuisines').order_by('-datetime')[:4]
 	dish = Dish.objects.filter(active=True).prefetch_related('cuisines').select_related('userprofile__user').order_by('-datetime')[:4]
-	return {'latest_dishes': dish}
+	return {'latest_dishes': dish,'LOADING_IMG':settings.LOADING_IMG}
 	

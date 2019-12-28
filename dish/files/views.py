@@ -17,7 +17,7 @@ import json #for ajax in photonewnodish
 from django.contrib.auth.decorators import login_required #For decorator: @login_required
 from datetime import date, datetime #To calculate todays date
 from django.contrib.auth.models import User
-from dish import settings #To call media locations, MEDIA_URL
+from dish import settings #To call media locations, MEDIA_URL, LOADING_IMG
 
 #For login
 from django.contrib.auth import login,logout,authenticate
