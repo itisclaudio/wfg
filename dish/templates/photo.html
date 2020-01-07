@@ -147,7 +147,7 @@ function imgError2(image) {
 	{% endcomment %}
 	//var loading_photo_url = "{% static 'images/loading512.gif' %}";
 	//{{ baseUrl }}images/features/{{p.icon}}
-	console.log('No Dish favphoto');
+	console.log('in imgError2, no photo');
 	document.getElementById('favphoto').src = loading_photo_url;
 	//Keep adding code here
 	return true;
@@ -162,11 +162,11 @@ function imgError(image) {
 	//var loading_photo_url = "{% static 'images/loading512.gif' %}";
 	//var loading_photo_url = "{{ baseUrl }}images/{{LOADING_IMG}}";
 	//alert('loading_photo_url: '+loading_photo_url);
-	console.log('No Dish photo');
+	console.log('in imgError, no photo');
 	var photo_url = "{{object.location.url}}";
 	var photo_check = "{{object.filename}}-thum{{object.extension}}";
+	console.log('photo_check: '+photo_check);
 	//{{p.filename}}-med{{p.extension}}
-	var no_photo_url = "{% static 'images/user.png' %}";
 	//Set loading gif while waiting for lambda to generate userphoto
 	document.getElementById('photo').src = loading_photo_url;
 	main_photo_url = document.getElementById('photo').src;
@@ -180,7 +180,7 @@ function imgError(image) {
 		  //alert('photo_url: '+photo_url);      //  your code here
 		  if (i < 60) {             //  if the counter < 60, call the loop function
 			//This will be excecute up to 20 times or until image found
-			//console.log('En if (i < 10)');
+			console.log('Main photo. index: '+i);
 			//alert('En if (i < 10)');
 			//checks if there is an image in the usePhoto URL
 			$.get(photo_check)
@@ -215,6 +215,7 @@ function imgError(image) {
 		  // it has been 20 times and there is no image, set up no image icon
 		  //console.log('En else (i =>10)');
 		  //alert('En else (i =>10)');
+		  var no_photo_url = "{% static 'images/upload-med.jpg' %}";
 		  document.getElementById('photo').src = no_photo_url;
 		  }
 	   }, 500) // setTimeout(function, time_period) in this case 1/2 second
