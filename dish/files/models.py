@@ -583,15 +583,15 @@ class Picture(models.Model):
 					newkey_reg = "media/dishes/{}-reg{}".format(self.urlname,extension)
 					newkey_med = "media/dishes/{}-med{}".format(self.urlname,extension)
 					newkey_thum = "media/dishes/{}-thum{}".format(self.urlname,extension)
-					
+					##000
 					## Deleting files but making a copy with the new name first
-					s3.Object(bucket,newkey).copy_from(CopySource='wfgs/'+oldkey)
+					s3.Object(bucket,newkey).copy_from(CopySource=bucket+'/'+oldkey)
 					s3.Object(bucket,oldkey).delete()
-					s3.Object(bucket,newkey_reg).copy_from(CopySource='wfgs/'+oldkey_reg)
+					s3.Object(bucket,newkey_reg).copy_from(CopySource=bucket+'/'+oldkey_reg)
 					s3.Object(bucket,oldkey_reg).delete()
-					s3.Object(bucket,newkey_med).copy_from(CopySource='wfgs/'+oldkey_med)
+					s3.Object(bucket,newkey_med).copy_from(CopySource=bucket+'/'+oldkey_med)
 					s3.Object(bucket,oldkey_med).delete()
-					s3.Object(bucket,newkey_thum).copy_from(CopySource='wfgs/'+oldkey_thum)
+					s3.Object(bucket,newkey_thum).copy_from(CopySource=bucket+'/'+oldkey_thum)
 					s3.Object(bucket,oldkey_thum).delete()
 					
 					## Rename photo in "dishes_original" folder
@@ -599,7 +599,7 @@ class Picture(models.Model):
 					key_original_new = "media/dishes_original/{}{}".format(self.urlname,extension)
 					try:
 						## check that original exist, old photos don't have it
-						s3.Object(bucket,key_original_new).copy_from(CopySource='wfgs/'+key_original)
+						s3.Object(bucket,key_original_new).copy_from(CopySource=bucket+'/'+key_original)
 					except Exception: #This happen when an exception is thrown and it is chatched in
 						pass
 					else:
