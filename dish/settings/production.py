@@ -53,6 +53,8 @@ LOCAL_DEV = False
 
 #Heroku variable for https:
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+#Variable so http redirects to https since Heroku doesn't do this automaticaly
+SECURE_SSL_REDIRECT = True
 
 #For Amazon S3
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
