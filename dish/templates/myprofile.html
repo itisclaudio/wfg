@@ -124,7 +124,7 @@ $(document).ready(function(){
 <div class="well">
 <div class="row">
 	<div class="col-md-5 col-sm-5 col-xs-12">
-		{% if profile.photo != "" %}
+		{% if profile.photo %}
 			<img id="profile_photo" src="{{ profile.photofilename}}{{ profile.extension}}" class="img-rounded" width="100%" onerror="imgError(this);"/>
 		{% else %}
 			<img src="{% static 'images/user.png' %}" class="img-polaroid" width="100%"/>
