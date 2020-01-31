@@ -2,7 +2,7 @@ from .base import *
 # Override base.py settings here
 #print "in production.py"
 
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ['wfg-p.herokuapp.com','wfg-s.herokuapp.com','wfg.herokuapp.com/','wfgs.s3.amazonaws.com','www.worldfood.guide','worldfood.guide']
 INSTALLED_APPS += (
 	'storages',#App needed for Amazon AWS S3

@@ -452,6 +452,7 @@ function searchSuccess(json)
 			var url_whole = "{{request.build_absolute_uri}}";
 			var url_base = url_whole.replace('dish/'+'{{dish.urlname}}'+'/','');
 			var url_delete = url_base+"dish_addto_list/"+{{dish.id}}+"/"+json.id+"/dish";
+			console.log('url_delete: '+url_delete);
 			//var url_delete = "{{BASE_URL}}"+"dish_addto_list/"+{{dish.id}}+"/"+json.id+"/dish";
 			$('#modal_select').attr("href",url_delete);
 			$('#modal_select').focus()
@@ -549,6 +550,7 @@ function searchSuccessSimilar(json)
 			var url_whole = "{{request.build_absolute_uri}}";
 			var url_base = url_whole.replace('dish/'+'{{dish.urlname}}'+'/','');
 			var url_delete = url_base+"dish_addto_similar/"+'{{dish.id}}'+"/"+json.id+"/";
+			console.log('url_delete: '+url_delete);
 			//var url_delete = "{{BASE_URL}}"+"dish_addto_similar/"+{{dish.id}}+"/"+json.id+"/";
 			$('#button_similar').attr("href",url_delete);
 			$('#button_similar').focus();
