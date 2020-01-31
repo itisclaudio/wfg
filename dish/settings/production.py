@@ -3,7 +3,7 @@ from .base import *
 #print "in production.py"
 
 DEBUG = True
-ALLOWED_HOSTS = ['wfg-s.herokuapp.com','wfg.herokuapp.com/','wfgs.s3.amazonaws.com']
+ALLOWED_HOSTS = ['wfg-p.herokuapp.com','wfg-s.herokuapp.com','wfg.herokuapp.com/','wfgs.s3.amazonaws.com','www.worldfood.guide','worldfood.guide']
 INSTALLED_APPS += (
 	'storages',#App needed for Amazon AWS S3
 	#'whitenoise.runserver_nostatic',
