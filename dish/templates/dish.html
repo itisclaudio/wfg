@@ -74,7 +74,6 @@ $(document).ready(function(){
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 		<h2 style="margin-top:0px;">Search List</h2>
-		<p>request.build_absolute_uri: {{ request.build_absolute_uri }}</p>
 		<input class="form-control ui-autocomplete-input" id="id_auto" name="auto" type="text" placeholder="type list name here.." autocomplete="off"/>
 	</div>
 	<div class="modal-body row" id="modal_list" style="display:none;">
@@ -563,7 +562,7 @@ function searchSuccess(json)
 			$('#myAlert').hide(); //{#  Hide "dish already in list" alert  #}
 			$('#modal_select').removeClass('disabled'); //{#  Enable button "Add dish"  #}
 			//{#  generate url for "Add dish" button:  #}
-			var url_delete = "{{BASE_URL}}"+"dish_addto_list/"+'{{dish.id}}'+"/"+json.id+"/dish";
+			var url_delete = "{{BASE_URL}}"+"dish_addto_list/"+{{dish.id}}+"/"+json.id+"/dish";
 			console.log('url_delete: '+url_delete);
 			$('#modal_select').attr("href",url_delete);
 			$('#modal_select').focus();
