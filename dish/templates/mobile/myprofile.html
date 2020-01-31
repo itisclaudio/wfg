@@ -290,7 +290,7 @@ $(document).ready(function(){
 
 {% block extra-bottom %}
 	<script type="text/javascript">
-	
+	{% if profile.photo %}
 		function imgError(image) {
 			{% comment %}
 			//If a userPhoto has just uploaded. AWS takes a few seconds to generate thumbs because
@@ -341,7 +341,7 @@ $(document).ready(function(){
 			checkImage(); //***Calls the function 
 		return true;
 		};//End imgError function
-	
+	{% endif %}
 		function facebook_photo(){
 			//var fb_user = '{{social.uid}}';
 			var image_url = 'https://graph.facebook.com/'+'{{social.uid}}'+'/picture?width=800';
