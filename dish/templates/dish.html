@@ -563,13 +563,14 @@ function searchSuccess(json)
 			$('#myAlert').hide(); //{#  Hide "dish already in list" alert  #}
 			$('#modal_select').removeClass('disabled'); //{#  Enable button "Add dish"  #}
 			//{#  generate url for "Add dish" button:  #}
-			var url_whole = "{{request.build_absolute_uri}}";
-			console.log('url_whole: '+url_whole);
-			var url_base = url_whole.replace('dish/'+'{{dish.urlname}}'+'/','');
-			console.log('url_base: '+url_base);
-			var url_delete = url_base+"dish_addto_list/"+'{{dish.id}}'+"/"+json.id+"/dish";
+			//var url_whole = "{{request.build_absolute_uri}}";
+			//console.log('url_whole: '+url_whole);
+			//var url_base = url_whole.replace('dish/'+'{{dish.urlname}}'+'/','');
+			//console.log('url_base: '+url_base);
+			//var url_delete = url_base+"dish_addto_list/"+'{{dish.id}}'+"/"+json.id+"/dish";
+			//console.log('url_delete: '+url_delete);
+			var url_delete = "{{BASE_URL}}"+"dish_addto_list/"+{{dish.id}}+"/"+json.id+"/dish";
 			console.log('url_delete: '+url_delete);
-			//var url_delete = "{{BASE_URL}}"+"dish_addto_list/"+{{dish.id}}+"/"+json.id+"/dish";
 			$('#modal_select').attr("href",url_delete);
 			$('#modal_select').focus();
 		}
