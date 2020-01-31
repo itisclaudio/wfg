@@ -269,6 +269,7 @@ $(document).ready(function(){
 </div>
 
 {% block extra-bottom %}
+{% if profile.photo %}
 	<script type="text/javascript">
 		function imgError(image) {
 			{% comment %}
@@ -354,6 +355,7 @@ $(document).ready(function(){
 			$("#modalLoading").modal('show');
 		};
 	</script>
+{% endif %}
 {% endblock %}
 
 {% endblock %}
