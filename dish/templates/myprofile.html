@@ -269,8 +269,12 @@ $(document).ready(function(){
 </div>
 
 {% block extra-bottom %}
-{% if profile.photo %}
 	<script type="text/javascript">
+		{% if profile.photo %}
+		{% comment %}
+		//If photo doesnt exist, he function imgError shouldn't load because it 
+		//requests profile.photofilename and this doesn't exist and will give and error
+		{% endcomment %}
 		function imgError(image) {
 			{% comment %}
 			//If a userPhoto has just uploaded. AWS takes a few seconds to generate thumbs because
@@ -321,7 +325,7 @@ $(document).ready(function(){
 			checkImage(); //***Calls the function 
 		return true;
 		};//End imgError function
-
+		{% endif %}
 		function facebook_photo(){
 			//var fb_user = '{{social.uid}}';
 			var image_url = 'https://graph.facebook.com/'+'{{social.uid}}'+'/picture?width=800';
@@ -355,7 +359,6 @@ $(document).ready(function(){
 			$("#modalLoading").modal('show');
 		};
 	</script>
-{% endif %}
 {% endblock %}
 
 {% endblock %}
