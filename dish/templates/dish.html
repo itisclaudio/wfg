@@ -74,6 +74,7 @@ $(document).ready(function(){
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 		<h2 style="margin-top:0px;">Search List</h2>
+		<p>request.build_absolute_uri: {{ request.build_absolute_uri }}</p>
 		<input class="form-control ui-autocomplete-input" id="id_auto" name="auto" type="text" placeholder="type list name here.." autocomplete="off"/>
 	</div>
 	<div class="modal-body row" id="modal_list" style="display:none;">
@@ -562,7 +563,13 @@ function searchSuccess(json)
 			$('#myAlert').hide(); //{#  Hide "dish already in list" alert  #}
 			$('#modal_select').removeClass('disabled'); //{#  Enable button "Add dish"  #}
 			//{#  generate url for "Add dish" button:  #}
-			var url_delete = "{{BASE_URL}}"+"dish_addto_list/"+{{dish.id}}+"/"+json.id+"/dish";
+			var url_whole = "{{request.build_absolute_uri}}";
+			console.log('url_whole: '+url_whole);
+			var url_base = url_whole.replace('dish/'+'{{dish.urlname}}'+'/','');
+			console.log('url_base: '+url_base);
+			var url_delete = url_base+"dish_addto_list/"+'{{dish.id}}'+"/"+json.id+"/dish";
+			console.log('url_delete: '+url_delete);
+			//var url_delete = "{{BASE_URL}}"+"dish_addto_list/"+{{dish.id}}+"/"+json.id+"/dish";
 			$('#modal_select').attr("href",url_delete);
 			$('#modal_select').focus();
 		}
@@ -658,7 +665,13 @@ function searchSuccessSimilar(json)
 			$('#alert_similar').hide(); //{#  Hide "dish already in list" alert  #}
 			$('#button_similar').removeClass('disabled'); //{#  Enable button "Add dish"  #}
 			//{#  generate url for "Add dish" button:  #}
-			var url_delete = "{{BASE_URL}}"+"dish_addto_similar/"+{{dish.id}}+"/"+json.id+"/";
+			var url_whole = "{{request.build_absolute_uri}}";
+			console.log('url_whole: '+url_whole);
+			var url_base = url_whole.replace('dish/'+'{{dish.urlname}}'+'/','');
+			console.log('url_base: '+url_base);
+			var url_delete = url_base+"dish_addto_similar/"+'{{dish.id}}'+"/"+json.id+"/";
+			console.log('url_delete: '+url_delete);
+			//var url_delete = "{{BASE_URL}}"+"dish_addto_similar/"+{{dish.id}}+"/"+json.id+"/";
 			$('#button_similar').attr("href",url_delete);
 			$('#button_similar').focus();
 		}
