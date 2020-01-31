@@ -569,7 +569,7 @@ function searchSuccess(json)
 			//console.log('url_base: '+url_base);
 			//var url_delete = url_base+"dish_addto_list/"+'{{dish.id}}'+"/"+json.id+"/dish";
 			//console.log('url_delete: '+url_delete);
-			var url_delete = "{{BASE_URL}}"+"dish_addto_list/"+{{dish.id}}+"/"+json.id+"/dish";
+			var url_delete = "{{BASE_URL}}"+"dish_addto_list/"+'{{dish.id}}'+"/"+json.id+"/dish";
 			console.log('url_delete: '+url_delete);
 			$('#modal_select').attr("href",url_delete);
 			$('#modal_select').focus();
