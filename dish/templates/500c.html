@@ -1,17 +1,18 @@
 {% extends '_base.html' %}
 {% block title %}WorldFood.Guide - Error 500{% endblock %}
+{% load static %}
 {% block content %}
 <h1>URL Broken</h1>
 <div class="well well-white" style="text-align:center;">
 <h3>The URL you are trying to access:</h3>
 	
-	<h3 style="color:red;">http://worldfood.guide{{patherror|truncatechars:68 }}</h3>
+	<h3 style="color:red;">https://worldfood.guide{{patherror|truncatechars:68 }}</h3>
 	
 	 <h3>doesn't exist or is broken</h3>
 		
-		<a href="http://worldfood.guide/"><img style="margin-bottom:15px;" src="http://worldfood.guide/media/images/broken_plate.jpg" width="400px"></a>
+		<a href="https://worldfood.guide/"><img style="margin-bottom:15px;" src="{% static 'images/broken_plate.jpg' %}" width="400px"></a>
 
-		<p>Click <a href="http://worldfood.guide/" rel="nofollow">here</a> to go to the main page</p>
+		<p>Click <a href="https://worldfood.guide/" rel="nofollow">here</a> to go to the main page</p>
 		<p class="smallfont">(Error 500)</p>
 </div>
 {% endblock %}
