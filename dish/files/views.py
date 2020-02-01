@@ -2278,8 +2278,8 @@ def searchresultadv_view(request,names=None,ingredients=None,cuisines=None,page=
 #######################################
 
 #Used in dish to added to list
-#@login_required(login_url=singin_url)
-#@verified_email_required
+@login_required(login_url=singin_url)
+@verified_email_required
 def lists_autocomplete_view(request):
 	if request.is_ajax:
 		#print ("request is ajax")
