@@ -3,6 +3,17 @@
 <html lang="en">
 <head>
 <title>{% block title %}{% endblock %}</title>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-53070205-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-53070205-2');
+</script>
+
 <script src="{% static 'dist/jquery/jquery-1.12.0.min.js' %}"></script>
 <!-- For Font Awesome Icons -->
 <script src="https://use.fontawesome.com/9eecc18abf.js"></script>
