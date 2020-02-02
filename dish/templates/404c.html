@@ -13,7 +13,7 @@
 		<h3>doesn't exist</h3>
 		
 		<a id="a_url" href=""><img style="margin-bottom:15px;" src="{% static 'images/broken_plate.jpg' %}" width="400px"></a>
-		<p>Click <a href="https://worldfood.guide/" rel="nofollow">here</a> to go to the main page</p>
+		<p>Click <a "a_main" href="https://worldfood.guide/" rel="nofollow">here</a> to go to the main page</p>
 		<p class="smallfont">(Error 404)</p>
 </div>
 {% endblock content %}
@@ -25,8 +25,10 @@
 		console.log(url);
 		$('#url').html(url);
 		var hostname = (new URL(url)).hostname;
-		$('#a_url').attr('href', hostname);
-		console.log(hostname);
+		url_base = "https://"+hostname+"/"
+		console.log(url_base);
+		$('#a_url').attr('href', url_base);
+		$('#a_main').attr('href', url_base);
 	});
 </script>
 {% endblock extra-bottom %}
