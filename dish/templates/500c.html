@@ -1,18 +1,31 @@
 {% extends '_base.html' %}
 {% block title %}WorldFood.Guide - Error 500{% endblock %}
 {% load static %}
+
 {% block content %}
 <h1>URL Broken</h1>
 <div class="well well-white" style="text-align:center;">
-<h3>The URL you are trying to access:</h3>
-	
-	<h3 style="color:red;">https://worldfood.guide{{patherror|truncatechars:68 }}</h3>
-	
-	 <h3>doesn't exist or is broken</h3>
-		
-		<a href="https://worldfood.guide/"><img style="margin-bottom:15px;" src="{% static 'images/broken_plate.jpg' %}" width="400px"></a>
-
-		<p>Click <a href="https://worldfood.guide/" rel="nofollow">here</a> to go to the main page</p>
-		<p class="smallfont">(Error 500)</p>
+	<h3>The URL you are trying to access:</h3>
+	<h3 id="url" style="color:red;"></h3>
+	<h3>doesn't exist or is broken</h3>
+	<a id="a_url" href=""><img style="margin-bottom:15px;" src="{% static 'images/broken_plate.jpg' %}" width="400px"></a>
+	<p>Click <a id="a_main" href="" rel="nofollow">here</a> to go to the main page</p>
+	<p class="smallfont">(Error 500)</p>
 </div>
-{% endblock %}
+{% endblock content %}
+
+{% block extra-bottom %}
+<script type="text/javascript">
+	//Functions to get real urls
+	$(document).ready(function (){
+		var url = window.location.href; // #Whole path
+		//console.log(url);
+		$('#url').html(url);
+		var hostname = (new URL(url)).hostname;
+		url_base = "https://"+hostname+"/"
+		//console.log(url_base);
+		$('#a_url').attr('href', url_base);
+		$('#a_main').attr('href', url_base);
+	});
+</script>
+{% endblock extra-bottom %}
