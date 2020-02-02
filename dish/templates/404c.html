@@ -12,7 +12,7 @@
 		
 		<h3>doesn't exist</h3>
 		
-		<a href="https://worldfood.guide/"><img style="margin-bottom:15px;" src="{% static 'images/broken_plate.jpg' %}" width="400px"></a>
+		<a id="a_url" href=""><img style="margin-bottom:15px;" src="{% static 'images/broken_plate.jpg' %}" width="400px"></a>
 		<p>Click <a href="https://worldfood.guide/" rel="nofollow">here</a> to go to the main page</p>
 		<p class="smallfont">(Error 404)</p>
 </div>
@@ -21,9 +21,12 @@
 {% block extra-bottom %}
 <script type="text/javascript">
 	$(document).ready(function (){
-		var path = window.location.href; // #Whole path
-		console.log(path);
-		$('#url').html(path);
+		var url = window.location.href; // #Whole path
+		console.log(url);
+		$('#url').html(url);
+		var hostname = (new URL(url)).hostname;
+		$('#a_url').attr('href', hostname);
+		console.log(hostname);
 	});
 </script>
 {% endblock extra-bottom %}
