@@ -7,10 +7,7 @@
 <script type="text/javascript">
 	var path = window.location.href; // #Whole path
 	console.log(path);
-	//var to_delete = "/listeditpublic/{{list.urlname}}";
-	//var main_path = path.replace(to_delete,'');
-	//var delete_path = main_path+"list_delete_dish/"+{{list.id}}+"/"+dish_id;
-	//$('#modaldelete_button').attr("href",delete_path);
+	$('#url').html(path);
 </script>
 {% endblock super-extra-head %}
 
@@ -19,11 +16,9 @@
 <div class="well well-white" style="text-align:center;">
 		<h3>The URL you are trying to access:</h3>
 
-		<h3 style="color:red;">https://worldfood.guide{{patherror|truncatechars:68}}</h3>
+		<h3  id="url" style="color:red;"></h3>
 		
 		<h3>doesn't exist</h3>
-		
-		<p id="url">var url_whole = "{{patherror}}"</p>
 		
 		<a href="https://worldfood.guide/"><img style="margin-bottom:15px;" src="{% static 'images/broken_plate.jpg' %}" width="400px"></a>
 		<p>Click <a href="https://worldfood.guide/" rel="nofollow">here</a> to go to the main page</p>
