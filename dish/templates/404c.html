@@ -1,22 +1,14 @@
 {% extends '_base.html' %}
 {% block title %}WorldFood.Guide - Error 404{% endblock %}
-
-{% block super-extra-head %}
 {% load static %}
 
-<script type="text/javascript">
-	var path = window.location.href; // #Whole path
-	console.log(path);
-	$('#url').html(path);
-</script>
-{% endblock super-extra-head %}
 
 {% block content %}
 <h1>Page not found</h1>
 <div class="well well-white" style="text-align:center;">
 		<h3>The URL you are trying to access:</h3>
 
-		<h3  id="url" style="color:red;">{{request.build_absolute_uri}}</h3>
+		<h3  id="url" style="color:red;"></h3>
 		
 		<h3>doesn't exist</h3>
 		
@@ -24,4 +16,14 @@
 		<p>Click <a href="https://worldfood.guide/" rel="nofollow">here</a> to go to the main page</p>
 		<p class="smallfont">(Error 404)</p>
 </div>
-{% endblock %}
+{% endblock content %}
+
+{% block extra-bottom %}
+<script type="text/javascript">
+	$(document).ready(function (){
+		var path = window.location.href; // #Whole path
+		console.log(path);
+		$('#url').html(path);
+	}
+</script>
+{% endblock extra-bottom %}
