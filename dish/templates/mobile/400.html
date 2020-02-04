@@ -1,20 +1,35 @@
 {% extends '_base.html' %}
-{% block title %}WorldFood.Guide - Error 404{% endblock %}
+{% block title %}WorldFood.Guide - Error 400{% endblock %}
+{% load static %}
 {% block content %}
 
-<h1 align="center" class="center">Page not found</h1>
+<h1 align="center" class="center">Sorry! something went wrong :(</h1>
 
 <div class="well well-mobile well-white" style="text-align:center;">	
 
-	<a href="http://worldfood.guide/"><img style="margin-bottom:15px;" src="http://worldfood.guide/media/images/broken_plate-small.jpg"></a>
-
+	<a id="a_url" href=""><img style="margin-bottom:15px;" src="{% static 'images/broken_plate-small.jpg' %}"></a>
 	<h3>Let us know what happend</h3>
 	<p>(Error 400) in:<br/>
-	<b style="color:red;">http://worldfood.guide{{patherror}}</b>
+	<b id="url" style="color:red;"></b>
 	</p>
-	<p><a href="http://worldfood.guide/contact/" >Contact us</a></p>
-	<p>Click <a href="http://worldfood.guide/" rel="nofollow">here</a> to go to the main page</p>
+	<p><a href="/contact/" >Contact us</a></p>
+	<p>Click <a id="a_main" href="" rel="nofollow">here</a> to go to the main page</p>
 
 </div>
+{% endblock content %}
 
-{% endblock %}
+{% block extra-bottom %}
+<script type="text/javascript">
+	//Functions to get real urls
+	$(document).ready(function (){
+		var url = window.location.href; // #Whole path
+		//console.log(url);
+		$('#url').html(url);
+		var hostname = (new URL(url)).hostname;
+		url_base = "https://"+hostname+"/"
+		//console.log(url_base);
+		$('#a_url').attr('href', url_base);
+		$('#a_main').attr('href', url_base);
+	});
+</script>
+{% endblock extra-bottom %}
