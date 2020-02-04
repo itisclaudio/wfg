@@ -157,7 +157,7 @@ def SaveEmailQueue(username,obj,action,url=None):
 def UpdateMainPhoto(id_dish):
 	print "Updatting main_photo in views"
 	dish = Dish.objects.get(pk=id_dish)
-	favphoto = Picture.objects.filter(dish=dish.id).order_by('-likestot').first()
+	favphoto = Picture.objects.filter(dish=dish.id).order_by('-likestot','-datetime').first()
 	print "favphoto:"
 	print favphoto
 	if favphoto:
@@ -530,7 +530,7 @@ def dish_view(request,urlname):
 	desc_small = desc[:500]
 	desc_mobile = desc[:200]
 	#from django.db.models import Max
-	photos = Picture.objects.filter(dish=dish.id).select_related('owner__user').order_by('-likestot')[:5]
+	photos = Picture.objects.filter(dish=dish.id).select_related('owner__user').order_by('-likestot','-datetime')[:5]
 	liked = 0
 	#lists = List.objects.filter(dishes=dish,active=True).select_related('owner').order_by('-likestot')
 	lists = List.objects.filter(dishes=dish,active=True).prefetch_related('dishes','dishes__cuisines','listlikes').select_related('owner').order_by('-likestot')
