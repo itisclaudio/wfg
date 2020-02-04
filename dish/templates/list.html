@@ -159,14 +159,14 @@ $(document).ready(function(){
 				<li><a href="{% url 'view_listnew' %}" title="Create New List"><i class="fa fa-plus" aria-hidden="true"></i> Create new list</a></li>
 				{% if user.id = list.owner.user.id %}
 					{# User is owner #}
-					<li><a data-toggle="modal" data-target="#modal_adddish"><i class="fa fa-plus" aria-hidden="true"></i> Add Dish</a></li>
+					<li><a data-toggle="modal" data-target="#modal_adddish" style="cursor: pointer;"><i class="fa fa-plus" aria-hidden="true"></i> Add Dish</a></li>
 					<li><a href="{% url 'view_listedit' urlname=list.urlname%}"><i class="fa fa-pencil" aria-hidden="true"></i> Edit list </a></li>
-					<li><a id="delete" data-toggle="modal" data-target="#modal_deletelist" title="Delete list"><i class="fa fa-trash" aria-hidden="true"></i> Delele list</a></li>
+					<li><a id="delete" data-toggle="modal" data-target="#modal_deletelist" title="Delete list" style="cursor: pointer;"><i class="fa fa-trash" aria-hidden="true"></i> Delele list</a></li>
 				{% else %}
 					{# User is autenticated but not owner #}
 					{% if list.type = '2' %}
 						{# List is Public #}
-						<li><a type="button" data-toggle="modal" data-target="#modal_adddish"><i class="fa fa-plus" aria-hidden="true"></i> Add Dish</a></li>
+						<li><a type="button" data-toggle="modal" data-target="#modal_adddish" style="cursor: pointer;"><i class="fa fa-plus" aria-hidden="true"></i> Add Dish</a></li>
 						<li><a href="{% url 'view_listedit' urlname=list.urlname%}"><i class="fa fa-pencil" aria-hidden="true"></i> Edit list</a></li>
 					{% endif %}
 				{% endif %}
