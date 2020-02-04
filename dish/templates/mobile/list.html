@@ -69,7 +69,7 @@ $(document).ready(function(){
       <div class="modal-body">
 		<h2 style="margin:2px; text-align:left;"><b>{{list.name}}</b></h2>
 		<p class="smallfont">by: {{list.owner}}, created: {{list.created|date:"d M Y"}}, updated: {{list.modified|date:"d M Y"}}
-		{% if list.private == False %} (Public){% endif %}
+		({{list.get_type_display}})
 		</p>
 		<p>{{ list.description|urlizetrunc:32|escape|linebreaks|truncatewords:80 }}</p>
       </div>
