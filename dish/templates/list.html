@@ -153,29 +153,31 @@ $(document).ready(function(){
 				Actions
 				<span class="caret"></span>
 			  </button>
-			  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-				{% if list.type = '2' %}
-					<li><a type="button" data-toggle="modal" data-target="#modal_adddish"><i class="fa fa-plus" aria-hidden="true"></i> Add Dish</a></li>
-					<li><a href="{% url 'view_listedit' urlname=list.urlname%}"><i class="fa fa-pencil" aria-hidden="true"></i> Edit list</a></li>
+			<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+			{% if user.is_authenticated %}
+				{# User autenticated #}
+				<li><a href="{% url 'view_listnew' %}" title="Create New List"><i class="fa fa-plus" aria-hidden="true"></i> Create new list</a></li>
+				{% if user.id = list.owner.user.id %}
+					{# User is owner #}
+					<li><a data-toggle="modal" data-target="#modal_adddish"><i class="fa fa-plus" aria-hidden="true"></i> Add Dish</a></li>
+					<li><a href="{% url 'view_listedit' urlname=list.urlname%}"><i class="fa fa-pencil" aria-hidden="true"></i> Edit list </a></li>
+					<li><a id="delete" data-toggle="modal" data-target="#modal_deletelist" title="Delete list"><i class="fa fa-trash" aria-hidden="true"></i> Delele list</a></li>
 				{% else %}
-					{% if user.id = list.owner.user.id %}
-						<li><a data-toggle="modal" data-target="#modal_adddish"><i class="fa fa-plus" aria-hidden="true"></i> Add Dish</a></li>
-						<li><a href="{% url 'view_listedit' urlname=list.urlname%}"><i class="fa fa-pencil" aria-hidden="true"></i> Edit list </a></li>
-						<li><a id="delete" data-toggle="modal" data-target="#modal_deletelist" title="Delete list"><i class="fa fa-trash" aria-hidden="true"></i> Delele list</a></li>
+					{# User is autenticated but not owner #}
+					{% if list.type = '2' %}
+						{# List is Public #}
+						<li><a type="button" data-toggle="modal" data-target="#modal_adddish"><i class="fa fa-plus" aria-hidden="true"></i> Add Dish</a></li>
+						<li><a href="{% url 'view_listedit' urlname=list.urlname%}"><i class="fa fa-pencil" aria-hidden="true"></i> Edit list</a></li>
 					{% endif %}
 				{% endif %}
-				{% if user.is_authenticated %}
-					<li><a href="{% url 'view_listnew' %}" title="Create New List"><i class="fa fa-plus" aria-hidden="true"></i> Create new list
-					</a></li>
-				{% endif %}
-				<li><a title="Search list" href="{% url 'view_list_search' %}"><i class="fa fa-search" aria-hidden="true"></i> Search list</a></li>
-				<li>
-					<a href="/lists_foodie/{{list.owner}}/1/" title="See all lists by: {{list.owner}}">Lists by "{{list.owner|truncatechars:13}}"</a></li>
-			  </ul>
+			{% endif %}
+			<li><a title="Search list" href="{% url 'view_list_search' %}"><i class="fa fa-search" aria-hidden="true"></i> Search list</a></li>
+			<li>
+				<a href="/lists_foodie/{{list.owner}}/1/" title="See all lists by: {{list.owner}}">Lists by "{{list.owner|truncatechars:13}}"</a></li>
+			</ul>
 			</div>
 	</li>
 	</ul>
-
 	<p class="smallfont">by: <a href="/foodie/{{list.owner.user.username}}/">{{list.owner}}</a>, created: {{list.created|date:"d M Y"}}, updated: {{list.modified|date:"d M Y"}}
 	{{ list.get_type_display }}
 	</p>
