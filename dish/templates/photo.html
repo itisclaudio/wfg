@@ -57,7 +57,7 @@
 			<img id="photo" src="{{object.location.url}}?cache=none" alt="{{object.dish}}" class="img-rounded" width="100%"/></a>
 			{% endcomment %}
 			{% now "Ymd.His" as todays_datetime %}
-			<img id="photo" src="{{object.location.url}}?{{todays_datetime}}" alt="{{object.dish}}" class="img-rounded" width="100%"/></a>
+			<img id="photo" src="{{object.location.url}}?t={{todays_datetime}}" alt="{{object.dish}}" class="img-rounded" width="100%"/></a>
 		{% else %}
 			<a href="/photofullscreen/{{object.id}}/">
 			<img id="photo" src="{{object.location.url}}" alt="{{object.dish}}" class="img-rounded" width="100%" onerror="imgError(this);"></a>
