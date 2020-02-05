@@ -6,7 +6,6 @@
 		{% endfor %}
 	{% endif %}
  {% endblock %}
-
 {% block super-extra-head %}
 {% load static %}
 <!--Facebook tags (Start)-->
@@ -55,8 +54,10 @@
 			<a href="/photofullscreen/{{object.id}}/">
 			{% comment %}
 			<img id="photo" src="{{object.location.url}}?cachebuster=blah23" alt="{{object.dish}}" class="img-rounded" width="100%"></a>
-			{% endcomment %}
 			<img id="photo" src="{{object.location.url}}?cache=none" alt="{{object.dish}}" class="img-rounded" width="100%"/></a>
+			{% endcomment %}
+			{% now "YmdHis" as todays_datetime %}
+			<img id="photo" src="{{object.location.url}}?{{todays_datetime}}" alt="{{object.dish}}" class="img-rounded" width="100%"/></a>
 		{% else %}
 			<a href="/photofullscreen/{{object.id}}/">
 			<img id="photo" src="{{object.location.url}}" alt="{{object.dish}}" class="img-rounded" width="100%" onerror="imgError(this);"></a>
