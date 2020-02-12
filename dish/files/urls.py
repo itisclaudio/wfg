@@ -1,6 +1,6 @@
 from django.conf.urls import patterns,url
 from django.http import HttpResponse
-from views import StaticViewSitemap, CuisinesSitemap, DishesSitemap, PicturesSitemap, MembersSitemap, ListSitemap
+from views import StaticViewSitemap, CuisinesSitemap, DishesSitemap, PicturesSitemap, MembersSitemap, ListSitemap, authorized_digital_sellers_view
 from django.contrib.sitemaps.views import sitemap
 
 sitemaps = {
@@ -15,7 +15,7 @@ sitemaps = {
 urlpatterns = patterns('dish.files.views',
 	url(r'^$','index_view',name='view_main'),
 	url(r'^sitemap\.xml$', sitemap,{'sitemaps':sitemaps}),
-
+	url(r'^ads\.txt$', authorized_digital_sellers_view, name='authorized_digital_sellers'),
 	url(r'^cuisine/(?P<id>\d+)/$','cuisine_redirect_view',name='view_cuisine'),
 	url(r'^cuisine/(?P<urlname>.*)/$','cuisine_view',name='view_cuisine'),
 	url(r'^cuisinenew/$','cuisinenew_view',name='view_cuisinenew'),

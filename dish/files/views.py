@@ -80,6 +80,10 @@ from dish.files.forms import (
 
 
 singin_url = '/signin/'
+		
+def authorized_digital_sellers_view(request):
+	"""Generates ads.txt required by google adSense"""
+	return HttpResponse('google.com, pub-3566007766704147, DIRECT, f08c47fec0942fa0')
 
 class StaticViewSitemap(Sitemap):
 	changefreq = 'daily'
