@@ -97,7 +97,7 @@
 					{% endfor %}
 				{% else %}
 					<div class="thumbnail col-md-4 col-xs-4" title="Go to dish page: {{p.name}}" style="margin-bottom:0px;line-height:16px;">
-					<img src="/media/images/upload-med.jpg" class="img-rounded" width="100%">
+					<img src="{% static 'images/upload-med.jpg' %}" class="img-rounded" width="100%">
 					<b style="display:inline;font-size:14px;" >There are no dishes</b>
 					</div>
 				{% endif %}
