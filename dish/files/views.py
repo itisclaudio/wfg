@@ -1722,8 +1722,9 @@ def photorotate_view(request, id):
 				path = str(photo.location.url)
 				# create lambda client
 				import boto3
-				payload = {"filename":filename, "ext":ext, "rotation":rotation}
-				print "filename: {}, ext: {}, rotation: {} ".format(payload['filename'],payload['ext'],payload['rotation'])
+				bucket = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+				payload = {"bucket":bucket, "filename":filename, "ext":ext, "rotation":rotation}
+				print "bucket: {}, filename: {}, ext: {}, rotation: {} ".format(payload['bucket'],payload['filename'],payload['ext'],payload['rotation'])
 				client = boto3.client('lambda',
 					region_name= 'us-west-2',
 					aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
@@ -1731,7 +1732,6 @@ def photorotate_view(request, id):
 				result = client.invoke(FunctionName='rotateImage',
                     InvocationType='RequestResponse',                                      
                     Payload=json.dumps(payload))
-				#range = result['photoid']
 				print "Finishes lambda"
 				print result
 		return HttpResponseRedirect('/photo/%s/%d/'%(photo.urlname,1))
