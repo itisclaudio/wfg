@@ -968,7 +968,9 @@ def quick_search_list_view(request):
 			req_user = request.user
 			#Store seach words in SearchLog if not me
 			if req_user.is_authenticated():
-				if req_user.username != 'itisclaudio':
+				dataloaders = ['itisclaudio','atasneem']
+				#if req_user.username != 'itisclaudio':
+				if req_user.username in dataloaders :
 					new_search = SearchLog()
 					profile = userProfile.objects.get(user=req_user)
 					new_search.foodie = profile
@@ -2618,6 +2620,9 @@ def dishsimilar_view(request, urlname):
 	dish = Dish.objects.get(urlname=urlname)
 	similars = DishSimilar.objects.filter(dish1=dish)
 	dish_sim_id_list = similars.values_list('dish2_id', flat=True)
+	print "dish_sim_id_list: {}".format(dish_sim_id_list)
+	for d in dish_sim_id_list:
+		print d
 	alert = 0
 	similar = ""
 	dishes = Dish.objects.filter(active=True).exclude(pk=dish.id)
