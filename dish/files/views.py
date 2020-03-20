@@ -971,6 +971,7 @@ def quick_search_list_view(request):
 			if req_user.is_authenticated():
 				if req_user.username not in dataloaders :
 					profile = userProfile.objects.get(user=req_user)
+					new_search = SearchLog()
 					new_search.foodie = profile
 					new_search.datetime = datetime.now()
 					new_search.search_origin = source
