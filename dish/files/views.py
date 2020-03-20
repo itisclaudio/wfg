@@ -80,6 +80,7 @@ from dish.files.forms import (
 
 
 singin_url = '/signin/'
+dataloaders = ['itisclaudio','atasneem']#Usernames that its search don't need to be saved
 		
 def authorized_digital_sellers_view(request):
 	"""Generates ads.txt required by google adSense"""
@@ -968,10 +969,7 @@ def quick_search_list_view(request):
 			req_user = request.user
 			#Store seach words in SearchLog if not me
 			if req_user.is_authenticated():
-				dataloaders = ['itisclaudio','atasneem']
-				#if req_user.username != 'itisclaudio':
 				if req_user.username not in dataloaders :
-					new_search = SearchLog()
 					profile = userProfile.objects.get(user=req_user)
 					new_search.foodie = profile
 					new_search.datetime = datetime.now()
@@ -1903,7 +1901,7 @@ def searchquick_view(request):
 			req_user = request.user
 			#Store seach words in SearchLog if not me
 			if req_user.is_authenticated():
-				if req_user.username != 'itisclaudio':
+				if req_user.username not in dataloaders :
 					new_search = SearchLog()
 					profile = userProfile.objects.get(user=req_user)
 					new_search.foodie = profile
@@ -2097,7 +2095,7 @@ def searchadvance_view(request,alert=None,names=None,ingredients=None,cuisines=N
 			#Store seach words in SearchLog if not me
 			req_user = request.user
 			if req_user.is_authenticated():
-				if req_user.username != 'itisclaudio':
+				if req_user.username not in dataloaders:
 					new_search = SearchLog()
 					profile = userProfile.objects.get(user=req_user)
 					new_search.foodie = profile
