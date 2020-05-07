@@ -1,6 +1,6 @@
 #BASE
 #====
-Django==1.8
+Django==1.11.28
 #Django==1.11.20
 django-ajax-selects==1.4.3
 django-allauth==0.31.0
